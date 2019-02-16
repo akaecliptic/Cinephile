@@ -1,0 +1,14 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/menu_option_trending"
+        android:title="@string/menu_trending"
+        android:icon="@drawable/icon_trending" />
+
+    <item android:id="@+id/menu_option_search"
+        android:title="@string/menu_search"
+        android:icon="@drawable/icon_search" />
+
+    <item android:id="@+id/menu_option_personal"
+        android:title="@string/menu_myList"
+        android:icon="@drawable/icon_list" />
+</menu>
