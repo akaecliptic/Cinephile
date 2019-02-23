@@ -73,22 +73,22 @@ public class RecyclerViewAdapterSearch extends RecyclerView.Adapter<RecyclerView
                     viewHolder.addToListBtn.setImageDrawable(context.getDrawable(R.drawable.ic_update));
                     viewHolder.addToListBtn.getDrawable().mutate().setTint(context.getColor(R.color.colorAccent));
 
-                    viewHolder.addToListBtn.setOnClickListener(view -> {
-                        List<Media> temp = sql.getList().getItems();
-                        Media old = null;
-
-                        for (Media m : temp) {
-                            if (old == null)
-                                old = sql.getInDB(m, tempMedia);
-
-                        }
-
-                        if (old != null) {
-                            sql.updateEntryFromOnline(old.getId(), tempMedia);
-                            Toast.makeText(context, "Updated " + tempMedia.getTitle() + " in your list",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    });
+//                    viewHolder.addToListBtn.setOnClickListener(view -> {
+//                        List<Media> temp = sql.getList().getItems();
+//                        Media old = null;
+//
+//                        for (Media m : temp) {
+//                            if (old == null)
+//                                old = sql.getInDB(m, tempMedia);
+//
+//                        }
+//
+//                        if (old != null) {
+//                            sql.updateEntryFromOnline(old.getId(), tempMedia);
+//                            Toast.makeText(context, "Updated " + tempMedia.getTitle() + " in your list",
+//                                    Toast.LENGTH_SHORT).show();
+//                        }
+//                    });
                 } else {
 
                     viewHolder.addToListBtn.setOnClickListener(view -> {

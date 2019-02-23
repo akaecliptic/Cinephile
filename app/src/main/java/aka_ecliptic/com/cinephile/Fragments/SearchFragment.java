@@ -38,7 +38,7 @@ public class SearchFragment extends Fragment {
 
     private static final String TAG = "SearchFragment";
 
-    private final Repository<Media> repository = new Repository<>();
+    private Repository<Media> repository;
     private RecyclerViewAdapterSearch adapter;
     private Switch aSwitch;
     private List<Media> onlineSearch;
@@ -51,7 +51,7 @@ public class SearchFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.activity_search, container, false);
 
-        repository.setList(SQLiteHandler.getInstance(view.getContext()).getList().getItems());
+        repository = new Repository<Media>(view.getContext());
         onlineSearch = new ArrayList<>();
 
         RecyclerView recyclerView = view.findViewById(R.id.searchRecyclerView);
@@ -107,7 +107,7 @@ public class SearchFragment extends Fragment {
             adapter.setOnline(aSwitch.isChecked());
             if(!aSwitch.isChecked()){
                 if(query.length() > 0) {
-                    repository.setList(SQLiteHandler.getInstance(view.getContext()).getList().getItems());
+                    repository.setList(this.getContext());
                     adapter.getFilter().filter(query);
                 }
             }else{

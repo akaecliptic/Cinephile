@@ -1,5 +1,6 @@
 package aka_ecliptic.com.cinephile.Fragments;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.res.TypedArray;
@@ -37,10 +38,6 @@ import aka_ecliptic.com.cinephile.Handler.SQLiteHandler;
 
 public class MyListFragment extends Fragment implements RecyclerViewAdapterMyList.ItemClickListener {
 
-    /*
-        TODO implement API
-    */
-
     public static final String TAG = "MyListFragment";
 
     private FloatingActionButton sortBtn;
@@ -48,7 +45,7 @@ public class MyListFragment extends Fragment implements RecyclerViewAdapterMyLis
     private Dialog dialogAddMovie;
     private RecyclerViewAdapterMyList adapter;
 
-    private final Repository<Media> repository = new Repository<>();
+    private Repository<Media> repository;
 
     @Nullable
     @Override
@@ -56,7 +53,7 @@ public class MyListFragment extends Fragment implements RecyclerViewAdapterMyLis
 
         View view = inflater.inflate(R.layout.activity_my_list, container, false);
 
-        repository.setList(SQLiteHandler.getInstance(view.getContext()).getList().getItems());
+        repository = new Repository<>(view.getContext());
 
         RecyclerView recyclerView = view.findViewById(R.id.myListRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
@@ -127,7 +124,7 @@ public class MyListFragment extends Fragment implements RecyclerViewAdapterMyLis
         b.putSerializable(Movie.class.getName(), adapter.getItem(position));
         Intent newIntent = new Intent(view.getContext(), MovieProfileActivity.class);
         newIntent.putExtras(b);
-        startActivityForResult(newIntent, 0);
+        startActivityForResult(newIntent, 77);
 
         Toast.makeText(this.getContext(), "Opening " + adapter.getItemTitle(position), Toast.LENGTH_SHORT).show();
     }
@@ -167,11 +164,10 @@ public class MyListFragment extends Fragment implements RecyclerViewAdapterMyLis
                 int rating = Integer.parseInt(ratingEdit.getText().toString());
                 String genre = spinnerEdit.getSelectedItem().toString();
 
-                SQLiteHandler.getInstance(getContext()).newEntry(new Movie(seen, year, title, rating, Media.Genre.valueOf(genre)));
                 int index = repository.getItems().size();
-                repository.getItems().add(SQLiteHandler.getInstance(getContext()).getList().getItems().get(index));
-                adapter.setData(repository.getItems());
+                repository.addItem(new Movie(seen, year, title, rating, Media.Genre.valueOf(genre)), this.getContext());
                 adapter.notifyItemInserted(index);
+
                 makeToast("The Movie " + title + " has been added");
                 dialogAddMovie.dismiss();
             }catch (Exception e){
@@ -190,7 +186,7 @@ public class MyListFragment extends Fragment implements RecyclerViewAdapterMyLis
     }
 
     private Spinner loadSpinner(Spinner spinner){
-        ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(getView().getContext(),
+        ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(this.getContext(),
                 R.array.media_genres, android.R.layout.simple_spinner_item);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(arrayAdapter);
@@ -201,13 +197,19 @@ public class MyListFragment extends Fragment implements RecyclerViewAdapterMyLis
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==0)
+        if(resultCode==99)
         {
-            String sortOrder = repository.getSortTypeString();
-            repository.setList(SQLiteHandler.getInstance(getContext()).getList().getItems());
-            repository.sortBySortType(Repository.Sort.valueOf(sortOrder));
-            adapter.setData(repository.getItems());
-            adapter.notifyDataSetChanged();
+            Bundle b = data.getExtras();
+            if (b != null){
+                Movie temp = (Movie) b.getSerializable(Movie.class.getName());
+                int index = repository.replaceItem(temp, this.getContext());
+                if (index != -1){
+                    adapter.notifyItemChanged(index);
+                }else {
+                    makeToast("There was an error when editing the movie");
+                }
+
+            }
         }
     }
 }

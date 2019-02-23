@@ -47,7 +47,7 @@ public class RecyclerViewAdapterProfile extends RecyclerView.Adapter<RecyclerVie
         if(movie != null){
             this.movie = movie;
         } else{
-            this.movie = new Movie(true, 2019, "Error Getting Movie", 99, Media.Genre.NULL );
+            this.movie = new Movie(true, 2019, "Error Getting Movie", 99, Media.Genre.ACTION );
         }
     }
 

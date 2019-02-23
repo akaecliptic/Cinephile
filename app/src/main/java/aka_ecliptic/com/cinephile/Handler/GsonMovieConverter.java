@@ -30,7 +30,7 @@ public class GsonMovieConverter {
                             getYear(jsonObject.get("release_date").getAsString()),
                             jsonObject.get("title").getAsString(),
                             (int) jsonObject.get("vote_average").getAsDouble() * 10,
-                            Media.Genre.NULL
+                            Media.Genre.ACTION
                     );
 
                     Media.ImageData imageData = new Media.ImageData();
@@ -63,24 +63,7 @@ public class GsonMovieConverter {
             String year = release_date.substring(0, 4);
             return Integer.parseInt(year);
         }else {
-            return 1988;
+            return 1888;
         }
     }
-
-
-    /*private Gson gson;
-
-    public GsonMovieConverter(){
-        gson = new Gson();
-    }
-
-    public GsonMovieConverter(JsonArray json){
-        GsonBuilder builder = new GsonBuilder();
-        builder.setPrettyPrinting();
-    }
-
-    public void loadMovie(JsonArray json,Movie movie){
-
-    }*/
-
 }

@@ -3,8 +3,6 @@ package aka_ecliptic.com.cinephile.Model;
 import android.support.annotation.Nullable;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 public abstract class Media implements Comparable<Media>, Serializable {
 
@@ -20,10 +18,10 @@ public abstract class Media implements Comparable<Media>, Serializable {
     public Media(){
         this.id = 0;
         this.seen = false;
-        this.year = 0000;
+        this.year = 1888;
         this.title = "null";
         this.rating = 0;
-        this.genre = Genre.NULL;
+        this.genre = Genre.ACTION;
     }
 
     public Media(boolean seen, int year, String title, int rating, Genre genre){
@@ -35,15 +33,6 @@ public abstract class Media implements Comparable<Media>, Serializable {
         this.genre = genre;
     }
 
-    public Media(boolean seen, int year, String title, int rating){
-        this.id = 0;
-        this.seen = seen;
-        this.year = year;
-        this.title = title;
-        this.rating = rating;
-        this.genre = Genre.NULL;
-    }
-
     public Media(int id, boolean seen, int year, String title, int rating, Genre genre){
         this.id = id;
         this.seen = seen;
@@ -51,24 +40,6 @@ public abstract class Media implements Comparable<Media>, Serializable {
         this.title = title;
         this.rating = rating;
         this.genre = genre;
-    }
-
-    public Media(List<String> list){
-        this.id = 0;
-        this.seen = convertSeen(list.get(0));
-        this.year = Integer.parseInt(list.get(1));
-        this.title = list.get(2);
-        this.rating = Integer.parseInt(list.get(3));
-        this.genre = Genre.valueOf(list.get(4));
-    }
-
-    public Media(int id, List<String> list){
-        this.id = id;
-        this.seen = convertSeen(list.get(0));
-        this.year = Integer.parseInt(list.get(1));
-        this.title = list.get(2);
-        this.rating = Integer.parseInt(list.get(3));
-        this.genre = Genre.valueOf(list.get(4));
     }
 
     public int getId() {
@@ -135,64 +106,32 @@ public abstract class Media implements Comparable<Media>, Serializable {
         this.descriptor = descriptor;
     }
 
-    public List<String> asList(){
-
-        ArrayList<String> list = new ArrayList<>();
-
-        list.add(convertSeen(this.seen));
-        list.add(Integer.toString(this.year));
-        list.add(this.title);
-        list.add(Integer.toString(this.rating));
-        list.add(this.genre.toString());
-
-        return list;
-    }
-
-    public static String convertSeen(boolean s){
-        if(s){
-            return "1";
-        }else {
-            return "0";
-        }
-    }
-
-    public static boolean convertSeen(String s){
-        if(s.equals("1")){
-            return true;
-        }else{
-            return false;
-        }
-    }
-
-    @Override
-    public int hashCode(){
-        return this.id * 75 + this.rating * 75 + this.year * 75 +
-               this.title.hashCode() * 75 + this.genre.toString().hashCode() * 75 +
-               Boolean.hashCode(this.seen) * 75;
-    }
-
-    @Override
-    public boolean equals(Object o){
-        if (o instanceof Media){
-            Media m = (Media) o;
-            return this.id == m.getId() && this.title.equals(m.getTitle()) &&
-                this.year == m.getYear() && this.rating == m.getRating() &&
-                this.genre.toString().equals(m.getGenre().toString()) && this.seen == m.isSeen();
-
-        } else{
-            return false;
-        }
-    }
-
     @Override
     public int compareTo(Media mediaObj){
             return Integer.compare(this.id, mediaObj.id);
     }
 
+
+//    int id;
+//    protected boolean seen;
+//    protected int year;
+//    protected String title;
+//    protected int rating;
+//    protected Genre genre;
+    @Override
+    public boolean equals(Object o){
+        if(o instanceof Media)  {
+            Media m = (Media) o;
+            return this.id == m.getId() && this.seen == m.isSeen() && this.year == m.getYear() &&
+                    this.title.equals(m.getTitle()) && this.rating == m.getRating() &&
+                    this.genre.equals(m.getGenre());
+        }
+        return false;
+    }
+
     public enum Genre{
         ACTION, ADVENTURE, COMEDY, THRILLER,
-        DRAMA, ROMANTIC, HORROR, SCI_FI,
-        NULL
+        DRAMA, ROMANTIC, HORROR, SCI_FI;
     }
 
     public static class ImageData implements Serializable{

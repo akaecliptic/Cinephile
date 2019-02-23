@@ -8,6 +8,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
+import aka_ecliptic.com.cinephile.Handler.SQLiteHandler;
 import aka_ecliptic.com.cinephile.Model.Media;
 
 public class Repository <T extends Media> {
@@ -17,66 +18,92 @@ public class Repository <T extends Media> {
 
     public Repository(){
         this.mediaList = new ArrayList<>();
-        this.sortType = Sort.DEFAULT;
+        this.sortType = Sort.ID;
     }
 
     public Repository(Context context){
-        //this.mediaList = list;
-        this.sortType = Sort.DEFAULT;
+        this.mediaList = (List) SQLiteHandler.getInstance(context).getList();
+        this.sortType = Sort.ID;
     }
 
-    public void setList(List<T> list){
+    public void setList(List<T> list, Sort sort){
         this.mediaList = list;
-        this.sortType = Sort.DEFAULT;
+        if (sort == null){
+            this.sortType = Sort.UNSORTED;
+        }else{
+            this.sortType = sort;
+        }
+
+    }
+
+    public void setList(Context context) {
+        this.mediaList = (List) SQLiteHandler.getInstance(context).getList();
     }
 
     public List<T> getItems(){
         return this.mediaList;
     }
 
-    public void sortById(){
-        this.mediaList.sort(Comparator.comparing(T::getId));
-        this.sortType = Sort.ID;
-    }
+    public int replaceItem(T item, Context context) {
+        SQLiteHandler.getInstance(context).updateEntry(item);
+        int index = -1;
 
-    public void sortByAlphabetically(){
-        this.mediaList.sort(Comparator.comparing(T::getTitle));
-        this.sortType = Sort.ALPHABETICALLY;
-    }
-
-    public void sortByRating(){
-        this.mediaList.sort(Comparator.comparing(T::getRating).reversed());
-        this.sortType = Sort.RATING;
-    }
-
-    public void sortByYear(){
-        this.mediaList.sort(Comparator.comparing(T::getYear));
-        this.sortType = Sort.YEAR;
-    }
-
-    public void sortBySortType(Sort sortOrder){
-        if (sortOrder == Sort.ID){
-            sortById();
-        } else if(sortOrder == Sort.ALPHABETICALLY){
-            sortByAlphabetically();
-        } else if(sortOrder == Sort.RATING){
-            sortByRating();
-        } else if(sortOrder == Sort.YEAR){
-            sortByYear();
+        for (T m : this.mediaList) {
+            if(m.getId() == item.getId()){
+                index = this.mediaList.indexOf(m);
+                this.mediaList.set(index, item);
+            }
         }
+
+        return index;
     }
 
-    public String getSortTypeString(){
-        return this.sortType.toString();
+    public void addItem(T movie, Context context) {
+        SQLiteHandler.getInstance(context).newEntry(movie);
+        this.mediaList.add(movie);
+
     }
 
     public Sort getSortType(){
         return this.sortType;
     }
 
+    public void sortBySortType(Sort sortOrder){
+        switch (sortOrder){
+            case ID: sortById();
+                break;
+            case ALPHABETICALLY: sortAlphabetically();
+                break;
+            case RATING: sortByRating();
+                break;
+            case YEAR: sortByYear();
+                break;
+        }
+    }
+
+    private void sortById(){
+        this.mediaList.sort(Comparator.comparing(T::getId));
+        this.sortType = Sort.ID;
+    }
+
+    private void sortAlphabetically(){
+        this.mediaList.sort(Comparator.comparing(T::getTitle));
+        this.sortType = Sort.ALPHABETICALLY;
+    }
+
+    private void sortByRating(){
+        this.mediaList.sort(Comparator.comparing(T::getRating).reversed());
+        this.sortType = Sort.RATING;
+    }
+
+    private void sortByYear(){
+        this.mediaList.sort(Comparator.comparing(T::getYear));
+        this.sortType = Sort.YEAR;
+    }
+
     public enum Sort{
-        ALPHABETICALLY(2), ID(4),
-        RATING(1), YEAR(3), DEFAULT(0);
+        ALPHABETICALLY(2), ID(0),
+        RATING(1), YEAR(3), UNSORTED(99);
 
         private final Integer index;
 
@@ -90,7 +117,7 @@ public class Repository <T extends Media> {
 
         public static Optional<Sort> valueOf(Integer value) {
             return Arrays.stream(values())
-                    .filter(Sort -> Sort.index == value)
+                    .filter(Sort -> Sort.index.equals(value))
                     .findFirst();
         }
     }
