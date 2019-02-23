@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="akaecliptic.com.cinephile">
+    package="aka_ecliptic.com.cinephile">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -14,7 +14,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name="akaecliptic.com.cinephile.Activity.ActivityMain"
+            android:name="aka_ecliptic.com.cinephile.Activity.ActivityMain"
             android:theme="@style/CustomThemeDark"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="akaecliptic.com.cinephile.Activity.MovieProfileActivity"
+            android:name="aka_ecliptic.com.cinephile.Activity.MovieProfileActivity"
             android:theme="@style/CustomThemeDark" />
 
     </application>
