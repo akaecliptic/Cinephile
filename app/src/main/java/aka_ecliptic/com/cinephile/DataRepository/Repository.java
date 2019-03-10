@@ -46,6 +46,7 @@ public class Repository <T extends Media> {
 
     public int replaceItem(T item, Context context) {
         SQLiteHandler.getInstance(context).updateEntry(item);
+
         int index = -1;
 
         for (T m : this.mediaList) {

@@ -53,10 +53,7 @@ public class MovieProfileActivity extends AppCompatActivity {
             Bundle b = new Bundle();
             b.putSerializable(Movie.class.getName(), adapter.getEditedItem());
 
-            if(this.getIntent().getExtras() != null)
-                this.getIntent().getExtras().clear();
-
-            this.getIntent().putExtras(b);
+            intent.putExtras(b);
 
             setResult(99, intent);
             finish();

@@ -204,7 +204,8 @@ public class MyListFragment extends Fragment implements RecyclerViewAdapterMyLis
                 Movie temp = (Movie) b.getSerializable(Movie.class.getName());
                 int index = repository.replaceItem(temp, this.getContext());
                 if (index != -1){
-                    adapter.notifyItemChanged(index);
+                    adapter.setData(repository.getItems());
+                    adapter.notifyDataSetChanged();
                 }else {
                     makeToast("There was an error when editing the movie");
                 }

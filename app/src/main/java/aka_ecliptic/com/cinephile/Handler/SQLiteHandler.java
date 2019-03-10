@@ -291,9 +291,9 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 
     public void deleteEntry(int id){
         SQLiteDatabase db = getWritableDatabase();
-        db.delete(MySQLiteHelper.MOVIE_TABLE, "WHERE Id = ?", new String[] {String.valueOf(id)});
-        db.delete(MySQLiteHelper.POSTER_TABLE, "WHERE MovieId = ?", new String[] {String.valueOf(id)});
-        db.delete(MySQLiteHelper.DESCRIPTOR_TABLE, "WHERE MovieId = ?", new String[] {String.valueOf(id)});
+        db.delete(MySQLiteHelper.MOVIE_TABLE, "Id = ?", new String[] {String.valueOf(id)});
+        db.delete(MySQLiteHelper.POSTER_TABLE, "MovieId = ?", new String[] {String.valueOf(id)});
+        db.delete(MySQLiteHelper.DESCRIPTOR_TABLE, "MovieId = ?", new String[] {String.valueOf(id)});
     }
 
     /**

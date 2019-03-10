@@ -111,13 +111,6 @@ public abstract class Media implements Comparable<Media>, Serializable {
             return Integer.compare(this.id, mediaObj.id);
     }
 
-
-//    int id;
-//    protected boolean seen;
-//    protected int year;
-//    protected String title;
-//    protected int rating;
-//    protected Genre genre;
     @Override
     public boolean equals(Object o){
         if(o instanceof Media)  {
