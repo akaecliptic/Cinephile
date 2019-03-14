@@ -1,6 +1,5 @@
 package aka_ecliptic.com.cinephile.Adapter;
 
-import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
@@ -51,19 +50,19 @@ public class RecyclerViewAdapterProfile extends RecyclerView.Adapter<RecyclerVie
         }
     }
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.recycler_movie_profile_layout, parent, false);
         return new ViewHolder(view);
     }
 
-    @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         this.vw = viewHolder;
-        viewHolder.yearTextView.setText(Integer.toString(movie.getYear()));
+        viewHolder.yearTextView.setText(String.valueOf(movie.getYear()));
         viewHolder.titleTextView.setText(movie.getTitle());
-        viewHolder.ratingTextView.setText(Integer.toString(movie.getRating()));
+        viewHolder.ratingTextView.setText(String.valueOf(movie.getRating()));
         viewHolder.seenBtn.getDrawable().mutate().setTint(seenColor());
         viewHolder.genre.setSelection(getDefaultSelected(movie.getGenre().name()));
 
@@ -97,15 +96,28 @@ public class RecyclerViewAdapterProfile extends RecyclerView.Adapter<RecyclerVie
 
     public Movie getEditedItem(){
 
-        if(Integer.parseInt(vw.yearTextView.getText().toString()) != movie.getYear()){
-            movie.setYear(Integer.parseInt(vw.yearTextView.getText().toString()));
-        } else if(Integer.parseInt(vw.ratingTextView.getText().toString()) != movie.getRating()){
-            movie.setRating(Integer.parseInt(vw.ratingTextView.getText().toString()));
-        } else if(!vw.titleTextView.getText().toString().equals(movie.getTitle())){
+        if(vw.yearTextView.getText().toString().length() != 0) {
+            if (Integer.parseInt(vw.yearTextView.getText().toString()) != movie.getYear()) {
+                movie.setYear(Integer.parseInt(vw.yearTextView.getText().toString()));
+            }
+        }
+
+        if(vw.ratingTextView.getText().toString().length() != 0) {
+            if (Integer.parseInt(vw.ratingTextView.getText().toString()) != movie.getRating()) {
+                movie.setRating(Integer.parseInt(vw.ratingTextView.getText().toString()));
+            }
+        }else{
+            movie.setRating(0);
+        }
+
+        if(!vw.titleTextView.getText().toString().equals(movie.getTitle())){
             movie.setTitle(vw.titleTextView.getText().toString());
-        } else if (!vw.genre.getSelectedItem().toString().equals(movie.getGenre().toString())){
+        }
+
+        if (!vw.genre.getSelectedItem().toString().equals(movie.getGenre().toString())){
             movie.setGenre(Media.Genre.valueOf(vw.genre.getSelectedItem().toString()));
         }
+
         return movie;
     }
 
@@ -115,7 +127,7 @@ public class RecyclerViewAdapterProfile extends RecyclerView.Adapter<RecyclerVie
     }
 
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    class ViewHolder extends RecyclerView.ViewHolder{
         ArrayAdapter<CharSequence> arrayAdapter;
 
         EditText yearTextView;
@@ -127,7 +139,7 @@ public class RecyclerViewAdapterProfile extends RecyclerView.Adapter<RecyclerVie
         Spinner genre;
         FloatingActionButton seenBtn;
 
-        public ViewHolder(@NonNull View itemView) {
+        ViewHolder(@NonNull View itemView) {
             super(itemView);
             yearTextView = itemView.findViewById(R.id.movieProfileYear);
             titleTextView = itemView.findViewById(R.id.movieProfileTitle);
@@ -199,12 +211,10 @@ public class RecyclerViewAdapterProfile extends RecyclerView.Adapter<RecyclerVie
 
         private void closeKeyboard(View v){
             if(v != null){
-                InputMethodManager imm = (InputMethodManager)context.getSystemService(context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
             }
         }
     }
-    //String getItemTitle(int id){
-        //return data.get(id).getTitle();
 }
 

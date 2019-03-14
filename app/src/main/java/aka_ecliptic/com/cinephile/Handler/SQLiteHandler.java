@@ -65,18 +65,18 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     }
 
     private void generateTables(SQLiteDatabase db) {
-        String exe1 = "CREATE TABLE IF NOT EXISTS `table_of_movies` (" +
-                "`Id`	INTEGER NOT NULL PRIMARY KEY," +
-                "`Seen`	TEXT NOT NULL," +
-                "`Year`	TEXT NOT NULL," +
-                "`Title`	TEXT NOT NULL," +
-                "`Rating`	TEXT NOT NULL," +
-                "`Genre`	TEXT NOT NULL)";
+        String exe1 = "CREATE TABLE IF NOT EXISTS 'table_of_movies' (" +
+                "'Id'	INTEGER NOT NULL PRIMARY KEY," +
+                "'Seen'	TEXT NOT NULL," +
+                "'Year'	TEXT NOT NULL," +
+                "'Title'	TEXT NOT NULL," +
+                "'Rating'	TEXT NOT NULL," +
+                "'Genre'	TEXT NOT NULL)";
 
         String exe2 = "CREATE TABLE IF NOT EXISTS 'movie_posters' ( " +
-                "`MovieId` INTEGER NOT NULL UNIQUE, " +
-                "`Backdrop` TEXT, " +
-                "`ProfilePoster` TEXT, " +
+                "'MovieId' INTEGER NOT NULL UNIQUE, " +
+                "'Backdrop' TEXT, " +
+                "'ProfilePoster' TEXT, " +
                 "FOREIGN KEY(MovieId) REFERENCES table_of_movies(Id))";
 
         String exe3 = "CREATE TABLE IF NOT EXISTS 'movie_descriptors' (" +
@@ -173,19 +173,6 @@ public class SQLiteHandler extends SQLiteOpenHelper {
             }
         }
 
-        db.close();
-    }
-
-    public void updateEntry(Media mediaObj){
-        ContentValues value = new ContentValues();
-        SQLiteDatabase db = getWritableDatabase();
-        List<String> list = MediaListConverter.asList(mediaObj);
-
-        for(int i = 0; i < movieTableHeadings.size(); i++){
-            value.put(movieTableHeadings.get(i), list.get(i));
-        }
-
-        db.update(MySQLiteHelper.MOVIE_TABLE,  value, "Id = " + mediaObj.getId(), null);
         db.close();
     }
 
@@ -289,6 +276,27 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         return null;
     }
 
+    /**
+     *
+     * @param mediaObj
+     */
+    public void updateEntry(Media mediaObj){
+        ContentValues value = new ContentValues();
+        SQLiteDatabase db = getWritableDatabase();
+        List<String> list = MediaListConverter.asList(mediaObj);
+
+        for(int i = 0; i < movieTableHeadings.size(); i++){
+            value.put(movieTableHeadings.get(i), list.get(i));
+        }
+
+        db.update(MySQLiteHelper.MOVIE_TABLE,  value, "Id = ?", new String[] {String.valueOf(mediaObj.getId())});
+        db.close();
+    }
+
+    /**
+     *
+     * @param id
+     */
     public void deleteEntry(int id){
         SQLiteDatabase db = getWritableDatabase();
         db.delete(MySQLiteHelper.MOVIE_TABLE, "Id = ?", new String[] {String.valueOf(id)});

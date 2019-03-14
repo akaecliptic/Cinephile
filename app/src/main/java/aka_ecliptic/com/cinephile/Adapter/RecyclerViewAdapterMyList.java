@@ -1,6 +1,5 @@
 package aka_ecliptic.com.cinephile.Adapter;
 
-import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
@@ -20,18 +19,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import aka_ecliptic.com.cinephile.Handler.SQLiteHandler;
 import aka_ecliptic.com.cinephile.Model.Media;
 import aka_ecliptic.com.cinephile.Model.Movie;
 import aka_ecliptic.com.cinephile.R;
-import aka_ecliptic.com.cinephile.Handler.SQLiteHandler;
 
 public class RecyclerViewAdapterMyList extends RecyclerView.Adapter<RecyclerViewAdapterMyList.ViewHolder> implements Filterable {
 
     private List<Media> data;
+    private List<Media> displayedData;
     private LayoutInflater mInflater;
     private ItemClickListener rcClickListener;
     private Context context;
-    private List<Media> displayedData;
 
     public RecyclerViewAdapterMyList(Context context, List<Media> list){
         this.mInflater = LayoutInflater.from(context);
@@ -40,19 +39,19 @@ public class RecyclerViewAdapterMyList extends RecyclerView.Adapter<RecyclerView
         displayedData = new ArrayList<>(list);
     }
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.recycler_my_list, parent, false);
         return new ViewHolder(view);
     }
 
-    @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         Media tempMedia = displayedData.get(position);
-        viewHolder.yearTextView.setText(Integer.toString(tempMedia.getYear()));
+        viewHolder.yearTextView.setText(String.valueOf(tempMedia.getYear()));
         viewHolder.titleTextView.setText(tempMedia.getTitle());
-        viewHolder.ratingTextView.setText(Integer.toString(tempMedia.getRating()));
+        viewHolder.ratingTextView.setText(String.valueOf(tempMedia.getRating()));
         viewHolder.seenCheckbox.setChecked(tempMedia.isSeen());
     }
 
@@ -104,7 +103,7 @@ public class RecyclerViewAdapterMyList extends RecyclerView.Adapter<RecyclerView
         TextView ratingTextView;
         CheckBox seenCheckbox;
 
-        public ViewHolder(@NonNull View itemView) {
+        ViewHolder(@NonNull View itemView) {
             super(itemView);
             yearTextView = itemView.findViewById(R.id.myListTVYear);
             titleTextView = itemView.findViewById(R.id.myListTVTitle);
@@ -172,10 +171,6 @@ public class RecyclerViewAdapterMyList extends RecyclerView.Adapter<RecyclerView
     public void setData(List<Media> list){
         this.data = list;
         this.displayedData = new ArrayList<>(list);
-    }
-
-    public String getItemTitle(int id){
-        return data.get(id).getTitle();
     }
 
     public Movie getItem(int id){

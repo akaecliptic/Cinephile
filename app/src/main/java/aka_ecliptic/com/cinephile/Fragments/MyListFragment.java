@@ -66,6 +66,7 @@ public class MyListFragment extends Fragment implements RecyclerViewAdapterMyLis
         SearchView searchView = view.findViewById(R.id.myListSearchView);
         searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
         searchView.setOnClickListener(v -> searchView.setIconified(false));
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -126,7 +127,7 @@ public class MyListFragment extends Fragment implements RecyclerViewAdapterMyLis
         newIntent.putExtras(b);
         startActivityForResult(newIntent, 77);
 
-        Toast.makeText(this.getContext(), "Opening " + adapter.getItemTitle(position), Toast.LENGTH_SHORT).show();
+        makeToast("Opening");
     }
 
     private void makeToast(String message){

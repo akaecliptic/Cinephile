@@ -62,30 +62,31 @@ public class TrendingFragment extends Fragment{
 
         tmdbHandler = TMDBHandler.getInstance(this.getContext());
         tmdbHandler.getTrending(pageCount, trendingType, result -> {
-
             loadTrending(result);
+            adapter.notifyDataSetChanged();
+        });
 
-            adapter = new RecyclerViewAdapterTrending(this.getContext(), repository.getItems(),
-                                                        tmdbHandler.getImageConfig("w92"));
-            adapter.setAddMoreClickListener((v)->
+        adapter = new RecyclerViewAdapterTrending(this.getContext(), repository.getItems(),
+                tmdbHandler.getImageConfig("w92"));
+
+        adapter.setAddMoreClickListener((v)->
                 tmdbHandler.getTrending(getNewPageCount(), trendingType, toAdd -> {
                     int before = adapter.getItemCount();
                     loadTrending(toAdd);
                     adapter.notifyItemRangeInserted(before, insertAmount);
                 })
-            );
+        );
 
-            adapter.setSelectedItemListener((view1, position) -> {
-                Bundle b = new Bundle();
-                b.putSerializable(Movie.class.getName(), adapter.getItem(position));
-                Intent newIntent = new Intent(view1.getContext(), MovieProfileActivity.class);
-                newIntent.putExtras(b);
-                startActivityForResult(newIntent, 0);
+        adapter.setSelectedItemListener((view1, position) -> {
+            Bundle b = new Bundle();
+            b.putSerializable(Movie.class.getName(), adapter.getItem(position));
+            Intent newIntent = new Intent(view1.getContext(), MovieProfileActivity.class);
+            newIntent.putExtras(b);
+            startActivityForResult(newIntent, 0);
 
-                Toast.makeText(view1.getContext(), "Opening " + adapter.getItem(position).getTitle(), Toast.LENGTH_SHORT).show();
-            });
-            recyclerView.setAdapter(adapter);
+            Toast.makeText(view1.getContext(), "Opening " + adapter.getItem(position).getTitle(), Toast.LENGTH_SHORT).show();
         });
+        recyclerView.setAdapter(adapter);
 
         return view;
     }

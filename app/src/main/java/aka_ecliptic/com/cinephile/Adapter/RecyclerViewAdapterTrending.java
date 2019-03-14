@@ -1,6 +1,5 @@
 package aka_ecliptic.com.cinephile.Adapter;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -17,6 +16,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import aka_ecliptic.com.cinephile.DataRepository.Repository;
 import aka_ecliptic.com.cinephile.Handler.SQLiteHandler;
 import aka_ecliptic.com.cinephile.Model.Media;
 import aka_ecliptic.com.cinephile.R;
@@ -31,12 +31,14 @@ public class RecyclerViewAdapterTrending extends RecyclerView.Adapter<RecyclerVi
     private Context context;
     private String imageConfig;
     private SelectedItemListener selectedListener;
+    private Repository<Media> ref;
 
     public RecyclerViewAdapterTrending(Context context, List<Media> list, String imageConfig){
         this.mInflater = LayoutInflater.from(context);
         this.context = context;
         this.data = list;
         this.imageConfig = imageConfig;
+        ref = new Repository<>(context);
     }
 
     @NonNull
@@ -52,27 +54,46 @@ public class RecyclerViewAdapterTrending extends RecyclerView.Adapter<RecyclerVi
         return new ViewHolder(view, viewType);
     }
 
-    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
+
+
         if(viewHolder.viewType == VIEW_TYPE_CELL) {
             Media tempMedia = data.get(position);
-            viewHolder.yearTextView.setText(Integer.toString(tempMedia.getYear()));
+
+            boolean have = ref.getItems().stream().anyMatch(m -> m.getId() == tempMedia.getId()
+                        && m.getTitle().equals(tempMedia.getTitle())
+                        && m.getYear() == tempMedia.getYear());
+
+            viewHolder.yearTextView.setText(String.valueOf(tempMedia.getYear()));
             viewHolder.titleTextView.setText(tempMedia.getTitle());
-            viewHolder.ratingTextView.setText(Integer.toString(tempMedia.getRating()));
+            viewHolder.ratingTextView.setText(String.valueOf(tempMedia.getRating()));
             Picasso.get().load(imageConfig + tempMedia.getImageData().getPosterImagePath()).
                     fit().centerCrop().into(viewHolder.imageView);
 
-            viewHolder.addToListBtn.setOnClickListener(view -> {
+            if(have){
+                viewHolder.addToListBtn.hide();
+            }else {
+                viewHolder.addToListBtn.show();
+                viewHolder.addToListBtn.setOnClickListener(view -> {
 
-                SQLiteHandler.getInstance(context).newEntry(tempMedia);
+                    SQLiteHandler.getInstance(context).newEntry(tempMedia);
 
-                Toast.makeText(context, "Added " + tempMedia.getTitle() + " to your list",
-                        Toast.LENGTH_SHORT).show();
-            });
+                    Toast.makeText(context, "Added " + tempMedia.getTitle() + " to your list",
+                            Toast.LENGTH_SHORT).show();
+                });
+            }
         }else{
+
             viewHolder.footerButton.setText("Load More");
             viewHolder.footerButton.setOnClickListener(addClickListener);
+            viewHolder.footerButton.setVisibility(View.VISIBLE);
+            viewHolder.footerButton.setEnabled(true);
+
+            if(data.size() == 0) {
+                viewHolder.footerButton.setVisibility(View.INVISIBLE);
+                viewHolder.footerButton.setEnabled(false);
+            }
         }
 
     }
