@@ -65,6 +65,10 @@ public class Repository <T extends Media> {
 
     }
 
+    public static <T extends Media>  void addToDB(Context context, T movie){
+        SQLiteHandler.getInstance(context).newEntry(movie);
+    }
+
     public Sort getSortType(){
         return this.sortType;
     }

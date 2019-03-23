@@ -19,6 +19,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import aka_ecliptic.com.cinephile.DataRepository.Repository;
 import aka_ecliptic.com.cinephile.Handler.SQLiteHandler;
 import aka_ecliptic.com.cinephile.Model.Media;
 import aka_ecliptic.com.cinephile.R;
@@ -54,7 +55,6 @@ public class RecyclerViewAdapterSearch extends RecyclerView.Adapter<RecyclerView
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position){
 
-        SQLiteHandler sql = SQLiteHandler.getInstance(context);
 
             Media tempMedia = displayedData.get(position);
             viewHolder.yearTextView.setText(String.valueOf(tempMedia.getYear()));
@@ -71,7 +71,7 @@ public class RecyclerViewAdapterSearch extends RecyclerView.Adapter<RecyclerView
                 viewHolder.addToListBtn.setClickable(true);
                 viewHolder.addToListBtn.show();
                 viewHolder.addToListBtn.setOnClickListener(view -> {
-                    sql.newEntry(tempMedia);
+                    Repository.addToDB(context, tempMedia);
 
                     Toast.makeText(context, "Added " + tempMedia.getTitle() + " to your list",
                             Toast.LENGTH_SHORT).show();

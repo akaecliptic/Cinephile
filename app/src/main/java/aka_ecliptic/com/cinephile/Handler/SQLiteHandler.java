@@ -74,13 +74,13 @@ public class SQLiteHandler extends SQLiteOpenHelper {
                 "'Genre'	TEXT NOT NULL)";
 
         String exe2 = "CREATE TABLE IF NOT EXISTS 'movie_posters' ( " +
-                "'MovieId' INTEGER NOT NULL UNIQUE, " +
+                "'MovieID' INTEGER NOT NULL UNIQUE, " +
                 "'Backdrop' TEXT, " +
                 "'ProfilePoster' TEXT, " +
-                "FOREIGN KEY(MovieId) REFERENCES table_of_movies(Id))";
+                "FOREIGN KEY(MovieID) REFERENCES table_of_movies(Id))";
 
         String exe3 = "CREATE TABLE IF NOT EXISTS 'movie_descriptors' (" +
-                "'MovieId' INTEGER NOT NULL UNIQUE," +
+                "'MovieID' INTEGER NOT NULL UNIQUE," +
                 "'Description' TEXT," +
                 "FOREIGN KEY(MovieID) REFERENCES table_of_movies(Id))";
 
@@ -213,69 +213,6 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         return false;
     }
 
-
-    public boolean isInDB(Media m){
-        SQLiteDatabase db = getWritableDatabase();
-        String query = "SELECT Id FROM " + DB_MOVIE_TABLE + " WHERE Id = " + m.getId();
-
-        Cursor c = db.rawQuery(query, null);
-        c.moveToFirst();
-        if(c.getCount() > 0){
-            c.close();
-            return true;
-        }
-        c.close();
-        return false;
-    }
-
-    public boolean isInDB(String title){
-        ArrayList<String> temp = new ArrayList<>();
-        SQLiteDatabase db = getWritableDatabase();
-        String query = "SELECT Title FROM " + DB_MOVIE_TABLE + " WHERE 1";
-
-        Cursor c = db.rawQuery(query, null);
-        c.moveToFirst();
-        while (!c.isAfterLast()){
-            String t  = c.getString(0);
-            temp.add(t);
-
-            c.moveToNext();
-        }
-        c.close();
-        for(String t : temp){
-            String inDB = t.toLowerCase().trim().replace(" ", "");
-            String toCompare = title.toLowerCase().trim().replace(" ", "");
-            if(inDB.equals(toCompare)){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean isInDB(String title, int year){
-
-        List<Media> temp = getList();
-        for(Media t : temp){
-            String inDB = t.getTitle().toLowerCase().trim().replace(" ", "");
-            String toCompare = title.toLowerCase().trim().replace(" ", "");
-            if(inDB.equals(toCompare) && t.getYear() == year){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public Media getInDB(Media base, Media toCheck){
-
-        String titleToCheck = toCheck.getTitle().toLowerCase().trim().replace(" ", "");
-        String titleBase = base.getTitle().toLowerCase().trim().replace(" ", "");
-
-        if(titleBase.equals(titleToCheck)){
-            return base;
-        }
-        return null;
-    }
-
     /**
      *
      * @param mediaObj
@@ -300,8 +237,8 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     public void deleteEntry(int id){
         SQLiteDatabase db = getWritableDatabase();
         db.delete(MySQLiteHelper.MOVIE_TABLE, "Id = ?", new String[] {String.valueOf(id)});
-        db.delete(MySQLiteHelper.POSTER_TABLE, "MovieId = ?", new String[] {String.valueOf(id)});
-        db.delete(MySQLiteHelper.DESCRIPTOR_TABLE, "MovieId = ?", new String[] {String.valueOf(id)});
+        db.delete(MySQLiteHelper.POSTER_TABLE, "MovieID = ?", new String[] {String.valueOf(id)});
+        db.delete(MySQLiteHelper.DESCRIPTOR_TABLE, "MovieID = ?", new String[] {String.valueOf(id)});
     }
 
     /**
