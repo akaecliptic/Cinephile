@@ -51,7 +51,7 @@ public class SearchFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.activity_search, container, false);
 
-        repository = new Repository<Media>(view.getContext());
+        repository = new Repository<>(view.getContext());
         onlineSearch = new ArrayList<>();
 
         RecyclerView recyclerView = view.findViewById(R.id.searchRecyclerView);

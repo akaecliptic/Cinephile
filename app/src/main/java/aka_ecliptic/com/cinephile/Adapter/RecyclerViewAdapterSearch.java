@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -50,55 +51,32 @@ public class RecyclerViewAdapterSearch extends RecyclerView.Adapter<RecyclerView
         return new ViewHolder(view);
     }
 
-    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position){
 
         SQLiteHandler sql = SQLiteHandler.getInstance(context);
 
             Media tempMedia = displayedData.get(position);
-            viewHolder.yearTextView.setText(Integer.toString(tempMedia.getYear()));
+            viewHolder.yearTextView.setText(String.valueOf(tempMedia.getYear()));
             viewHolder.titleTextView.setText(tempMedia.getTitle());
-            viewHolder.ratingTextView.setText(Integer.toString(tempMedia.getRating()));
+            viewHolder.ratingTextView.setText(String.valueOf(tempMedia.getRating()));
 
-            if (sql.isInDB(tempMedia)) {
+            boolean alreadyHave = data.parallelStream().anyMatch(m -> m.getId() == tempMedia.getId());
+
+            if (alreadyHave) {
                 viewHolder.addToListBtn.setClickable(false);
-                viewHolder.addToListBtn.setAlpha(.0f);
+                viewHolder.addToListBtn.hide();
             } else {
 
                 viewHolder.addToListBtn.setClickable(true);
-                viewHolder.addToListBtn.setAlpha(1f);
+                viewHolder.addToListBtn.show();
+                viewHolder.addToListBtn.setOnClickListener(view -> {
+                    sql.newEntry(tempMedia);
 
-                if (sql.isInDB(tempMedia.getTitle(), tempMedia.getYear())) {
-                    viewHolder.addToListBtn.setImageDrawable(context.getDrawable(R.drawable.ic_update));
-                    viewHolder.addToListBtn.getDrawable().mutate().setTint(context.getColor(R.color.colorAccent));
+                    Toast.makeText(context, "Added " + tempMedia.getTitle() + " to your list",
+                            Toast.LENGTH_SHORT).show();
+                });
 
-//                    viewHolder.addToListBtn.setOnClickListener(view -> {
-//                        List<Media> temp = sql.getList().getItems();
-//                        Media old = null;
-//
-//                        for (Media m : temp) {
-//                            if (old == null)
-//                                old = sql.getInDB(m, tempMedia);
-//
-//                        }
-//
-//                        if (old != null) {
-//                            sql.updateEntryFromOnline(old.getId(), tempMedia);
-//                            Toast.makeText(context, "Updated " + tempMedia.getTitle() + " in your list",
-//                                    Toast.LENGTH_SHORT).show();
-//                        }
-//                    });
-                } else {
-
-                    viewHolder.addToListBtn.setOnClickListener(view -> {
-
-                        sql.newEntry(tempMedia);
-
-                        Toast.makeText(context, "Added " + tempMedia.getTitle() + " to your list",
-                                Toast.LENGTH_SHORT).show();
-                    });
-                }
             }
     }
 
@@ -160,22 +138,13 @@ public class RecyclerViewAdapterSearch extends RecyclerView.Adapter<RecyclerView
             }else{
                 String filterPattern = constraint.toString().toLowerCase().trim();
 
-                for(Media media : data ){
-                    if(media.getTitle().toLowerCase().contains(filterPattern)){
-                        filteredMedia.add(media);
-                    }
-                }
+                data.parallelStream()
+                        .filter(m -> m.getTitle().toLowerCase().trim().contains(filterPattern))
+                        .forEach(filteredMedia::add);
 
                 if(isOnline){
-                    SQLiteHandler sql = SQLiteHandler.getInstance(context);
                     List<Media> removedDupedOnline = new LinkedList<>(onlineResults);
-                    Iterator it = removedDupedOnline.iterator();
-                    while(it.hasNext()){
-                        Media temp = (Media) it.next();
-                        if(sql.isInDB(temp)){
-                            it.remove();
-                        }
-                    }
+                    removedDupedOnline.removeAll(data);
                     filteredMedia.addAll(removedDupedOnline);
                 }
             }
@@ -194,12 +163,6 @@ public class RecyclerViewAdapterSearch extends RecyclerView.Adapter<RecyclerView
             notifyDataSetChanged();
         }
     };
-
-    public void setData(List<Media> list){
-        this.data = list;
-        displayedData = new ArrayList<>(list);
-        notifyDataSetChanged();
-    }
 
     public void setSelectedClickListener(SelectedItemListener sICL){
         selectedItemListener = sICL;
