@@ -24,7 +24,7 @@
         android:layout_centerVertical="true"
         android:layout_marginStart="7dp"
         android:layout_toEndOf="@+id/trendingImageView"
-        android:text="@string/year"
+        android:text="@string/releaseDate"
         android:textColor="#fff"
         android:textSize="20sp" />
 

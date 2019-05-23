@@ -1,6 +1,5 @@
 package aka_ecliptic.com.cinephile.Adapter;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -14,13 +13,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 import aka_ecliptic.com.cinephile.DataRepository.Repository;
-import aka_ecliptic.com.cinephile.Handler.SQLiteHandler;
 import aka_ecliptic.com.cinephile.Model.Media;
 import aka_ecliptic.com.cinephile.R;
 
@@ -57,7 +53,7 @@ public class RecyclerViewAdapterSearch extends RecyclerView.Adapter<RecyclerView
 
 
             Media tempMedia = displayedData.get(position);
-            viewHolder.yearTextView.setText(String.valueOf(tempMedia.getYear()));
+            viewHolder.yearTextView.setText(String.valueOf(tempMedia.getReleaseDate()));
             viewHolder.titleTextView.setText(tempMedia.getTitle());
             viewHolder.ratingTextView.setText(String.valueOf(tempMedia.getRating()));
 

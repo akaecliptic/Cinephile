@@ -1,14 +1,16 @@
 package aka_ecliptic.com.cinephile.Model;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public abstract class Media implements Comparable<Media>, Serializable {
 
     protected int id;
     protected boolean seen;
-    protected int year;
+    protected Date releaseDate;
     protected String title;
     protected int rating;
     protected Genre genre;
@@ -18,25 +20,25 @@ public abstract class Media implements Comparable<Media>, Serializable {
     public Media(){
         this.id = 0;
         this.seen = false;
-        this.year = 1888;
+        this.releaseDate = new Date();
         this.title = "null";
         this.rating = 0;
-        this.genre = Genre.ACTION;
+        this.genre = Genre.NONE;
     }
 
-    public Media(boolean seen, int year, String title, int rating, Genre genre){
+    public Media(boolean seen, Date releaseDate, String title, int rating, Genre genre){
         this.id = 0;
         this.seen = seen;
-        this.year = year;
+        this.releaseDate = releaseDate;
         this.title = title;
         this.rating = rating;
         this.genre = genre;
     }
 
-    public Media(int id, boolean seen, int year, String title, int rating, Genre genre){
+    public Media(int id, boolean seen, Date releaseDate, String title, int rating, Genre genre){
         this.id = id;
         this.seen = seen;
-        this.year = year;
+        this.releaseDate = releaseDate;
         this.title = title;
         this.rating = rating;
         this.genre = genre;
@@ -58,12 +60,12 @@ public abstract class Media implements Comparable<Media>, Serializable {
         this.seen = seen;
     }
 
-    public int getYear() {
-        return year;
+    public Date getReleaseDate() {
+        return releaseDate;
     }
 
-    public void setYear(int year) {
-        this.year = year;
+    public void setReleaseDate(Date releaseDate) {
+        this.releaseDate = releaseDate;
     }
 
     public String getTitle() {
@@ -107,7 +109,7 @@ public abstract class Media implements Comparable<Media>, Serializable {
     }
 
     @Override
-    public int compareTo(Media mediaObj){
+    public int compareTo(@NonNull Media mediaObj){
             return Integer.compare(this.id, mediaObj.id);
     }
 
@@ -115,63 +117,19 @@ public abstract class Media implements Comparable<Media>, Serializable {
     public boolean equals(Object o){
         if(o instanceof Media)  {
             Media m = (Media) o;
-            return this.id == m.getId() && this.seen == m.isSeen() && this.year == m.getYear() &&
-                    this.title.equals(m.getTitle()) && this.rating == m.getRating() &&
-                    this.genre.equals(m.getGenre());
+            return this.id == m.getId() && this.releaseDate == m.getReleaseDate() &&
+                    this.title.equals(m.getTitle());
         }
         return false;
     }
 
-    public enum Genre{
-        ACTION, ADVENTURE, COMEDY, THRILLER,
-        DRAMA, ROMANTIC, HORROR, SCI_FI;
-    }
-
-    public static class ImageData implements Serializable{
-        private String posterImagePath;
-        private String backdropImagePath;
-
-        public ImageData(@Nullable String backdropImagePath, @Nullable String posterImagePath){
-            this.posterImagePath = posterImagePath;
-            this.backdropImagePath = backdropImagePath;
-
+    public boolean equals2(Object o){
+        if(o instanceof Media)  {
+            Media m = (Media) o;
+            return this.id == m.getId() && this.seen == m.isSeen() && this.releaseDate == m.getReleaseDate() &&
+                    this.title.equals(m.getTitle()) && this.rating == m.getRating() &&
+                    this.genre.equals(m.getGenre());
         }
-
-        public ImageData(){
-
-        }
-
-        public String getPosterImagePath() {
-            return posterImagePath;
-        }
-
-        public void setPosterImagePath(String posterImagePath) {
-            this.posterImagePath = posterImagePath;
-        }
-
-        public String getBackdropImagePath() {
-            return backdropImagePath;
-        }
-
-        public void setBackdropImagePath(String backdropImagePath) {
-            this.backdropImagePath = backdropImagePath;
-        }
-    }
-
-    //TODO Add more relevant parameters
-    public static class Descriptor implements Serializable{
-        private String description;
-
-        public Descriptor(String description){
-            this.description = description;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-
-        public void setDescription(String description) {
-            this.description = description;
-        }
+        return false;
     }
 }

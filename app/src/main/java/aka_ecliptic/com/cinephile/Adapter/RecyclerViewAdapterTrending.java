@@ -63,9 +63,9 @@ public class RecyclerViewAdapterTrending extends RecyclerView.Adapter<RecyclerVi
 
             boolean have = ref.getItems().stream().anyMatch(m -> m.getId() == tempMedia.getId()
                         && m.getTitle().equals(tempMedia.getTitle())
-                        && m.getYear() == tempMedia.getYear());
+                        && m.getReleaseDate() == tempMedia.getReleaseDate());
 
-            viewHolder.yearTextView.setText(String.valueOf(tempMedia.getYear()));
+            viewHolder.yearTextView.setText(String.valueOf(tempMedia.getReleaseDate()));
             viewHolder.titleTextView.setText(tempMedia.getTitle());
             viewHolder.ratingTextView.setText(String.valueOf(tempMedia.getRating()));
             Picasso.get().load(imageConfig + tempMedia.getImageData().getPosterImagePath()).

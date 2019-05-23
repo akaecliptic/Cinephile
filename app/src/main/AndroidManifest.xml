@@ -14,18 +14,18 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name="aka_ecliptic.com.cinephile.Activity.ActivityMain"
+            android:name=".Activity.ActivityMain"
             android:theme="@style/CustomThemeDark"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name="aka_ecliptic.com.cinephile.Activity.MovieProfileActivity"
+            android:name=".Activity.MovieProfileActivity"
             android:theme="@style/CustomThemeDark" />
-
     </application>
 
 </manifest>

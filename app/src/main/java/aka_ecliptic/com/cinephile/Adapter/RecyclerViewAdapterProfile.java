@@ -60,7 +60,7 @@ public class RecyclerViewAdapterProfile extends RecyclerView.Adapter<RecyclerVie
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         this.vw = viewHolder;
-        viewHolder.yearTextView.setText(String.valueOf(movie.getYear()));
+        viewHolder.yearTextView.setText(String.valueOf(movie.getReleaseDate()));
         viewHolder.titleTextView.setText(movie.getTitle());
         viewHolder.ratingTextView.setText(String.valueOf(movie.getRating()));
         viewHolder.seenBtn.getDrawable().mutate().setTint(seenColor());
@@ -97,8 +97,8 @@ public class RecyclerViewAdapterProfile extends RecyclerView.Adapter<RecyclerVie
     public Movie getEditedItem(){
 
         if(vw.yearTextView.getText().toString().length() != 0) {
-            if (Integer.parseInt(vw.yearTextView.getText().toString()) != movie.getYear()) {
-                movie.setYear(Integer.parseInt(vw.yearTextView.getText().toString()));
+            if (Integer.parseInt(vw.yearTextView.getText().toString()) != movie.getReleaseDate()) {
+                movie.setReleaseDate(Integer.parseInt(vw.yearTextView.getText().toString()));
             }
         }
 

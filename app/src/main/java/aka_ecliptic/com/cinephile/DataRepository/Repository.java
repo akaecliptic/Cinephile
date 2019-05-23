@@ -102,7 +102,7 @@ public class Repository <T extends Media> {
     }
 
     private void sortByYear(){
-        this.mediaList.sort(Comparator.comparing(T::getYear));
+        this.mediaList.sort(Comparator.comparing(T::getReleaseDate));
         this.sortType = Sort.YEAR;
     }
 

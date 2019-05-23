@@ -2,7 +2,7 @@
     <string name="app_name">Cinephile</string>
     <string name="title">Title</string>
     <string name="rating">Rating</string>
-    <string name="year">Year</string>
+    <string name="releaseDate">Year</string>
     <string name="Search">Search</string>
     <string name="menu_trending">Trending</string>
     <string name="menu_search">Search</string>
@@ -58,5 +58,12 @@
     <string name="title_notifications">Notifications</string>
     <string name="edit_on_create">edit_on_create</string>
     <string name="Online">Online</string>
+    <string name="title_activity_main_page">MainPage</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
 
 </resources>

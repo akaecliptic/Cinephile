@@ -14,7 +14,7 @@ public class MediaListConverter {
         ArrayList<String> list = new ArrayList<>();
 
         list.add(convertSeen(m.isSeen()));
-        list.add(Integer.toString(m.getYear()));
+        list.add(Integer.toString(m.getReleaseDate()));
         list.add(m.getTitle());
         list.add(Integer.toString(m.getRating()));
         list.add(m.getGenre().toString());

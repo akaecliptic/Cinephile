@@ -49,7 +49,7 @@ public class RecyclerViewAdapterMyList extends RecyclerView.Adapter<RecyclerView
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         Media tempMedia = displayedData.get(position);
-        viewHolder.yearTextView.setText(String.valueOf(tempMedia.getYear()));
+        viewHolder.yearTextView.setText(String.valueOf(tempMedia.getReleaseDate()));
         viewHolder.titleTextView.setText(tempMedia.getTitle());
         viewHolder.ratingTextView.setText(String.valueOf(tempMedia.getRating()));
         viewHolder.seenCheckbox.setChecked(tempMedia.isSeen());

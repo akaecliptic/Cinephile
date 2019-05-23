@@ -48,7 +48,8 @@ public class MovieProfileActivity extends AppCompatActivity {
 
     private void endProcedure(){
         Intent intent = new Intent();
-        if(!Objects.equals(getMovie(), adapter.getEditedItem())){
+        //TODO check if further null checks are needed.
+        if(!Objects.requireNonNull(getMovie()).equals2(adapter.getEditedItem())){
 
             Bundle b = new Bundle();
             b.putSerializable(Movie.class.getName(), adapter.getEditedItem());
