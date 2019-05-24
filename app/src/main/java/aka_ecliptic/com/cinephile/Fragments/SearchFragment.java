@@ -33,7 +33,7 @@ import aka_ecliptic.com.cinephile.Model.Media;
 import aka_ecliptic.com.cinephile.Model.Movie;
 import aka_ecliptic.com.cinephile.R;
 
-public class SearchFragment extends Fragment {
+public class SearchFragment extends Fragment implements RecyclerViewAdapterSearch.SelectedItemListener{
 
     private static final String TAG = "SearchFragment";
 
@@ -56,15 +56,7 @@ public class SearchFragment extends Fragment {
         RecyclerView recyclerView = view.findViewById(R.id.searchRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         adapter = new RecyclerViewAdapterSearch(this.getContext(), repository.getItems());
-        adapter.setSelectedClickListener((vw, position) -> {
-            Bundle b = new Bundle();
-            b.putSerializable(Movie.class.getName(), adapter.getItem(position));
-            Intent newIntent = new Intent(vw.getContext(), MovieProfileActivity.class);
-            newIntent.putExtras(b);
-            startActivityForResult(newIntent, 0);
-
-            Toast.makeText(vw.getContext(), "Opening " + adapter.getItem(position).getTitle(), Toast.LENGTH_SHORT).show();
-        });
+        adapter.setSelectedClickListener(this);
         recyclerView.setAdapter(adapter);
 
         SearchView searchView = view.findViewById(R.id.searchSearchView);
@@ -141,5 +133,16 @@ public class SearchFragment extends Fragment {
             Toast.makeText(this.getContext(), "There was an error making request",
                     Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onSelect(View view, int position) {
+        Bundle b = new Bundle();
+        b.putSerializable(Movie.class.getName(), adapter.getItem(position));
+        Intent newIntent = new Intent(view.getContext(), MovieProfileActivity.class);
+        newIntent.putExtras(b);
+        startActivityForResult(newIntent, 0);
+
+        Toast.makeText(view.getContext(), "Opening " + adapter.getItem(position).getTitle(), Toast.LENGTH_SHORT).show();
     }
 }

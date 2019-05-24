@@ -15,8 +15,12 @@ import aka_ecliptic.com.cinephile.R;
 
 public class MovieProfileActivity extends AppCompatActivity {
 
-    FloatingActionButton backBtn;
-
+    /**
+     * Used to create activity, load movie object into profile fragment, and then add profile fragment
+     * to fragment container.
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,7 +28,7 @@ public class MovieProfileActivity extends AppCompatActivity {
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
-        backBtn = findViewById(R.id.btnBackActivityMovie);
+        FloatingActionButton backBtn = findViewById(R.id.btnBackActivityMovie);
         backBtn.getDrawable().mutate().setTint(getResources().getColor(R.color.colorAccent, null));
 
         MediaProfileFragment.setMediaObject(getMovie());
@@ -34,11 +38,20 @@ public class MovieProfileActivity extends AppCompatActivity {
         backBtn.setOnClickListener((View vw) -> endProcedure());
     }
 
+    /**
+     * Used to ensure endProcedure method is called when leaving activity through android back button.
+     *
+     * @see MovieProfileActivity#endProcedure()
+     */
     @Override
     public void onBackPressed(){
         endProcedure();
     }
 
+    /**
+     * Called when closing this activity, used to run a check whether the viewed movie object was
+     * edited or not. If so it attaches the edited movie object to a bundle.
+     */
     private void endProcedure(){
         Intent intent = new Intent();
         if(!Objects.requireNonNull(getMovie()).equals2(MediaProfileFragment.getMediaObject())){
@@ -54,6 +67,11 @@ public class MovieProfileActivity extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * Used to pass the movie object of focus between activities, by passing through bundles.
+     *
+     * @return The Movie object to be viewed
+     */
     private Movie getMovie(){
         Bundle b = this.getIntent().getExtras();
         if (b != null){

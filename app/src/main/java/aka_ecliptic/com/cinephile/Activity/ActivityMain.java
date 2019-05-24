@@ -13,6 +13,12 @@ import aka_ecliptic.com.cinephile.R;
 
 public class ActivityMain extends AppCompatActivity {
 
+    /**
+     * Used to create activity, initialise bottom navigation bar, and then add entry fragment
+     * to fragment container.
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,6 +33,9 @@ public class ActivityMain extends AppCompatActivity {
 
     }
 
+    /**
+     * Used to switch fragment according to navigation button selected.
+     */
     private BottomNavigationView.OnNavigationItemSelectedListener navigationListener =
             item -> {
                 Fragment selectedFragment = null;

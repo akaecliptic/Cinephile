@@ -21,10 +21,6 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     private static String TAG = "DataBaseHelper";
     private static String DB_NAME = "Cinephile.db";
 
-    private static String DB_MOVIE_TABLE = "movie_data";
-    private static String DB_POSTER_TABLE = "movie_posters";
-    private static String DB_DESCRIPTOR_TABLE = "movie_descriptors";
-
     private static SQLiteDatabase movieDB;
     private static SQLiteHandler sqLiteHandler;
 
@@ -99,9 +95,9 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     }
 
     public void updateTables(){
-        if(tableNotExisting(DB_POSTER_TABLE) ||
-           tableNotExisting(DB_MOVIE_TABLE) ||
-           tableNotExisting(DB_DESCRIPTOR_TABLE)){
+        if(tableNotExisting(MySQLiteHelper.POSTER_TABLE) ||
+           tableNotExisting(MySQLiteHelper.MOVIE_TABLE) ||
+           tableNotExisting(MySQLiteHelper.DESCRIPTOR_TABLE)){
             generateTables(getWritableDatabase());
         }
     }
@@ -182,7 +178,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 
     private boolean descriptorExists(int id1, int id2){
         SQLiteDatabase db = getWritableDatabase();
-        String query = "SELECT Description FROM " + DB_DESCRIPTOR_TABLE + " WHERE MovieID = " + id1 +
+        String query = "SELECT Description FROM " + MySQLiteHelper.DESCRIPTOR_TABLE + " WHERE MovieID = " + id1 +
                         " OR MovieID = " + id2;
         Cursor c = db.rawQuery(query, null);
 
@@ -199,7 +195,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 
     private boolean postersExist(int id1, int id2){
         SQLiteDatabase db = getWritableDatabase();
-        String query = "SELECT Backdrop, ProfilePoster FROM " + DB_POSTER_TABLE + " WHERE MovieID = " + id1 +
+        String query = "SELECT Backdrop, ProfilePoster FROM " + MySQLiteHelper.POSTER_TABLE + " WHERE MovieID = " + id1 +
                 " OR MovieID = " + id2;
         Cursor c = db.rawQuery(query, null);
 
@@ -281,9 +277,10 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    //TODO Use a join query to reduce methods needed.
     /**
      * Primary Select method used to get movie from the DB,
-     * used only really by a Repository object.
+     * used by a Repository object.
      *
      * @return List<Media> A list of media objects
      */
@@ -318,7 +315,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     }
 
     /**
-     * Called by getList, if a poster is retrieved it will be added to the movie parsed.
+     * Called by getList, if a poster is retrieved it will be added to the movie.
      *
      * @param media The movie that the poster should be attached to.
      * @param id Used to find the appropriate poster
@@ -338,7 +335,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     }
 
     /**
-     * Called by getList, if a descriptor is retrieved it will be added to the movie parsed.
+     * Called by getList, if a descriptor is retrieved it will be added to the movie.
      *
      * @param media The movie that the poster should be attached to.
      * @param id Used to find the appropriate poster

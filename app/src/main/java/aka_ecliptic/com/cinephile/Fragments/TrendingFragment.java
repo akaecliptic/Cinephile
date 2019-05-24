@@ -30,7 +30,7 @@ import aka_ecliptic.com.cinephile.Model.Media;
 import aka_ecliptic.com.cinephile.Model.Movie;
 import aka_ecliptic.com.cinephile.R;
 
-public class TrendingFragment extends Fragment{
+public class TrendingFragment extends Fragment implements RecyclerViewAdapterTrending.SelectedItemListener{
 
     private static final String TAG = "TrendingFragment";
     private RecyclerViewAdapterTrending adapter;
@@ -77,15 +77,7 @@ public class TrendingFragment extends Fragment{
                 })
         );
 
-        adapter.setSelectedItemListener((view1, position) -> {
-            Bundle b = new Bundle();
-            b.putSerializable(Movie.class.getName(), adapter.getItem(position));
-            Intent newIntent = new Intent(view1.getContext(), MovieProfileActivity.class);
-            newIntent.putExtras(b);
-            startActivityForResult(newIntent, 0);
-
-            Toast.makeText(view1.getContext(), "Opening " + adapter.getItem(position).getTitle(), Toast.LENGTH_SHORT).show();
-        });
+        adapter.setSelectedItemListener(this);
         recyclerView.setAdapter(adapter);
 
         return view;
@@ -139,5 +131,16 @@ public class TrendingFragment extends Fragment{
             Toast.makeText(this.getContext(), "There was an error making request",
                     Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onSelect(View view, int position) {
+        Bundle b = new Bundle();
+        b.putSerializable(Movie.class.getName(), adapter.getItem(position));
+        Intent newIntent = new Intent(view.getContext(), MovieProfileActivity.class);
+        newIntent.putExtras(b);
+        startActivityForResult(newIntent, 0);
+
+        Toast.makeText(view.getContext(), "Opening " + adapter.getItem(position).getTitle(), Toast.LENGTH_SHORT).show();
     }
 }
