@@ -4,7 +4,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 public abstract class Media implements Comparable<Media>, Serializable {
 
@@ -60,12 +62,17 @@ public abstract class Media implements Comparable<Media>, Serializable {
         this.seen = seen;
     }
 
-    public Date getReleaseDate() {
-        return releaseDate;
+    public int getReleaseDate() {
+        Calendar cal = new GregorianCalendar();
+        cal.setTime(releaseDate);
+        return cal.get(Calendar.YEAR);
     }
 
-    public void setReleaseDate(Date releaseDate) {
-        this.releaseDate = releaseDate;
+    //TODO change this, only here to bypass parsing errors while refactoring
+    public void setReleaseDate(int releaseDate) {
+        Calendar cal = new GregorianCalendar();
+        cal.set(releaseDate, 0, 1);
+        this.releaseDate = cal.getTime();
     }
 
     public String getTitle() {
@@ -113,11 +120,12 @@ public abstract class Media implements Comparable<Media>, Serializable {
             return Integer.compare(this.id, mediaObj.id);
     }
 
+    //TODO change release date comparisons when changing release date getters and setters.
     @Override
     public boolean equals(Object o){
         if(o instanceof Media)  {
             Media m = (Media) o;
-            return this.id == m.getId() && this.releaseDate == m.getReleaseDate() &&
+            return this.id == m.getId() && this.getReleaseDate() == m.getReleaseDate() &&
                     this.title.equals(m.getTitle());
         }
         return false;
@@ -126,7 +134,7 @@ public abstract class Media implements Comparable<Media>, Serializable {
     public boolean equals2(Object o){
         if(o instanceof Media)  {
             Media m = (Media) o;
-            return this.id == m.getId() && this.seen == m.isSeen() && this.releaseDate == m.getReleaseDate() &&
+            return this.id == m.getId() && this.seen == m.isSeen() &&  this.getReleaseDate() == m.getReleaseDate() &&
                     this.title.equals(m.getTitle()) && this.rating == m.getRating() &&
                     this.genre.equals(m.getGenre());
         }

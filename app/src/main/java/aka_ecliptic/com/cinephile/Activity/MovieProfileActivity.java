@@ -4,22 +4,18 @@ import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.WindowManager;
 
 import java.util.Objects;
 
+import aka_ecliptic.com.cinephile.Fragments.MediaProfileFragment;
 import aka_ecliptic.com.cinephile.Model.Movie;
 import aka_ecliptic.com.cinephile.R;
-import aka_ecliptic.com.cinephile.Adapter.RecyclerViewAdapterProfile;
-import aka_ecliptic.com.cinephile.Handler.SQLiteHandler;
 
 public class MovieProfileActivity extends AppCompatActivity {
 
     FloatingActionButton backBtn;
-    RecyclerViewAdapterProfile adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,14 +27,11 @@ public class MovieProfileActivity extends AppCompatActivity {
         backBtn = findViewById(R.id.btnBackActivityMovie);
         backBtn.getDrawable().mutate().setTint(getResources().getColor(R.color.colorAccent, null));
 
-        RecyclerView recyclerView = findViewById(R.id.activityMovieRecycler);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new RecyclerViewAdapterProfile(this, getMovie());
-        recyclerView.setAdapter(adapter);
+        MediaProfileFragment.setMediaObject(getMovie());
+        getSupportFragmentManager().beginTransaction().replace(R.id.profileContainer,
+                new MediaProfileFragment()).commit();
 
-        backBtn.setOnClickListener((View vw) -> {
-            endProcedure();
-        });
+        backBtn.setOnClickListener((View vw) -> endProcedure());
     }
 
     @Override
@@ -48,14 +41,12 @@ public class MovieProfileActivity extends AppCompatActivity {
 
     private void endProcedure(){
         Intent intent = new Intent();
-        //TODO check if further null checks are needed.
-        if(!Objects.requireNonNull(getMovie()).equals2(adapter.getEditedItem())){
+        if(!Objects.requireNonNull(getMovie()).equals2(MediaProfileFragment.getMediaObject())){
 
             Bundle b = new Bundle();
-            b.putSerializable(Movie.class.getName(), adapter.getEditedItem());
+            b.putSerializable(Movie.class.getName(), MediaProfileFragment.getMediaObject());
 
             intent.putExtras(b);
-
             setResult(99, intent);
             finish();
         }

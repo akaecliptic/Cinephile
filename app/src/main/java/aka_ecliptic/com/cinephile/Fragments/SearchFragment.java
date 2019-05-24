@@ -28,7 +28,6 @@ import aka_ecliptic.com.cinephile.Activity.MovieProfileActivity;
 import aka_ecliptic.com.cinephile.Adapter.RecyclerViewAdapterSearch;
 import aka_ecliptic.com.cinephile.DataRepository.Repository;
 import aka_ecliptic.com.cinephile.Handler.GsonMovieConverter;
-import aka_ecliptic.com.cinephile.Handler.SQLiteHandler;
 import aka_ecliptic.com.cinephile.Handler.TMDBHandler;
 import aka_ecliptic.com.cinephile.Model.Media;
 import aka_ecliptic.com.cinephile.Model.Movie;
@@ -49,7 +48,7 @@ public class SearchFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.activity_search, container, false);
+        View view = inflater.inflate(R.layout.fragment_search, container, false);
 
         repository = new Repository<>(view.getContext());
         onlineSearch = new ArrayList<>();

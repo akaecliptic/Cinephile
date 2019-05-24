@@ -10,6 +10,9 @@ import com.google.gson.JsonParseException;
 
 import java.lang.reflect.Type;
 
+import aka_ecliptic.com.cinephile.Model.Descriptor;
+import aka_ecliptic.com.cinephile.Model.Genre;
+import aka_ecliptic.com.cinephile.Model.ImageData;
 import aka_ecliptic.com.cinephile.Model.Media;
 import aka_ecliptic.com.cinephile.Model.Movie;
 
@@ -30,10 +33,10 @@ public class GsonMovieConverter {
                             getYear(jsonObject.get("release_date").getAsString()),
                             jsonObject.get("title").getAsString(),
                             (int) jsonObject.get("vote_average").getAsDouble() * 10,
-                            Media.Genre.ACTION
+                            Genre.ACTION
                     );
 
-                    Media.ImageData imageData = new Media.ImageData();
+                    ImageData imageData = new ImageData();
 
                     if(!jsonObject.get("backdrop_path").isJsonNull()){
                         imageData.setBackdropImagePath(jsonObject.get("backdrop_path").getAsString());
@@ -42,7 +45,7 @@ public class GsonMovieConverter {
                         imageData.setPosterImagePath(jsonObject.get("poster_path").getAsString());
                     }
 
-                    Media.Descriptor descriptor = new Media.Descriptor(
+                    Descriptor descriptor = new Descriptor(
                             jsonObject.get("overview").toString()
                     );
 

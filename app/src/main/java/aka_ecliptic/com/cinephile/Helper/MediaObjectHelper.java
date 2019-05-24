@@ -1,13 +1,21 @@
 package aka_ecliptic.com.cinephile.Helper;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
+import aka_ecliptic.com.cinephile.Model.Genre;
 import aka_ecliptic.com.cinephile.Model.Media;
 import aka_ecliptic.com.cinephile.Model.Movie;
 
 //TODO: Possible change to my own implementation of List
-public class MediaListConverter {
+public class MediaObjectHelper {
+
+    private static final SimpleDateFormat format =
+            new SimpleDateFormat("yyyy-MM-dd", Locale.UK);
 
     public static List<String> asList(Media m){
 
@@ -29,7 +37,7 @@ public class MediaListConverter {
             Integer.parseInt(list.get(1)),
             list.get(2),
             Integer.parseInt(list.get(3)),
-            Media.Genre.valueOf(list.get(4))
+            Genre.valueOf(list.get(4))
             );
     }
 
@@ -43,5 +51,22 @@ public class MediaListConverter {
 
     public static boolean convertSeen(String s){
         return s.equals("1");
+    }
+
+    public static boolean releaseDateEquals(Date date1, Date date2){
+        return formatDate(date1).equals(formatDate(date2));
+    }
+
+    public static String formatDate(Date date){
+        return format.format(date);
+    }
+
+    public static Date parseDate(String date){
+        try {
+            return format.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

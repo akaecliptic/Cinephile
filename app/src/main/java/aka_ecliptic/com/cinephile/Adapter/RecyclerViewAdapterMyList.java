@@ -146,7 +146,7 @@ public class RecyclerViewAdapterMyList extends RecyclerView.Adapter<RecyclerView
             String prompt = "Do You want to delete '" + this.titleTextView.getText().toString() + "'" +
                     " or update from online";
 
-            dialogDelete.setContentView(R.layout.options_movie_layout);
+            dialogDelete.setContentView(R.layout.popup_movie_options);
 
             btnCancel = dialogDelete.findViewById(R.id.btnDelCancel);
             btnAdd = dialogDelete.findViewById(R.id.btnDelete);

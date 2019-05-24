@@ -9,8 +9,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-import aka_ecliptic.com.cinephile.Helper.MediaListConverter;
+import aka_ecliptic.com.cinephile.Helper.MediaObjectHelper;
 import aka_ecliptic.com.cinephile.Helper.MySQLiteHelper;
+import aka_ecliptic.com.cinephile.Model.Descriptor;
+import aka_ecliptic.com.cinephile.Model.ImageData;
 import aka_ecliptic.com.cinephile.Model.Media;
 import aka_ecliptic.com.cinephile.Model.Movie;
 
@@ -138,7 +140,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         ContentValues dValues = new ContentValues();
 
         SQLiteDatabase db = getWritableDatabase();
-        List<String> list = MediaListConverter.asList(mediaObj);
+        List<String> list = MediaObjectHelper.asList(mediaObj);
 
         int newId = mediaObj.getId();
 
@@ -220,7 +222,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     public void updateEntry(Media mediaObj){
         ContentValues value = new ContentValues();
         SQLiteDatabase db = getWritableDatabase();
-        List<String> list = MediaListConverter.asList(mediaObj);
+        List<String> list = MediaObjectHelper.asList(mediaObj);
 
         for(int i = 0; i < movieTableHeadings.size(); i++){
             value.put(movieTableHeadings.get(i), list.get(i));
@@ -251,7 +253,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
 
         for(int i = 0; i < movieTableHeadings.size(); i++){
-            value.put(movieTableHeadings.get(i), MediaListConverter.asList(mediaObj).get(i));
+            value.put(movieTableHeadings.get(i), MediaObjectHelper.asList(mediaObj).get(i));
         }
         if(mediaObj.getId() != 0){
             value.put("ID", mediaObj.getId());
@@ -297,7 +299,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
             }
 
             System.out.println(db.getPath());
-            Movie m = MediaListConverter.fromList(id, temp);
+            Movie m = MediaObjectHelper.fromList(id, temp);
 
             movies.add(m);
             c.moveToNext();
@@ -323,11 +325,11 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         Cursor c = db.rawQuery(MySQLiteHelper.SELECT_POSTERS_BY_ID, new String[] {String.valueOf(id)});
 
-        Media.ImageData imageData = null;
+        ImageData imageData = null;
         c.moveToFirst();
 
         if(c.getCount() > 0){
-            imageData = new Media.ImageData(c.getString(0), c.getString(1));
+            imageData = new ImageData(c.getString(0), c.getString(1));
         }
         c.close();
         media.setImageData(imageData);
@@ -343,11 +345,11 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         Cursor c = db.rawQuery(MySQLiteHelper.SELECT_DESCRIPTORS_BY_ID, new String[] {String.valueOf(id)});
 
-        Media.Descriptor descriptor = null;
+        Descriptor descriptor = null;
         c.moveToFirst();
 
         if(c.getCount() > 0){
-            descriptor = new Media.Descriptor(c.getString(0));
+            descriptor = new Descriptor(c.getString(0));
         }
 
         c.close();

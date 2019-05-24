@@ -6,6 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".Activity.MovieProfileActivity">
 
+    <android.support.v7.widget.ContentFrameLayout
+        android:id="@+id/profileContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/btnBackActivityMovie"
         android:layout_width="45dp"
@@ -18,11 +23,12 @@
         app:backgroundTint="@color/colorPrimaryDark"
         app:srcCompat="?attr/actionModeCloseDrawable" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/activityMovieRecycler"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true" />
+    <!--<android.support.v7.widget.RecyclerView-->
+        <!--android:id="@+id/activityMovieRecycler"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--android:clickable="false"-->
+        <!--android:visibility="invisible" />-->
 
 </RelativeLayout>

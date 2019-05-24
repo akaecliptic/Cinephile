@@ -1,6 +1,5 @@
 package aka_ecliptic.com.cinephile.Fragments;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.res.TypedArray;
@@ -29,12 +28,12 @@ import android.widget.Toast;
 import java.util.Objects;
 
 import aka_ecliptic.com.cinephile.Activity.MovieProfileActivity;
+import aka_ecliptic.com.cinephile.Model.Genre;
 import aka_ecliptic.com.cinephile.Model.Media;
 import aka_ecliptic.com.cinephile.Model.Movie;
 import aka_ecliptic.com.cinephile.R;
 import aka_ecliptic.com.cinephile.Adapter.RecyclerViewAdapterMyList;
 import aka_ecliptic.com.cinephile.DataRepository.Repository;
-import aka_ecliptic.com.cinephile.Handler.SQLiteHandler;
 
 public class MyListFragment extends Fragment implements RecyclerViewAdapterMyList.ItemClickListener {
 
@@ -51,7 +50,7 @@ public class MyListFragment extends Fragment implements RecyclerViewAdapterMyLis
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
 
-        View view = inflater.inflate(R.layout.activity_my_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_my_list, container, false);
 
         repository = new Repository<>(view.getContext());
 
@@ -127,7 +126,7 @@ public class MyListFragment extends Fragment implements RecyclerViewAdapterMyLis
         newIntent.putExtras(b);
         startActivityForResult(newIntent, 77);
 
-        makeToast("Opening");
+        makeToast("Opening '" + adapter.getItem(position).getTitle() +"'");
     }
 
     private void makeToast(String message){
@@ -144,7 +143,7 @@ public class MyListFragment extends Fragment implements RecyclerViewAdapterMyLis
         EditText ratingEdit;
         Spinner spinnerEdit;
 
-        dialogAddMovie.setContentView(R.layout.add_movie_layout);
+        dialogAddMovie.setContentView(R.layout.popup_add_movie);
 
         btnCancel = dialogAddMovie.findViewById(R.id.btnAddMovieCancel);
         btnAdd = dialogAddMovie.findViewById(R.id.btnAddMovieAccept);
@@ -166,7 +165,7 @@ public class MyListFragment extends Fragment implements RecyclerViewAdapterMyLis
                 String genre = spinnerEdit.getSelectedItem().toString();
 
                 int index = repository.getItems().size();
-                repository.addItem(new Movie(seen, year, title, rating, Media.Genre.valueOf(genre)), this.getContext());
+                repository.addItem(new Movie(seen, year, title, rating, Genre.valueOf(genre)), this.getContext());
                 adapter.notifyItemInserted(index);
 
                 makeToast("The Movie " + title + " has been added");
