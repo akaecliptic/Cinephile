@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import aka_ecliptic.com.cinephile.Fragments.MyListFragment;
 import aka_ecliptic.com.cinephile.Fragments.SearchFragment;
 import aka_ecliptic.com.cinephile.Fragments.TrendingFragment;
+import aka_ecliptic.com.cinephile.Handler.SQLiteHandler;
 import aka_ecliptic.com.cinephile.R;
 
 public class ActivityMain extends AppCompatActivity {

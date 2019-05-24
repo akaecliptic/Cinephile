@@ -19,9 +19,9 @@ import aka_ecliptic.com.cinephile.Model.Movie;
 public class SQLiteHandler extends SQLiteOpenHelper {
 
     private static String TAG = "DataBaseHelper";
-    private static String DB_NAME = "Movies.db";
+    private static String DB_NAME = "Cinephile.db";
 
-    private static String DB_MOVIE_TABLE = "table_of_movies";
+    private static String DB_MOVIE_TABLE = "movie_data";
     private static String DB_POSTER_TABLE = "movie_posters";
     private static String DB_DESCRIPTOR_TABLE = "movie_descriptors";
 
@@ -67,24 +67,26 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     }
 
     private void generateTables(SQLiteDatabase db) {
-        String exe1 = "CREATE TABLE IF NOT EXISTS 'table_of_movies' (" +
-                "'Id'	INTEGER NOT NULL PRIMARY KEY," +
+        String exe1 = "CREATE TABLE IF NOT EXISTS 'movie_data' (" +
+                "'ID'	INTEGER NOT NULL PRIMARY KEY," +
                 "'Seen'	TEXT NOT NULL," +
                 "'Year'	TEXT NOT NULL," +
                 "'Title'	TEXT NOT NULL," +
                 "'Rating'	TEXT NOT NULL," +
-                "'Genre'	TEXT NOT NULL)";
+                "'Genre'	TEXT NOT NULL," +
+                "'SubGenre' TEXT NOT NULL," +
+                "'MinGenre' TEXT NOT NULL)";
 
         String exe2 = "CREATE TABLE IF NOT EXISTS 'movie_posters' ( " +
                 "'MovieID' INTEGER NOT NULL UNIQUE, " +
                 "'Backdrop' TEXT, " +
                 "'ProfilePoster' TEXT, " +
-                "FOREIGN KEY(MovieID) REFERENCES table_of_movies(Id))";
+                "FOREIGN KEY(MovieID) REFERENCES movie_data(ID))";
 
         String exe3 = "CREATE TABLE IF NOT EXISTS 'movie_descriptors' (" +
                 "'MovieID' INTEGER NOT NULL UNIQUE," +
                 "'Description' TEXT," +
-                "FOREIGN KEY(MovieID) REFERENCES table_of_movies(Id))";
+                "FOREIGN KEY(MovieID) REFERENCES movie_data(ID))";
 
         db.execSQL(exe1);
         db.execSQL(exe2);
@@ -144,12 +146,12 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 
         int newId = mediaObj.getId();
 
-        value.put("Id", newId);
+        value.put("ID", newId);
         for(int i = 0; i < movieTableHeadings.size(); i++){
             value.put(movieTableHeadings.get(i), list.get(i));
         }
 
-        db.update(MySQLiteHelper.MOVIE_TABLE,  value, "Id = " + id, null);
+        db.update(MySQLiteHelper.MOVIE_TABLE,  value, "ID = " + id, null);
 
 
         if(mediaObj.getImageData() != null){
@@ -228,7 +230,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
             value.put(movieTableHeadings.get(i), list.get(i));
         }
 
-        db.update(MySQLiteHelper.MOVIE_TABLE,  value, "Id = ?", new String[] {String.valueOf(mediaObj.getId())});
+        db.update(MySQLiteHelper.MOVIE_TABLE,  value, "ID = ?", new String[] {String.valueOf(mediaObj.getId())});
         db.close();
     }
 
@@ -238,7 +240,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
      */
     public void deleteEntry(int id){
         SQLiteDatabase db = getWritableDatabase();
-        db.delete(MySQLiteHelper.MOVIE_TABLE, "Id = ?", new String[] {String.valueOf(id)});
+        db.delete(MySQLiteHelper.MOVIE_TABLE, "ID = ?", new String[] {String.valueOf(id)});
         db.delete(MySQLiteHelper.POSTER_TABLE, "MovieID = ?", new String[] {String.valueOf(id)});
         db.delete(MySQLiteHelper.DESCRIPTOR_TABLE, "MovieID = ?", new String[] {String.valueOf(id)});
     }
