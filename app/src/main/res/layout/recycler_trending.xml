@@ -1,70 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<android.support.v7.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="115dp">
+        android:layout_height="wrap_content"
+        android:id="@+id/trendingCardView"
+        app:cardCornerRadius="5dp"
+        android:backgroundTint="#151515"
+        android:layout_marginBottom="5dp">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="115dp"
+        android:padding="2dp">
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/trendingAddButton"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
-        android:layout_marginEnd="7dp"
-        android:clickable="true"
-        android:focusable="true"
-        app:backgroundTint="#000"
-        app:srcCompat="@android:drawable/ic_input_add" />
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/trendingAddButton"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="7dp"
+            android:clickable="true"
+            android:focusable="true"
+            app:backgroundTint="#000"
+            app:srcCompat="@android:drawable/ic_input_add" />
 
-    <TextView
-        android:id="@+id/trendingTVYear"
-        android:layout_width="wrap_content"
-        android:layout_height="25dp"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="7dp"
-        android:layout_toEndOf="@+id/trendingImageView"
-        android:text="@string/releaseDate"
-        android:textColor="#fff"
-        android:textSize="20sp" />
+        <TextView
+            android:id="@+id/trendingTVYear"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_toEndOf="@+id/trendingImageView"
+            android:text="@string/releaseDate"
+            android:textColor="#fff"
+            android:textSize="20sp" />
 
-    <TextView
-        android:id="@+id/trendingTVTitle"
-        android:layout_width="135dp"
-        android:layout_height="25dp"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="7dp"
-        android:layout_toEndOf="@+id/trendingTVYear"
+        <TextView
+            android:id="@+id/trendingTVTitle"
+            android:layout_width="135dp"
+            android:layout_height="25dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="10dp"
 
-        android:ellipsize="marquee"
-        android:focusable="true"
-        android:marqueeRepeatLimit="marquee_forever"
-        android:scrollHorizontally="true"
-        android:singleLine="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="63dp"
 
-        android:text="@string/title"
-        android:textColor="#fff"
-        android:textSize="20sp" />
+            android:layout_toEndOf="@+id/trendingImageView"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:text="@string/title"
+            android:textColor="#fff"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/trendingTVRating"
-        android:layout_width="wrap_content"
-        android:layout_height="25dp"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="7dp"
-        android:layout_toEndOf="@+id/trendingTVTitle"
-        android:maxLength="2"
-        android:text="@string/rating"
-        android:textColor="#fff"
-        android:textSize="20sp" />
+        <TextView
+            android:id="@+id/trendingTVRating"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="158dp"
+            android:layout_marginBottom="10dp"
+            android:maxLength="3"
+            android:text="@string/rating"
+            android:textColor="#fff"
+            android:textSize="20sp" />
 
-    <ImageView
-        android:id="@+id/trendingImageView"
-        android:layout_width="70dp"
-        android:layout_height="105dp"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="7dp"
-        app:srcCompat="@mipmap/ic_launcher" />
+        <ImageView
+            android:id="@+id/trendingImageView"
+            android:layout_width="70dp"
+            android:layout_height="105dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="7dp"
+            app:srcCompat="@mipmap/ic_launcher" />
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/textView"
+            android:textColor="#999"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/trendingTVRating"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="150dp"
+            android:layout_marginBottom="1dp"
+            android:text="@string/rating" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:textColor="#999"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/trendingTVYear"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="1dp"
+            android:layout_toEndOf="@+id/trendingImageView"
+            android:text="@string/release_date" />
+    </RelativeLayout>
+</android.support.v7.widget.CardView>
+

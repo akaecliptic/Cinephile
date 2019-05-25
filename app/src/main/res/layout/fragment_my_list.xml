@@ -8,11 +8,12 @@
         android:id="@+id/myListRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="400dp"
-        android:layout_above="@+id/addActionButton"
         android:layout_below="@+id/myListSearchView"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp" />
+        android:layout_marginBottom="10dp"
+        android:padding="1dp"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/addActionButton"
@@ -37,17 +38,20 @@
         android:layout_marginEnd="20dp"
         android:clickable="true"
         android:focusable="true"
-        app:backgroundTint="@color/colorPrimaryDark"
+        app:backgroundTint="#151515"
         app:srcCompat="@drawable/icon_sort_sort" />
 
     <android.support.v7.widget.SearchView
         android:id="@+id/myListSearchView"
         android:layout_width="match_parent"
         android:layout_height="45dp"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
+        android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
-        android:layout_marginEnd="20dp"
+        android:layout_marginEnd="5dp"
         android:layout_toStartOf="@+id/sortActionButton"
+        android:background="#151515"
         android:queryHint="@string/Search" />
 
 </RelativeLayout>

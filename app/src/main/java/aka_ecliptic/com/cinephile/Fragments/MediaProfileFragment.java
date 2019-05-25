@@ -22,9 +22,11 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.Date;
 import java.util.Objects;
 
 import aka_ecliptic.com.cinephile.Handler.TMDBHandler;
+import aka_ecliptic.com.cinephile.Helper.MediaObjectHelper;
 import aka_ecliptic.com.cinephile.Model.Genre;
 import aka_ecliptic.com.cinephile.Model.Media;
 import aka_ecliptic.com.cinephile.Model.Movie;
@@ -81,7 +83,8 @@ public class MediaProfileFragment extends Fragment {
     }
 
     private void bindData(){
-        yearTextView.setText(String.valueOf(mediaObject.getReleaseDate()));
+        //TODO incorporate other sub-genres.
+        yearTextView.setText(MediaObjectHelper.stringDate(mediaObject.getReleaseDate()));
         titleTextView.setText(mediaObject.getTitle());
         ratingTextView.setText(String.valueOf(mediaObject.getRating()));
         seenBtn.getDrawable().mutate().setTint(seenColor());
@@ -120,7 +123,7 @@ public class MediaProfileFragment extends Fragment {
         if(media != null){
             mediaObject = media;
         } else{
-            mediaObject = new Movie(true, 2019, "Error Getting Movie", 99, Genre.ACTION );
+            mediaObject = new Movie(true, new Date(), "Error Getting Movie", 99, Genre.ACTION );
         }
     }
 

@@ -33,7 +33,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 
         movieTableHeadings = new ArrayList<>();
         movieTableHeadings.add("Seen");
-        movieTableHeadings.add("Year");
+        movieTableHeadings.add("ReleaseDate");
         movieTableHeadings.add("Title");
         movieTableHeadings.add("Rating");
         movieTableHeadings.add("Genre");
@@ -94,7 +94,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         updateTables();
     }
 
-    public void updateTables(){
+    private void updateTables(){
         if(tableNotExisting(MySQLiteHelper.POSTER_TABLE) ||
            tableNotExisting(MySQLiteHelper.MOVIE_TABLE) ||
            tableNotExisting(MySQLiteHelper.DESCRIPTOR_TABLE)){
@@ -130,50 +130,6 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         if(movieDB != null)
             movieDB.close();
         super.close();
-    }
-
-    public void updateEntryFromOnline(int id,Media mediaObj){
-        ContentValues value = new ContentValues();
-        ContentValues pValues = new ContentValues();
-        ContentValues dValues = new ContentValues();
-
-        SQLiteDatabase db = getWritableDatabase();
-        List<String> list = MediaObjectHelper.asList(mediaObj);
-
-        int newId = mediaObj.getId();
-
-        value.put("ID", newId);
-        for(int i = 0; i < movieTableHeadings.size(); i++){
-            value.put(movieTableHeadings.get(i), list.get(i));
-        }
-
-        db.update(MySQLiteHelper.MOVIE_TABLE,  value, "ID = " + id, null);
-
-
-        if(mediaObj.getImageData() != null){
-            pValues.put(posterTableHeadings.get(0), newId);
-            pValues.put(posterTableHeadings.get(1), mediaObj.getImageData().getBackdropImagePath());
-            pValues.put(posterTableHeadings.get(2), mediaObj.getImageData().getPosterImagePath());
-            if(postersExist(id, newId)) {
-                db.update(MySQLiteHelper.POSTER_TABLE, pValues, "MovieID = " + id + " OR MovieID = " + newId,
-                        null);
-            }else {
-                db.insert(MySQLiteHelper.POSTER_TABLE, null, pValues);
-            }
-        }
-
-        if(mediaObj.getDescriptor() != null){
-            dValues.put(descriptorTableHeading.get(0), newId);
-            dValues.put(descriptorTableHeading.get(1), mediaObj.getDescriptor().getDescription());
-            if(descriptorExists(id, mediaObj.getId())){
-                db.update(MySQLiteHelper.DESCRIPTOR_TABLE, dValues, "MovieID = " + id + " OR MovieID = " +
-                        newId, null);
-            }else{
-                db.insert(MySQLiteHelper.DESCRIPTOR_TABLE, null, dValues);
-            }
-        }
-
-        db.close();
     }
 
     private boolean descriptorExists(int id1, int id2){
@@ -213,9 +169,53 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         return false;
     }
 
+    public void updateEntryFromOnline(int id, Media mediaObj){
+        ContentValues value = new ContentValues();
+        ContentValues pValues = new ContentValues();
+        ContentValues dValues = new ContentValues();
+
+        SQLiteDatabase db = getWritableDatabase();
+        List<String> list = MediaObjectHelper.asList(mediaObj);
+
+        int newId = mediaObj.getId();
+
+        value.put("ID", newId);
+        for(int i = 0; i < movieTableHeadings.size(); i++){
+            value.put(movieTableHeadings.get(i), list.get(i));
+        }
+
+        db.update(MySQLiteHelper.MOVIE_TABLE,  value, "ID = " + id, null);
+
+        if(mediaObj.getImageData() != null){
+            pValues.put(posterTableHeadings.get(0), newId);
+            pValues.put(posterTableHeadings.get(1), mediaObj.getImageData().getBackdropImagePath());
+            pValues.put(posterTableHeadings.get(2), mediaObj.getImageData().getPosterImagePath());
+            if(postersExist(id, newId)) {
+                db.update(MySQLiteHelper.POSTER_TABLE, pValues, "MovieID = " + id + " OR MovieID = " + newId,
+                        null);
+            }else {
+                db.insert(MySQLiteHelper.POSTER_TABLE, null, pValues);
+            }
+        }
+
+        if(mediaObj.getDescriptor() != null){
+            dValues.put(descriptorTableHeading.get(0), newId);
+            dValues.put(descriptorTableHeading.get(1), mediaObj.getDescriptor().getDescription());
+            if(descriptorExists(id, mediaObj.getId())){
+                db.update(MySQLiteHelper.DESCRIPTOR_TABLE, dValues, "MovieID = " + id + " OR MovieID = " +
+                        newId, null);
+            }else{
+                db.insert(MySQLiteHelper.DESCRIPTOR_TABLE, null, dValues);
+            }
+        }
+
+        db.close();
+    }
+
     /**
+     *  Updates changes made to movie object to database
      *
-     * @param mediaObj
+     * @param mediaObj The movie to be updated.
      */
     public void updateEntry(Media mediaObj){
         ContentValues value = new ContentValues();
@@ -231,8 +231,9 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     }
 
     /**
+     *  Deletes movie and all associated data from database
      *
-     * @param id
+     * @param id The id of the movie to be deleted.
      */
     public void deleteEntry(int id){
         SQLiteDatabase db = getWritableDatabase();
@@ -242,8 +243,9 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     }
 
     /**
+     *  Adds a new movie to database, with associated poster and descriptor data, if present.
      *
-     * @param mediaObj
+     * @param mediaObj The movie to be added.
      */
     public void newEntry(Media mediaObj){
 
@@ -256,6 +258,9 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         if(mediaObj.getId() != 0){
             value.put("ID", mediaObj.getId());
         }
+        //TODO add other genres to movietableheadings.
+        value.put("SubGenre", "NONE");
+        value.put("MinGenre", "NONE");
 
         db.insert(MySQLiteHelper.MOVIE_TABLE, null, value);
 
@@ -277,82 +282,44 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    //TODO Use a join query to reduce methods needed.
     /**
-     * Primary Select method used to get movie from the DB,
-     * used by a Repository object.
+     * Primary Select method, retrieves all movie data from database, this include poster and
+     * descriptor data. Used to fill repository with data.
      *
-     * @return List<Media> A list of media objects
+     * @return List<Media> A list of media objects.
      */
     public List<Media> getList(){
         SQLiteDatabase db = getWritableDatabase();
-        Cursor c = db.rawQuery(MySQLiteHelper.SELECT_ALL_MOVIES, null);
+        Cursor c = db.rawQuery(MySQLiteHelper.SELECT_ALL_MOVIE_INFO, null);
         ArrayList<Media> movies = new ArrayList<>();
 
         c.moveToFirst();
         while (!c.isAfterLast()){
             ArrayList<String> temp = new ArrayList<>();
             int id  = c.getInt(0);
-            for(int i = 1; i < c.getColumnCount(); i++){
+            for(int i = 1; i <= movieTableHeadings.size(); i++){
                 temp.add(c.getString(i));
             }
 
-            System.out.println(db.getPath());
             Movie m = MediaObjectHelper.fromList(id, temp);
 
+            if(!c.isNull(c.getColumnIndex(descriptorTableHeading.get(1))))
+                m.setDescriptor(new Descriptor(c.getString(c.getColumnIndex(descriptorTableHeading.get(1)))));
+
+            ImageData imageData = new ImageData();
+
+            if(!c.isNull(c.getColumnIndex(posterTableHeadings.get(1))))
+                imageData.setBackdropImagePath(c.getString(c.getColumnIndex(posterTableHeadings.get(1))));
+            if(!c.isNull(c.getColumnIndex(posterTableHeadings.get(2))))
+                imageData.setPosterImagePath(c.getString(c.getColumnIndex(posterTableHeadings.get(2))));
+
+            m.setImageData(imageData);
             movies.add(m);
             c.moveToNext();
         }
 
         c.close();
-
-        for (Media movie: movies){
-            getPosterData(movie, movie.getId());
-            getDescriptor(movie, movie.getId());
-        }
-
         return movies;
-    }
-
-    /**
-     * Called by getList, if a poster is retrieved it will be added to the movie.
-     *
-     * @param media The movie that the poster should be attached to.
-     * @param id Used to find the appropriate poster
-     */
-    private void getPosterData(Media media,int id){
-        SQLiteDatabase db = getWritableDatabase();
-        Cursor c = db.rawQuery(MySQLiteHelper.SELECT_POSTERS_BY_ID, new String[] {String.valueOf(id)});
-
-        ImageData imageData = null;
-        c.moveToFirst();
-
-        if(c.getCount() > 0){
-            imageData = new ImageData(c.getString(0), c.getString(1));
-        }
-        c.close();
-        media.setImageData(imageData);
-    }
-
-    /**
-     * Called by getList, if a descriptor is retrieved it will be added to the movie.
-     *
-     * @param media The movie that the poster should be attached to.
-     * @param id Used to find the appropriate poster
-     */
-    private void getDescriptor(Media media, int id){
-        SQLiteDatabase db = getWritableDatabase();
-        Cursor c = db.rawQuery(MySQLiteHelper.SELECT_DESCRIPTORS_BY_ID, new String[] {String.valueOf(id)});
-
-        Descriptor descriptor = null;
-        c.moveToFirst();
-
-        if(c.getCount() > 0){
-            descriptor = new Descriptor(c.getString(0));
-        }
-
-        c.close();
-        media.setDescriptor(descriptor);
     }
 }
 

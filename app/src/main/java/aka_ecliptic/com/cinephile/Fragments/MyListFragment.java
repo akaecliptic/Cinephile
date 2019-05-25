@@ -25,9 +25,19 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.Date;
 import java.util.Objects;
 
 import aka_ecliptic.com.cinephile.Activity.MovieProfileActivity;
+import aka_ecliptic.com.cinephile.Handler.GsonMovieConverter;
+import aka_ecliptic.com.cinephile.Handler.SQLiteHandler;
+import aka_ecliptic.com.cinephile.Handler.TMDBHandler;
+import aka_ecliptic.com.cinephile.Helper.MediaObjectHelper;
 import aka_ecliptic.com.cinephile.Model.Genre;
 import aka_ecliptic.com.cinephile.Model.Media;
 import aka_ecliptic.com.cinephile.Model.Movie;
@@ -160,12 +170,12 @@ public class MyListFragment extends Fragment implements RecyclerViewAdapterMyLis
 
                 boolean seen = seenAdd.isChecked();
                 String title = titleEdit.getText().toString();
-                int year = Integer.parseInt(yearEdit.getText().toString());
+                String year = yearEdit.getText().toString();
                 int rating = Integer.parseInt(ratingEdit.getText().toString());
                 String genre = spinnerEdit.getSelectedItem().toString();
 
                 int index = repository.getItems().size();
-                repository.addItem(new Movie(seen, year, title, rating, Genre.valueOf(genre)), this.getContext());
+                repository.addItem(new Movie(seen, MediaObjectHelper.parseDate(year), title, rating, Genre.valueOf(genre)), this.getContext());
                 adapter.notifyItemInserted(index);
 
                 makeToast("The Movie " + title + " has been added");

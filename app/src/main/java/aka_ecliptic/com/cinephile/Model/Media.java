@@ -8,6 +8,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import aka_ecliptic.com.cinephile.Helper.MediaObjectHelper;
+
 public abstract class Media implements Comparable<Media>, Serializable {
 
     protected int id;
@@ -62,17 +64,12 @@ public abstract class Media implements Comparable<Media>, Serializable {
         this.seen = seen;
     }
 
-    public int getReleaseDate() {
-        Calendar cal = new GregorianCalendar();
-        cal.setTime(releaseDate);
-        return cal.get(Calendar.YEAR);
+    public Date getReleaseDate() {
+        return releaseDate;
     }
 
-    //TODO change this, only here to bypass parsing errors while refactoring
-    public void setReleaseDate(int releaseDate) {
-        Calendar cal = new GregorianCalendar();
-        cal.set(releaseDate, 0, 1);
-        this.releaseDate = cal.getTime();
+    public void setReleaseDate(Date releaseDate) {
+        this.releaseDate = releaseDate;
     }
 
     public String getTitle() {
@@ -125,7 +122,7 @@ public abstract class Media implements Comparable<Media>, Serializable {
     public boolean equals(Object o){
         if(o instanceof Media)  {
             Media m = (Media) o;
-            return this.id == m.getId() && this.getReleaseDate() == m.getReleaseDate() &&
+            return this.id == m.getId() && MediaObjectHelper.releaseDateEquals(this.getReleaseDate(), m.getReleaseDate()) &&
                     this.title.equals(m.getTitle());
         }
         return false;
@@ -134,7 +131,7 @@ public abstract class Media implements Comparable<Media>, Serializable {
     public boolean equals2(Object o){
         if(o instanceof Media)  {
             Media m = (Media) o;
-            return this.id == m.getId() && this.seen == m.isSeen() &&  this.getReleaseDate() == m.getReleaseDate() &&
+            return this.id == m.getId() && this.seen == m.isSeen() && MediaObjectHelper.releaseDateEquals(this.getReleaseDate(), m.getReleaseDate()) &&
                     this.title.equals(m.getTitle()) && this.rating == m.getRating() &&
                     this.genre.equals(m.getGenre());
         }

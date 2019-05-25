@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Objects;
 
 import aka_ecliptic.com.cinephile.Handler.SQLiteHandler;
+import aka_ecliptic.com.cinephile.Helper.MediaObjectHelper;
 import aka_ecliptic.com.cinephile.Model.Media;
 import aka_ecliptic.com.cinephile.Model.Movie;
 import aka_ecliptic.com.cinephile.R;
@@ -49,7 +50,7 @@ public class RecyclerViewAdapterMyList extends RecyclerView.Adapter<RecyclerView
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         Media tempMedia = displayedData.get(position);
-        viewHolder.yearTextView.setText(String.valueOf(tempMedia.getReleaseDate()));
+        viewHolder.yearTextView.setText(MediaObjectHelper.dateYear(tempMedia.getReleaseDate()));
         viewHolder.titleTextView.setText(tempMedia.getTitle());
         viewHolder.ratingTextView.setText(String.valueOf(tempMedia.getRating()));
         viewHolder.seenCheckbox.setChecked(tempMedia.isSeen());

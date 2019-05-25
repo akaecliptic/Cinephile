@@ -3,7 +3,9 @@ package aka_ecliptic.com.cinephile.Helper;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -16,13 +18,14 @@ public class MediaObjectHelper {
 
     private static final SimpleDateFormat format =
             new SimpleDateFormat("yyyy-MM-dd", Locale.UK);
+    private static final Calendar calendar = new GregorianCalendar();
 
     public static List<String> asList(Media m){
 
         ArrayList<String> list = new ArrayList<>();
 
         list.add(convertSeen(m.isSeen()));
-        list.add(Integer.toString(m.getReleaseDate()));
+        list.add(stringDate(m.getReleaseDate()));
         list.add(m.getTitle());
         list.add(Integer.toString(m.getRating()));
         list.add(m.getGenre().toString());
@@ -34,7 +37,7 @@ public class MediaObjectHelper {
         return new Movie(
             id,
             convertSeen(list.get(0)),
-            Integer.parseInt(list.get(1)),
+            parseDate(list.get(1)),
             list.get(2),
             Integer.parseInt(list.get(3)),
             Genre.valueOf(list.get(4))
@@ -54,16 +57,24 @@ public class MediaObjectHelper {
     }
 
     public static boolean releaseDateEquals(Date date1, Date date2){
-        return formatDate(date1).equals(formatDate(date2));
+        return stringDate(date1).equals(stringDate(date2));
     }
 
-    public static String formatDate(Date date){
+    public static String stringDate(Date date){
         return format.format(date);
+    }
+
+    public static String dateYear(Date date){
+        SimpleDateFormat year = new SimpleDateFormat("yyyy", Locale.UK);
+        return year.format(date);
     }
 
     public static Date parseDate(String date){
         try {
-            return format.parse(date);
+            if(date.length() > 4)
+                return format.parse(date);
+            calendar.set(Integer.parseInt(date), 0, 1);
+            return calendar.getTime();
         } catch (ParseException e) {
             e.printStackTrace();
         }

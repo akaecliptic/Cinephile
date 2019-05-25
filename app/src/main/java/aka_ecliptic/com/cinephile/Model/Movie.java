@@ -13,24 +13,17 @@ public class Movie extends Media {
         super();
     }
 
-    public Movie(boolean seen, int releaseDate, String title, int rating, Genre genre){
-        super(seen, processDate(releaseDate), title, rating, genre);
+    public Movie(boolean seen, Date releaseDate, String title, int rating, Genre genre){
+        super(seen, releaseDate, title, rating, genre);
     }
 
-    //TODO remove this, only here to bypass parsing errors while refactoring
-    private static Date processDate(int releaseDate) {
-        Calendar cal = new GregorianCalendar();
-        cal.set(releaseDate, 0, 1);
-        return cal.getTime();
-    }
-
-    public Movie(int id, boolean seen, int releaseDate, String title, int rating, Genre genre){
-        super(id, seen, processDate(releaseDate), title, rating, genre);
+    public Movie(int id, boolean seen, Date releaseDate, String title, int rating, Genre genre){
+        super(id, seen, releaseDate, title, rating, genre);
     }
 
     //In place for future database changes.
-    public Movie(int id, boolean seen, int releaseDate, String title, int rating, Genre genre, Genre subGenre, Genre minGenre){
-        super(id, seen, processDate(releaseDate), title, rating, genre);
+    public Movie(int id, boolean seen, Date releaseDate, String title, int rating, Genre genre, Genre subGenre, Genre minGenre){
+        super(id, seen, releaseDate, title, rating, genre);
     }
 
     //TODO add movieDescriptor

@@ -7,6 +7,32 @@
     android:focusableInTouchMode="true">
 
     <Spinner
+        android:id="@+id/movieProfileGenre3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/movieProfileGenre2"
+        android:layout_alignParentEnd="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@+id/movieProfileDesc"
+        android:hint="Genre"
+        android:textAlignment="center"
+        android:textSize="12sp" />
+
+    <Spinner
+        android:id="@+id/movieProfileGenre2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/movieProfileGenre"
+        android:layout_alignParentEnd="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@+id/movieProfileDesc"
+        android:hint="Genre"
+        android:textAlignment="center"
+        android:textSize="12sp" />
+
+    <Spinner
         android:id="@+id/movieProfileGenre"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -18,6 +18,7 @@ import java.util.List;
 
 import aka_ecliptic.com.cinephile.DataRepository.Repository;
 import aka_ecliptic.com.cinephile.Handler.SQLiteHandler;
+import aka_ecliptic.com.cinephile.Helper.MediaObjectHelper;
 import aka_ecliptic.com.cinephile.Model.Media;
 import aka_ecliptic.com.cinephile.R;
 
@@ -61,24 +62,20 @@ public class RecyclerViewAdapterTrending extends RecyclerView.Adapter<RecyclerVi
         if(viewHolder.viewType == VIEW_TYPE_CELL) {
             Media tempMedia = data.get(position);
 
-            boolean have = ref.getItems().stream().anyMatch(m -> m.getId() == tempMedia.getId()
-                        && m.getTitle().equals(tempMedia.getTitle())
-                        && m.getReleaseDate() == tempMedia.getReleaseDate());
-
-            viewHolder.yearTextView.setText(String.valueOf(tempMedia.getReleaseDate()));
+            viewHolder.yearTextView.setText(MediaObjectHelper.stringDate(tempMedia.getReleaseDate()));
             viewHolder.titleTextView.setText(tempMedia.getTitle());
             viewHolder.ratingTextView.setText(String.valueOf(tempMedia.getRating()));
             Picasso.get().load(imageConfig + tempMedia.getImageData().getPosterImagePath()).
                     fit().centerCrop().into(viewHolder.imageView);
 
-            if(have){
+            if(ref.getItems().contains(tempMedia)){
                 viewHolder.addToListBtn.hide();
             }else {
                 viewHolder.addToListBtn.show();
                 viewHolder.addToListBtn.setOnClickListener(view -> {
 
                     SQLiteHandler.getInstance(context).newEntry(tempMedia);
-
+                    viewHolder.addToListBtn.hide();
                     Toast.makeText(context, "Added " + tempMedia.getTitle() + " to your list",
                             Toast.LENGTH_SHORT).show();
                 });

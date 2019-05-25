@@ -17,10 +17,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 import aka_ecliptic.com.cinephile.DataRepository.Repository;
+import aka_ecliptic.com.cinephile.Helper.MediaObjectHelper;
 import aka_ecliptic.com.cinephile.Model.Media;
 import aka_ecliptic.com.cinephile.R;
 
 public class RecyclerViewAdapterSearch extends RecyclerView.Adapter<RecyclerViewAdapterSearch.ViewHolder> implements Filterable {
+
+    //TODO rework.
 
     private List<Media> data;
     private List<Media> displayedData;
@@ -52,7 +55,7 @@ public class RecyclerViewAdapterSearch extends RecyclerView.Adapter<RecyclerView
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position){
 
             Media tempMedia = displayedData.get(position);
-            viewHolder.yearTextView.setText(String.valueOf(tempMedia.getReleaseDate()));
+            viewHolder.yearTextView.setText(MediaObjectHelper.dateYear(tempMedia.getReleaseDate()));
             viewHolder.titleTextView.setText(tempMedia.getTitle());
             viewHolder.ratingTextView.setText(String.valueOf(tempMedia.getRating()));
 
