@@ -128,7 +128,7 @@ public class TrendingFragment extends Fragment implements RecyclerViewAdapterTre
             }
         }catch (Exception e){
             Log.d(TAG,"Error "+ e + "found making an API request");
-            Toast.makeText(this.getContext(), "There was an error making request",
+            Toast.makeText(this.getContext(), "Was not able to find any movies, check internet connection",
                     Toast.LENGTH_SHORT).show();
         }
     }

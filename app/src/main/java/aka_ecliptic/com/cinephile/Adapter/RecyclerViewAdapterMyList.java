@@ -175,7 +175,7 @@ public class RecyclerViewAdapterMyList extends RecyclerView.Adapter<RecyclerView
     }
 
     public Movie getItem(int id){
-        return (Movie) data.get(id);
+        return (Movie) displayedData.get(id);
     }
 
     public void setClickListener(ItemClickListener iCL){

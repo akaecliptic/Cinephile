@@ -59,27 +59,30 @@ public class SearchFragment extends Fragment implements RecyclerViewAdapterSearc
         adapter.setSelectedClickListener(this);
         recyclerView.setAdapter(adapter);
 
+        aSwitch = view.findViewById(R.id.searchSwitch);
+
         SearchView searchView = view.findViewById(R.id.searchSearchView);
-        searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        searchView.setImeOptions((aSwitch.isChecked()) ? EditorInfo.IME_ACTION_SEARCH : EditorInfo.IME_ACTION_DONE);
         searchView.setOnClickListener(v -> searchView.setIconified(false));
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                if(aSwitch.isChecked()) {
+                    if (query != null && query.length() != 0) {
+                        TMDBHandler.getInstance(view.getContext()).search(query, pageCount, result -> {
+                            loadSearch(result);
+                            adapter.addData(onlineSearch);
+                            adapter.getFilter().filter(query);
+                        });
+                        return false;
+                    }
+                }
+                adapter.getFilter().filter(query);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if(aSwitch.isChecked()) {
-                    if (newText != null && newText.length() != 0) {
-                        TMDBHandler.getInstance(view.getContext()).search(newText, pageCount, result -> {
-                            loadSearch(result);
-                            adapter.addData(onlineSearch);
-                            adapter.getFilter().filter(newText);
-                        });
-                        return false;
-                    }
-                }
                 adapter.getFilter().filter(newText);
                 return false;
             }
@@ -92,7 +95,6 @@ public class SearchFragment extends Fragment implements RecyclerViewAdapterSearc
             }
         });
 
-        aSwitch = view.findViewById(R.id.searchSwitch);
         aSwitch.setOnClickListener(l -> {
             String query = searchView.getQuery().toString();
             adapter.setOnline(aSwitch.isChecked());

@@ -97,9 +97,11 @@ public class MyListFragment extends Fragment implements RecyclerViewAdapterMyLis
             }
         });
 
+        //TODO: Rework implementation of adding offline movies.
         FloatingActionButton addBtn = view.findViewById(R.id.addActionButton);
         addBtn.getDrawable().mutate().setTint(getResources().getColor(R.color.colorAccent, null));
-        addBtn.setOnClickListener((View v) ->  this.addMovie());
+        addBtn.hide();
+        //addBtn.setOnClickListener((View v) ->  this.addMovie());
 
         sortBtn = view.findViewById(R.id.sortActionButton);
         sortBtn.getDrawable().mutate().setTint(getResources().getColor(R.color.colorAccent, null));
