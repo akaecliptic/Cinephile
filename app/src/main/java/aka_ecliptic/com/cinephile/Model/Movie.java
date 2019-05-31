@@ -1,8 +1,6 @@
 package aka_ecliptic.com.cinephile.Model;
 
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 public class Movie extends Media {
 
@@ -21,10 +19,30 @@ public class Movie extends Media {
         super(id, seen, releaseDate, title, rating, genre);
     }
 
-    //In place for future database changes.
     public Movie(int id, boolean seen, Date releaseDate, String title, int rating, Genre genre, Genre subGenre, Genre minGenre){
         super(id, seen, releaseDate, title, rating, genre);
+        this.subGenre = subGenre;
+        this.minGenre = minGenre;
     }
 
-    //TODO add movieDescriptor
+    public Genre getSubGenre() {
+        return subGenre;
+    }
+
+    public void setSubGenre(Genre subGenre) {
+        this.subGenre = subGenre;
+    }
+
+    public Genre getMinGenre() {
+        return minGenre;
+    }
+
+    public void setMinGenre(Genre minGenre) {
+        this.minGenre = minGenre;
+    }
+
+    public boolean movieEquals(Movie m) {
+        return super.equals2(m) && this.subGenre.equals(m.getSubGenre()) && this.minGenre.equals(m.minGenre);
+    }
+//TODO add movieDescriptor
 }

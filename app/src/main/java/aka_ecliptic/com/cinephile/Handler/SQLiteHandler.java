@@ -37,6 +37,8 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         movieTableHeadings.add("Title");
         movieTableHeadings.add("Rating");
         movieTableHeadings.add("Genre");
+        movieTableHeadings.add("SubGenre");
+        movieTableHeadings.add("MinGenre");
 
         posterTableHeadings = new ArrayList<>();
         posterTableHeadings.add("MovieID");
@@ -175,7 +177,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         ContentValues dValues = new ContentValues();
 
         SQLiteDatabase db = getWritableDatabase();
-        List<String> list = MediaObjectHelper.asList(mediaObj);
+        List<String> list = MediaObjectHelper.movieAsList((Movie) mediaObj);
 
         int newId = mediaObj.getId();
 
@@ -220,7 +222,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     public void updateEntry(Media mediaObj){
         ContentValues value = new ContentValues();
         SQLiteDatabase db = getWritableDatabase();
-        List<String> list = MediaObjectHelper.asList(mediaObj);
+        List<String> list = MediaObjectHelper.movieAsList((Movie) mediaObj);
 
         for(int i = 0; i < movieTableHeadings.size(); i++){
             value.put(movieTableHeadings.get(i), list.get(i));
@@ -251,16 +253,14 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 
         ContentValues value = new ContentValues();
         SQLiteDatabase db = getWritableDatabase();
+        List<String> list = MediaObjectHelper.movieAsList((Movie) mediaObj);
 
         for(int i = 0; i < movieTableHeadings.size(); i++){
-            value.put(movieTableHeadings.get(i), MediaObjectHelper.asList(mediaObj).get(i));
+            value.put(movieTableHeadings.get(i), list.get(i));
         }
         if(mediaObj.getId() != 0){
             value.put("ID", mediaObj.getId());
         }
-        //TODO add other genres to movietableheadings.
-        value.put("SubGenre", "NONE");
-        value.put("MinGenre", "NONE");
 
         db.insert(MySQLiteHelper.MOVIE_TABLE, null, value);
 
@@ -301,7 +301,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
                 temp.add(c.getString(i));
             }
 
-            Movie m = MediaObjectHelper.fromList(id, temp);
+            Movie m = MediaObjectHelper.movieFromList(id, temp);
 
             if(!c.isNull(c.getColumnIndex(descriptorTableHeading.get(1))))
                 m.setDescriptor(new Descriptor(c.getString(c.getColumnIndex(descriptorTableHeading.get(1)))));

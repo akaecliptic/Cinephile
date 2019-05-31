@@ -37,7 +37,9 @@ public class GsonMovieConverter {
                         getYear(jsonObject.get("release_date").getAsString()),
                         jsonObject.get("title").getAsString(),
                         jsonObject.get("vote_average").getAsBigDecimal().multiply(new BigDecimal(10)).intValue(),
-                        Genre.ACTION
+                        Genre.NONE,
+                        Genre.NONE,
+                        Genre.NONE
                 );
 
                 ImageData imageData = new ImageData();

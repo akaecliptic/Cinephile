@@ -54,7 +54,7 @@ public class MovieProfileActivity extends AppCompatActivity {
      */
     private void endProcedure(){
         Intent intent = new Intent();
-        if(!Objects.requireNonNull(getMovie()).equals2(MediaProfileFragment.getMediaObject())){
+        if(!Objects.requireNonNull(getMovie()).movieEquals((Movie) MediaProfileFragment.getMediaObject())){
 
             Bundle b = new Bundle();
             b.putSerializable(Movie.class.getName(), MediaProfileFragment.getMediaObject());

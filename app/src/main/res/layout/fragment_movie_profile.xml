@@ -109,11 +109,12 @@
         android:layout_marginTop="5dp"
         android:layout_marginEnd="15dp"
         android:clickable="true"
+        android:focusable="true"
         app:backgroundTint="@color/colorPrimaryDark"
         app:rippleColor="@android:color/transparent"
-        app:srcCompat="@drawable/icon_sort_seen" />
+        app:srcCompat="@drawable/icon_sort_seen"/>
 
-    <EditText
+    <TextView
         android:id="@+id/movieProfileYear"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -122,11 +123,20 @@
         android:layout_marginTop="0dp"
         android:layout_centerHorizontal="true"
         android:layout_toEndOf="@+id/movieProfileDesc"
-        android:hint="Year"
-        android:inputType="number"
+        android:hint="@string/releaseDate"
         android:textAlignment="center"
         android:textSize="17sp"
         android:background="@android:color/transparent"/>
+
+    <CalendarView
+        android:id="@+id/movieProfileCalendarView"
+        android:layout_width="250dp"
+        android:layout_height="300dp"
+        android:layout_alignTop="@+id/movieProfileYear"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_toEndOf="@+id/movieProfileDesc"
+        android:background="@color/cardview_dark_background" />
 
     <TextView
         android:id="@+id/movieProfileDesc"
@@ -141,5 +151,6 @@
         android:inputType="none"
         android:minHeight="200dp"
         android:textSize="12sp" />
+
 
 </RelativeLayout>

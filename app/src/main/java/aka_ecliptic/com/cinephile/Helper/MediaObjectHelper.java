@@ -20,7 +20,7 @@ public class MediaObjectHelper {
             new SimpleDateFormat("yyyy-MM-dd", Locale.UK);
     private static final Calendar calendar = new GregorianCalendar();
 
-    public static List<String> asList(Media m){
+    public static List<String> movieAsList(Movie m){
 
         ArrayList<String> list = new ArrayList<>();
 
@@ -29,18 +29,22 @@ public class MediaObjectHelper {
         list.add(m.getTitle());
         list.add(Integer.toString(m.getRating()));
         list.add(m.getGenre().toString());
+        list.add(m.getSubGenre().toString());
+        list.add(m.getMinGenre().toString());
 
         return list;
     }
 
-    public static Movie fromList(int id, List<String> list){
+    public static Movie movieFromList(int id, List<String> list){
         return new Movie(
             id,
             convertSeen(list.get(0)),
             parseDate(list.get(1)),
             list.get(2),
             Integer.parseInt(list.get(3)),
-            Genre.valueOf(list.get(4))
+            Genre.valueOf(list.get(4)),
+            Genre.valueOf(list.get(5)),
+            Genre.valueOf(list.get(6))
             );
     }
 
@@ -79,5 +83,16 @@ public class MediaObjectHelper {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static int checkInt(String in){
+        if(in != null && !in.isEmpty()){
+            try{
+                return Integer.parseInt(in);
+            }catch (NumberFormatException e){
+                return -1;
+            }
+        }
+        return -1;
     }
 }
