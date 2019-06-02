@@ -14,12 +14,19 @@ import android.widget.CheckBox;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Objects;
 
+import aka_ecliptic.com.cinephile.Handler.GsonMovieConverter;
 import aka_ecliptic.com.cinephile.Handler.SQLiteHandler;
+import aka_ecliptic.com.cinephile.Handler.TMDBHandler;
 import aka_ecliptic.com.cinephile.Helper.MediaObjectHelper;
 import aka_ecliptic.com.cinephile.Model.Media;
 import aka_ecliptic.com.cinephile.Model.Movie;
@@ -50,6 +57,7 @@ public class RecyclerViewAdapterMyList extends RecyclerView.Adapter<RecyclerView
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         Media tempMedia = displayedData.get(position);
+        viewHolder.id = tempMedia.getId();
         viewHolder.yearTextView.setText(MediaObjectHelper.dateYear(tempMedia.getReleaseDate()));
         viewHolder.titleTextView.setText(tempMedia.getTitle());
         viewHolder.ratingTextView.setText(String.valueOf(tempMedia.getRating()));
@@ -99,6 +107,7 @@ public class RecyclerViewAdapterMyList extends RecyclerView.Adapter<RecyclerView
     };
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
+        int id;
         TextView yearTextView;
         TextView titleTextView;
         TextView ratingTextView;
@@ -144,7 +153,7 @@ public class RecyclerViewAdapterMyList extends RecyclerView.Adapter<RecyclerView
             Button btnAdd;
             Button btnCancel;
             TextView textViewDel;
-            String prompt = "Do You want to delete '" + this.titleTextView.getText().toString() + "'" +
+            String prompt = "Do You want to delete '" + titleTextView.getText().toString() + "'" +
                     " or update from online";
 
             dialogDelete.setContentView(R.layout.popup_movie_options);
@@ -160,7 +169,25 @@ public class RecyclerViewAdapterMyList extends RecyclerView.Adapter<RecyclerView
             });
 
             btnCancel.setOnClickListener((View vw) -> {
-                //TODO Have switch to a popup
+                TMDBHandler.getInstance(context).getMovie(id, result -> {
+                    Gson gson = GsonMovieConverter.getCustomGsonMovieUpdate();
+                    Movie m = gson.fromJson(result.toString(),Movie.class);
+
+                    SQLiteHandler.getInstance(context).updateEntry(m);
+
+                    ListIterator<Media> it = displayedData.listIterator();
+                    while (it.hasNext()){
+                        Movie movie = (Movie)it.next();
+                        if(m.getId() == movie.getId()){
+                            m.setDescriptor(movie.getDescriptor());
+                            m.setImageData(movie.getImageData());
+                            it.set(m);
+                        }
+                    }
+
+                    Toast.makeText(context, titleTextView.getText().toString() + " has been updated",
+                            Toast.LENGTH_SHORT).show();
+                });
                 dialogDelete.dismiss();
             });
             Objects.requireNonNull(dialogDelete.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.BLACK));

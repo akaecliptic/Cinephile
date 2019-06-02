@@ -53,6 +53,7 @@ public class MyListFragment extends Fragment implements RecyclerViewAdapterMyLis
 
     private Dialog dialogAddMovie;
     private RecyclerViewAdapterMyList adapter;
+    private SearchView searchView;
 
     private Repository<Media> repository;
 
@@ -72,7 +73,7 @@ public class MyListFragment extends Fragment implements RecyclerViewAdapterMyLis
 
         dialogAddMovie = new Dialog(inflater.getContext());
 
-        SearchView searchView = view.findViewById(R.id.myListSearchView);
+        searchView = view.findViewById(R.id.myListSearchView);
         searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
         searchView.setOnClickListener(v -> searchView.setIconified(false));
 
@@ -198,7 +199,7 @@ public class MyListFragment extends Fragment implements RecyclerViewAdapterMyLis
     }
 
     private Spinner loadSpinner(Spinner spinner){
-        ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(this.getContext(),
+        ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(spinner.getContext(),
                 R.array.media_genres, android.R.layout.simple_spinner_item);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(arrayAdapter);
@@ -216,6 +217,7 @@ public class MyListFragment extends Fragment implements RecyclerViewAdapterMyLis
                 Movie temp = (Movie) b.getSerializable(Movie.class.getName());
                 int index = repository.replaceItem(temp, this.getContext());
                 if (index != -1){
+                    adapter.getFilter().filter(searchView.getQuery().toString());
                     adapter.setData(repository.getItems());
                     adapter.notifyDataSetChanged();
                 }else {

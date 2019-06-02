@@ -67,7 +67,7 @@ public class TMDBHandler {
 
     public void getTrending(int page, TrendingType trendingType, final VolleyCallback callback){
 
-        String url = BASE_URL + "movie/" + trendingType.type + "?api_key=" + API_KEY + "&page=" + page;
+        String url = BASE_URL + "movie/" + trendingType.type + "?api_key=" + API_KEY + "&language=en-GB&page=" + page + "&region=GB";
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null
                 , callback::onSuccess
@@ -76,6 +76,21 @@ public class TMDBHandler {
                     Toast.makeText(tmdbContext, "There was an error making request",
                                     Toast.LENGTH_SHORT).show();
                 });
+
+        TMDBHandler.getInstance(tmdbContext).addToRequestQueue(jsonObjectRequest);
+    }
+
+    public void getMovie(int movieId, final VolleyCallback callback){
+
+        String url = BASE_URL + "movie/" + movieId + "?api_key=" + API_KEY + "&language=en-GB&append_to_response=release_dates";
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null
+                , callback::onSuccess
+                , error -> {
+            Log.d(TAG,"Error "+ error + "found making an API request");
+            Toast.makeText(tmdbContext, "There was an error making request",
+                    Toast.LENGTH_SHORT).show();
+        });
 
         TMDBHandler.getInstance(tmdbContext).addToRequestQueue(jsonObjectRequest);
     }

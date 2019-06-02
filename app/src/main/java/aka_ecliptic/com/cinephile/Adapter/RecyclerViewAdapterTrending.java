@@ -70,11 +70,26 @@ public class RecyclerViewAdapterTrending extends RecyclerView.Adapter<RecyclerVi
 
             if(ref.getItems().contains(tempMedia)){
                 viewHolder.addToListBtn.hide();
+            }else if(ref.getItems().stream().anyMatch(m -> m.getId() == tempMedia.getId())){
+                viewHolder.addToListBtn.show();
+
+                viewHolder.addToListBtn.setImageDrawable(context.getDrawable(R.drawable.ic_update));
+                viewHolder.addToListBtn.getDrawable().mutate().setTint(context.getColor(R.color.colorAccent));
+
+                viewHolder.addToListBtn.setOnClickListener(view -> {
+                    ref.replaceItem(tempMedia, context);
+                    viewHolder.addToListBtn.hide();
+                    Toast.makeText(context, tempMedia.getTitle() + " has been updated",
+                            Toast.LENGTH_SHORT).show();
+                });
             }else {
                 viewHolder.addToListBtn.show();
-                viewHolder.addToListBtn.setOnClickListener(view -> {
 
-                    SQLiteHandler.getInstance(context).newEntry(tempMedia);
+                viewHolder.addToListBtn.setImageDrawable(context.getDrawable(android.R.drawable.ic_input_add));
+                viewHolder.addToListBtn.getDrawable().mutate().setTint(context.getColor(R.color.colorAccent));
+
+                viewHolder.addToListBtn.setOnClickListener(view -> {
+                    ref.addItem(tempMedia, context);
                     viewHolder.addToListBtn.hide();
                     Toast.makeText(context, "Added " + tempMedia.getTitle() + " to your list",
                             Toast.LENGTH_SHORT).show();
@@ -82,7 +97,7 @@ public class RecyclerViewAdapterTrending extends RecyclerView.Adapter<RecyclerVi
             }
         }else{
 
-            viewHolder.footerButton.setText("Load More");
+            viewHolder.footerButton.setText(R.string.load_more);
             viewHolder.footerButton.setOnClickListener(addClickListener);
             viewHolder.footerButton.setVisibility(View.VISIBLE);
             viewHolder.footerButton.setEnabled(true);

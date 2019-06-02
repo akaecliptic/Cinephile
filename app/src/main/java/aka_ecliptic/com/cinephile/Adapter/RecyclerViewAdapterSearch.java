@@ -55,6 +55,9 @@ public class RecyclerViewAdapterSearch extends RecyclerView.Adapter<RecyclerView
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position){
 
             Media tempMedia = displayedData.get(position);
+            if(tempMedia == null){
+                System.out.println("YEET");
+            }
             viewHolder.yearTextView.setText(MediaObjectHelper.dateYear(tempMedia.getReleaseDate()));
             viewHolder.titleTextView.setText(tempMedia.getTitle());
             viewHolder.ratingTextView.setText(String.valueOf(tempMedia.getRating()));

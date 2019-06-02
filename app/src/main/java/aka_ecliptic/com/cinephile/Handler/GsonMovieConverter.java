@@ -2,6 +2,7 @@ package aka_ecliptic.com.cinephile.Handler;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -31,15 +32,17 @@ public class GsonMovieConverter {
         if (!json.isJsonNull()) {
                 JsonObject jsonObject = json.getAsJsonObject();
 
+                Genre[] genres = getGenres(jsonObject.getAsJsonArray("genre_ids"));
+
                 Movie movie = new Movie(
                         jsonObject.get("id").getAsInt(),
                         false,
                         getYear(jsonObject.get("release_date").getAsString()),
                         jsonObject.get("title").getAsString(),
                         jsonObject.get("vote_average").getAsBigDecimal().multiply(new BigDecimal(10)).intValue(),
-                        Genre.NONE,
-                        Genre.NONE,
-                        Genre.NONE
+                        genres[0],
+                        genres[1],
+                        genres[2]
                 );
 
                 ImageData imageData = new ImageData();
@@ -64,6 +67,65 @@ public class GsonMovieConverter {
 
         gsonB.registerTypeAdapter(Movie.class, jsonD);
         return gsonB.create();
+    }
+
+    public static Gson getCustomGsonMovieUpdate(){
+        GsonBuilder gsonB = new GsonBuilder();
+        JsonDeserializer<Movie> jsonD = (json, typeOfT, context) -> {
+            if (!json.isJsonNull()) {
+                JsonObject jsonObject = json.getAsJsonObject();
+
+                Genre[] genres = getGenres(jsonObject.getAsJsonArray("genres"));
+                Date date = getReleaseDates(jsonObject.get("release_dates").getAsJsonObject().getAsJsonArray("results"));
+                if(date == null)
+                    date = getYear(jsonObject.get("release_date").getAsString());
+
+                return new Movie(
+                        jsonObject.get("id").getAsInt(),
+                        false,
+                        date,
+                        jsonObject.get("title").getAsString(),
+                        jsonObject.get("vote_average").getAsBigDecimal().multiply(new BigDecimal(10)).intValue(),
+                        genres[0],
+                        genres[1],
+                        genres[2]
+                );
+
+            }
+            return null;
+        };
+
+        gsonB.registerTypeAdapter(Movie.class, jsonD);
+        return gsonB.create();
+    }
+
+    private static Genre[] getGenres(JsonArray jsonArray){
+        Genre[] genres = new Genre[3];
+        for (int i = 0; i < 3; i++) {
+            if(i < jsonArray.size() && !jsonArray.isJsonNull()){
+                if(jsonArray.get(i).isJsonObject()){
+                    int id = jsonArray.get(i).getAsJsonObject().get("id").getAsInt();
+                    genres[i] = Genre.getGenreById(id);
+                }else {
+                    genres[i] = Genre.getGenreById(jsonArray.get(i).getAsInt());
+                }
+            }else {
+                genres[i] = Genre.NONE;
+            }
+        }
+        return genres;
+    }
+
+    private static Date getReleaseDates(JsonArray jsonArray){
+        for (JsonElement jsonElement : jsonArray) {
+            JsonObject temp = jsonElement.getAsJsonObject();
+            if(temp.get("iso_3166_1").getAsString().equals("GB")){
+                String year = temp.get("release_dates").getAsJsonArray().get(0).getAsJsonObject()
+                                    .get("release_date").getAsString();
+                return getYear(year);
+            }
+        }
+        return null;
     }
 
     private static Date getYear(String releaseDate) {

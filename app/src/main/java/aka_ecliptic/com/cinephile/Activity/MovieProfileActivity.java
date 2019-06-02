@@ -35,7 +35,11 @@ public class MovieProfileActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().replace(R.id.profileContainer,
                 new MediaProfileFragment()).commit();
 
-        backBtn.setOnClickListener((View vw) -> endProcedure());
+        backBtn.setOnClickListener((View vw) -> {
+            if(MediaProfileFragment.checkRating(findViewById(R.id.movieProfileRating))) {
+                endProcedure();
+            }
+        });
     }
 
     /**
@@ -45,7 +49,13 @@ public class MovieProfileActivity extends AppCompatActivity {
      */
     @Override
     public void onBackPressed(){
-        endProcedure();
+        if(MediaProfileFragment.isCalendarOpen()){
+            MediaProfileFragment.closeCalendar(findViewById(R.id.movieProfileCalendarView));
+        }else {
+            if(MediaProfileFragment.checkRating(findViewById(R.id.movieProfileRating))) {
+                endProcedure();
+            }
+        }
     }
 
     /**

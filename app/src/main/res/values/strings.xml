@@ -36,6 +36,7 @@
     <string-array name="media_genres">
         <item>ACTION</item>
         <item>ADVENTURE</item>
+        <item>ANIMATION</item>
         <item>COMEDY</item>
         <item>CRIME</item>
         <item>DOCUMENTARY</item>
@@ -48,6 +49,7 @@
         <item>MYSTERY</item>
         <item>ROMANTIC</item>
         <item>SCI_FI</item>
+        <item>TV</item>
         <item>THRILLER</item>
         <item>WAR</item>
         <item>WESTERN</item>
@@ -61,4 +63,5 @@
     <string name="edit_on_create">edit_on_create</string>
     <string name="Online">Online</string>
     <string name="release_date">Release Date</string>
+    <string name="load_more">Load More</string>
 </resources>

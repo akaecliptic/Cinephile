@@ -43,6 +43,7 @@ public class MediaProfileFragment extends Fragment {
     private static Media mediaObject;
     private String posterConfig;
     private String backdropConfig;
+    private static boolean calendarOpen = false;
 
     private ArrayAdapter<CharSequence> arrayAdapter;
 
@@ -75,7 +76,7 @@ public class MediaProfileFragment extends Fragment {
         yearTextView.setOnLongClickListener(l -> {
             calendarView.setVisibility(View.VISIBLE);
             calendarView.setClickable(true);
-            yearTextView.setVisibility(View.INVISIBLE);
+            calendarOpen = true;
             return true;
         });
 
@@ -135,15 +136,12 @@ public class MediaProfileFragment extends Fragment {
             minGenre.setVisibility(View.INVISIBLE);
         }
 
-        //TODO: have the calender view be closable without selecting date.
         calendarView.setDate(mediaObject.getReleaseDate().getTime());
         calendarView.setOnDateChangeListener( (calendarView, year, month, dayOfMonth) -> {
             Calendar cal = new GregorianCalendar(year, month, dayOfMonth);
-            yearTextView.setVisibility(View.VISIBLE);
             yearTextView.setText(MediaObjectHelper.stringDate(cal.getTime()));
             mediaObject.setReleaseDate(cal.getTime());
-            calendarView.setVisibility(View.INVISIBLE);
-            calendarView.setClickable(false);
+            closeCalendar(calendarView);
         });
 
         if(mediaObject.getDescriptor() != null){
@@ -203,7 +201,7 @@ public class MediaProfileFragment extends Fragment {
 
     private boolean createDialog() {
 
-        Dialog dialogEdit = new Dialog(this.getContext());
+        Dialog dialogEdit = new Dialog(Objects.requireNonNull(this.getContext()));
 
         Button btnDone;
         Button btnCancel;
@@ -243,7 +241,7 @@ public class MediaProfileFragment extends Fragment {
     }
 
     private Spinner loadSpinner(Spinner spinner){
-        arrayAdapter = ArrayAdapter.createFromResource(this.getContext(),
+        arrayAdapter = ArrayAdapter.createFromResource(spinner.getContext(),
                 R.array.media_genres, android.R.layout.simple_spinner_item);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(arrayAdapter);
@@ -252,8 +250,10 @@ public class MediaProfileFragment extends Fragment {
 
     private void closeKeyboard(View v){
         if(v != null){
-            InputMethodManager imm = (InputMethodManager)this.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+            InputMethodManager imm = (InputMethodManager)v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (imm != null) {
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+            }
         }
     }
 
@@ -263,5 +263,31 @@ public class MediaProfileFragment extends Fragment {
         }else{
             return Color.GRAY;
         }
+    }
+
+    public static boolean checkRating(EditText view){
+        String userText = view.getText().toString();
+        int userInput = MediaObjectHelper.checkInt(userText);
+        if(mediaObject.getRating() != userInput) {
+            if (userInput >= 0 && userInput <= 100) {
+                mediaObject.setRating(userInput);
+                return true;
+            } else {
+                view.setText(String.valueOf(mediaObject.getRating()));
+                Toast.makeText(view.getContext(), "Invalid input for rating, try again", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean isCalendarOpen(){
+        return calendarOpen;
+    }
+
+    public static void closeCalendar(CalendarView view){
+        view.setVisibility(View.INVISIBLE);
+        view.setClickable(false);
+        calendarOpen = false;
     }
 }
