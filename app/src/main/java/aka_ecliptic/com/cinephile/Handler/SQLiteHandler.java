@@ -225,8 +225,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         List<String> list = MediaObjectHelper.movieAsList((Movie) mediaObj);
 
         for(int i = 0; i < movieTableHeadings.size(); i++){
-            if(!movieTableHeadings.get(i).equals("Rating") && !movieTableHeadings.get(i).equals("Seen"))
-                value.put(movieTableHeadings.get(i), list.get(i));
+            value.put(movieTableHeadings.get(i), list.get(i));
         }
 
         db.update(MySQLiteHelper.MOVIE_TABLE,  value, "ID = ?", new String[] {String.valueOf(mediaObj.getId())});

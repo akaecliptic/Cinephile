@@ -117,7 +117,6 @@ public abstract class Media implements Comparable<Media>, Serializable {
             return Integer.compare(this.id, mediaObj.id);
     }
 
-    //TODO change release date comparisons when changing release date getters and setters.
     @Override
     public boolean equals(Object o){
         if(o instanceof Media)  {

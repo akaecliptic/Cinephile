@@ -13,7 +13,6 @@ import aka_ecliptic.com.cinephile.Model.Genre;
 import aka_ecliptic.com.cinephile.Model.Media;
 import aka_ecliptic.com.cinephile.Model.Movie;
 
-//TODO: Possible change to my own implementation of List
 public class MediaObjectHelper {
 
     private static final SimpleDateFormat format =

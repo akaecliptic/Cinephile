@@ -179,6 +179,8 @@ public class RecyclerViewAdapterMyList extends RecyclerView.Adapter<RecyclerView
                     while (it.hasNext()){
                         Movie movie = (Movie)it.next();
                         if(m.getId() == movie.getId()){
+                            m.setSeen(movie.isSeen());
+                            m.setRating(movie.getRating());
                             m.setDescriptor(movie.getDescriptor());
                             m.setImageData(movie.getImageData());
                             it.set(m);

@@ -15,11 +15,14 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import aka_ecliptic.com.cinephile.DataRepository.Repository;
 import aka_ecliptic.com.cinephile.Handler.SQLiteHandler;
 import aka_ecliptic.com.cinephile.Helper.MediaObjectHelper;
 import aka_ecliptic.com.cinephile.Model.Media;
+import aka_ecliptic.com.cinephile.Model.Movie;
 import aka_ecliptic.com.cinephile.R;
 
 public class RecyclerViewAdapterTrending extends RecyclerView.Adapter<RecyclerViewAdapterTrending.ViewHolder>{
@@ -77,7 +80,16 @@ public class RecyclerViewAdapterTrending extends RecyclerView.Adapter<RecyclerVi
                 viewHolder.addToListBtn.getDrawable().mutate().setTint(context.getColor(R.color.colorAccent));
 
                 viewHolder.addToListBtn.setOnClickListener(view -> {
+
+                    Movie m = (Movie) ref.getItems().parallelStream()
+                            .filter(mov -> mov.getId() == tempMedia.getId())
+                            .collect(Collectors.toList()).get(0);
+
+                    tempMedia.setSeen(m.isSeen());
+                    tempMedia.setRating(m.getRating());
+
                     ref.replaceItem(tempMedia, context);
+
                     viewHolder.addToListBtn.hide();
                     Toast.makeText(context, tempMedia.getTitle() + " has been updated",
                             Toast.LENGTH_SHORT).show();
