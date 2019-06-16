@@ -62,7 +62,6 @@ public class SearchFragment extends Fragment implements RecyclerViewAdapterSearc
         aSwitch = view.findViewById(R.id.searchSwitch);
 
         SearchView searchView = view.findViewById(R.id.searchSearchView);
-        searchView.setImeOptions((aSwitch.isChecked()) ? EditorInfo.IME_ACTION_SEARCH : EditorInfo.IME_ACTION_DONE);
         searchView.setOnClickListener(v -> searchView.setIconified(false));
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -71,18 +70,19 @@ public class SearchFragment extends Fragment implements RecyclerViewAdapterSearc
                     if (query != null && query.length() != 0) {
                         TMDBHandler.getInstance(view.getContext()).search(query, pageCount, result -> {
                             loadSearch(result);
-                            adapter.addData(onlineSearch);
+                            adapter.addOnlineData(onlineSearch);
                             adapter.getFilter().filter(query);
                         });
                         return false;
                     }
                 }
-                adapter.getFilter().filter(query);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                onlineSearch.clear();
+                adapter.addOnlineData(onlineSearch);
                 adapter.getFilter().filter(newText);
                 return false;
             }
@@ -100,7 +100,6 @@ public class SearchFragment extends Fragment implements RecyclerViewAdapterSearc
             adapter.setOnline(aSwitch.isChecked());
             if(!aSwitch.isChecked()){
                 if(query.length() > 0) {
-                    repository.setList(this.getContext());
                     adapter.getFilter().filter(query);
                 }
             }else{
@@ -108,7 +107,7 @@ public class SearchFragment extends Fragment implements RecyclerViewAdapterSearc
                     TMDBHandler.getInstance(view.getContext()).search(query,
                             pageCount, result -> {
                                 loadSearch(result);
-                                adapter.addData(onlineSearch);
+                                adapter.addOnlineData(onlineSearch);
                                 adapter.getFilter().filter(query);
                             });
                 }

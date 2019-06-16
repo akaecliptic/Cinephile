@@ -1,6 +1,7 @@
 package aka_ecliptic.com.cinephile.Adapter;
 
 import android.content.Context;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Handler;
 
 import aka_ecliptic.com.cinephile.DataRepository.Repository;
 import aka_ecliptic.com.cinephile.Helper.MediaObjectHelper;
@@ -22,8 +24,6 @@ import aka_ecliptic.com.cinephile.Model.Media;
 import aka_ecliptic.com.cinephile.R;
 
 public class RecyclerViewAdapterSearch extends RecyclerView.Adapter<RecyclerViewAdapterSearch.ViewHolder> implements Filterable {
-
-    //TODO rework.
 
     private List<Media> data;
     private List<Media> displayedData;
@@ -55,24 +55,18 @@ public class RecyclerViewAdapterSearch extends RecyclerView.Adapter<RecyclerView
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position){
 
             Media tempMedia = displayedData.get(position);
-            if(tempMedia == null){
-                System.out.println("YEET");
-            }
             viewHolder.yearTextView.setText(MediaObjectHelper.dateYear(tempMedia.getReleaseDate()));
             viewHolder.titleTextView.setText(tempMedia.getTitle());
             viewHolder.ratingTextView.setText(String.valueOf(tempMedia.getRating()));
 
-            boolean alreadyHave = data.parallelStream().anyMatch(m -> m.getId() == tempMedia.getId());
-
-            if (alreadyHave) {
-                viewHolder.addToListBtn.setClickable(false);
+            if (data.contains(tempMedia)) {
                 viewHolder.addToListBtn.hide();
             } else {
-
-                viewHolder.addToListBtn.setClickable(true);
                 viewHolder.addToListBtn.show();
                 viewHolder.addToListBtn.setOnClickListener(view -> {
                     Repository.addToDB(context, tempMedia);
+                    data.add(tempMedia);
+                    viewHolder.addToListBtn.hide();
 
                     Toast.makeText(context, "Added " + tempMedia.getTitle() + " to your list",
                             Toast.LENGTH_SHORT).show();
@@ -86,7 +80,7 @@ public class RecyclerViewAdapterSearch extends RecyclerView.Adapter<RecyclerView
         return displayedData.size();
     }
 
-    public void addData(List<Media> list) {
+    public void addOnlineData(List<Media> list) {
         onlineResults.clear();
         onlineResults.addAll(list);
     }
@@ -139,14 +133,12 @@ public class RecyclerViewAdapterSearch extends RecyclerView.Adapter<RecyclerView
             }else{
                 String filterPattern = constraint.toString().toLowerCase().trim();
 
-                data.parallelStream()
-                        .filter(m -> m.getTitle().toLowerCase().trim().contains(filterPattern))
+                data.stream().filter(media -> media.getTitle().toLowerCase().trim().contains(filterPattern))
                         .forEach(filteredMedia::add);
 
                 if(isOnline){
-                    List<Media> removedDupedOnline = new LinkedList<>(onlineResults);
-                    removedDupedOnline.removeAll(data);
-                    filteredMedia.addAll(removedDupedOnline);
+                    onlineResults.removeAll(data);
+                    filteredMedia.addAll(onlineResults);
                 }
             }
 

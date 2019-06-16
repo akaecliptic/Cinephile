@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Objects;
 
+import aka_ecliptic.com.cinephile.DataRepository.Repository;
 import aka_ecliptic.com.cinephile.Handler.GsonMovieConverter;
 import aka_ecliptic.com.cinephile.Handler.SQLiteHandler;
 import aka_ecliptic.com.cinephile.Handler.TMDBHandler;
@@ -84,11 +85,8 @@ public class RecyclerViewAdapterMyList extends RecyclerView.Adapter<RecyclerView
             }else{
                 String filterPattern = constraint.toString().toLowerCase().trim();
 
-                for(Media media : data ){
-                    if(media.getTitle().toLowerCase().contains(filterPattern)){
-                        filteredMedia.add(media);
-                    }
-                }
+                data.stream().filter(media -> media.getTitle().toLowerCase().trim().contains(filterPattern))
+                        .forEach(filteredMedia::add);
             }
 
             FilterResults results = new FilterResults();
@@ -184,6 +182,7 @@ public class RecyclerViewAdapterMyList extends RecyclerView.Adapter<RecyclerView
                             m.setDescriptor(movie.getDescriptor());
                             m.setImageData(movie.getImageData());
                             it.set(m);
+                            new Repository<>(context).replaceItem(m, context);
                         }
                     }
 
