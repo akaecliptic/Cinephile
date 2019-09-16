@@ -33,7 +33,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 
         movieTableHeadings = new ArrayList<>();
         movieTableHeadings.add("Seen");
-        movieTableHeadings.add("ReleaseDate");
+        movieTableHeadings.add("Year");
         movieTableHeadings.add("Title");
         movieTableHeadings.add("Rating");
         movieTableHeadings.add("Genre");
