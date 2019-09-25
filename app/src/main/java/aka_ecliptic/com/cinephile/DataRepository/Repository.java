@@ -10,6 +10,7 @@ import java.util.Optional;
 
 import aka_ecliptic.com.cinephile.Handler.SQLiteHandler;
 import aka_ecliptic.com.cinephile.Model.Media;
+import aka_ecliptic.com.cinephile.Model.Movie;
 
 public class Repository <T extends Media> {
 
@@ -22,7 +23,7 @@ public class Repository <T extends Media> {
     }
 
     public Repository(Context context){
-        this.mediaList = (List) SQLiteHandler.getInstance(context).getList();
+        this.mediaList = (List) SQLiteHandler.getInstance(context).getMovieList();
         this.sortType = Sort.ID;
     }
 
@@ -37,36 +38,36 @@ public class Repository <T extends Media> {
     }
 
     public void setList(Context context) {
-        this.mediaList = (List) SQLiteHandler.getInstance(context).getList();
+        this.mediaList = (List) SQLiteHandler.getInstance(context).getMovieList();
     }
 
     public List<T> getItems(){
         return this.mediaList;
     }
 
-    public int replaceItem(T item, Context context) {
-        SQLiteHandler.getInstance(context).updateEntry(item);
+    public int replaceItem(Movie item, Context context) {
+        SQLiteHandler.getInstance(context).updateMovie(item);
 
         int index = -1;
 
         for (T m : this.mediaList) {
             if(m.getId() == item.getId()){
                 index = this.mediaList.indexOf(m);
-                this.mediaList.set(index, item);
+                this.mediaList.set(index, (T) item);
             }
         }
 
         return index;
     }
 
-    public void addItem(T movie, Context context) {
-        SQLiteHandler.getInstance(context).newEntry(movie);
-        this.mediaList.add(movie);
+    public void addItem(Movie movie, Context context) {
+        SQLiteHandler.getInstance(context).newMovie(movie);
+        this.mediaList.add((T) movie);
 
     }
 
-    public static <T extends Media>  void addToDB(Context context, T movie){
-        SQLiteHandler.getInstance(context).newEntry(movie);
+    public static <T extends Movie>  void addToDB(Context context, T movie){
+        SQLiteHandler.getInstance(context).newMovie(movie);
     }
 
     public Sort getSortType(){

@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,27 +38,34 @@ import aka_ecliptic.com.cinephile.Model.Media;
 import aka_ecliptic.com.cinephile.Model.Movie;
 import aka_ecliptic.com.cinephile.R;
 
-public class MediaProfileFragment extends Fragment {
-    public static final String TAG = "MediaProfileFragment";
+public class MovieProfileFragment extends Fragment {
+    public static final String TAG = "MovieProfileFragment";
 
     private static Media mediaObject;
     private String posterConfig;
     private String backdropConfig;
-    private static boolean calendarOpen = false;
 
     private ArrayAdapter<CharSequence> arrayAdapter;
 
-    private TextView yearTextView;
-    private TextView titleTextView;
-    private EditText ratingTextView;
-    private TextView descriptionTextView;
-    private ImageView moviePoster;
-    private ImageView movieBackDrop;
-    private Spinner genre;
-    private Spinner subGenre;
-    private Spinner minGenre;
-    private CalendarView calendarView;
-    private FloatingActionButton seenBtn;
+    private TextView textTitle;
+    private TextView textReleaseDate;
+    private TextView textDescription;
+
+    private ImageView imagePoster;
+    private ImageView imageBackDrop;
+
+    private Spinner spinnerGenre1;
+    private Spinner spinnerGenre2;
+    private Spinner spinnerGenre3;
+
+    private FloatingActionButton btnSeen;
+    private FloatingActionButton btnMore;
+
+    private FloatingActionButton btnRating;
+    private TextView textRating;
+    private ProgressBar progressRating;
+
+
 
     @Nullable
     @Override
@@ -72,90 +80,77 @@ public class MediaProfileFragment extends Fragment {
     }
 
     private void initialiseViews(View view){
-        yearTextView = view.findViewById(R.id.movieProfileYear);
-        yearTextView.setOnLongClickListener(l -> {
-            calendarView.setVisibility(View.VISIBLE);
-            calendarView.setClickable(true);
-            calendarOpen = true;
-            return true;
-        });
+        textReleaseDate = view.findViewById(R.id.profile_text_release_date);
 
-        titleTextView = view.findViewById(R.id.movieProfileTitle);
-        titleTextView.setSelected(true);
-        titleTextView.setOnLongClickListener(l -> createDialog());
+        textTitle = view.findViewById(R.id.profile_text_title);
+        textTitle.setSelected(true);
+        textTitle.setOnLongClickListener(l -> createDialog());
 
-        ratingTextView = view.findViewById(R.id.movieProfileRating);
-        descriptionTextView = view.findViewById(R.id.movieProfileDesc);
+        textRating = view.findViewById(R.id.profile_text_rating);
+        textDescription = view.findViewById(R.id.profile_text_description);
 
-        moviePoster = view.findViewById(R.id.movieProfileImage);
-        movieBackDrop = view.findViewById(R.id.movieProfileBackdrop);
+        imagePoster = view.findViewById(R.id.profile_image_poster);
+        imageBackDrop = view.findViewById(R.id.profile_image_backdrop);
 
-        seenBtn = view.findViewById(R.id.movieProfileSeen);
-        genre = loadSpinner(view.findViewById(R.id.movieProfileGenre));
-        subGenre = loadSpinner(view.findViewById(R.id.movieProfileGenre2));
-        minGenre = loadSpinner(view.findViewById(R.id.movieProfileGenre3));
+        //Buttons
+        btnSeen = view.findViewById(R.id.profile_button_seen);
+        btnRating = view.findViewById(R.id.profile_button_rating);
 
-        seenBtn.setOnClickListener((View vw) -> {
+        btnMore = view.findViewById(R.id.profile_button_more);
+
+        spinnerGenre1 = loadSpinner(view.findViewById(R.id.profile_spinner_genre_1));
+        spinnerGenre2 = loadSpinner(view.findViewById(R.id.profile_spinner_genre_2));
+        spinnerGenre3 = loadSpinner(view.findViewById(R.id.profile_spinner_genre_3));
+
+        btnSeen.setOnClickListener((View vw) -> {
             mediaObject.setSeen(!mediaObject.isSeen());
-            seenBtn.getDrawable().mutate().setTint(seenColor());
+            btnSeen.getDrawable().mutate().setTint(seenColor());
         });
-
-        calendarView = view.findViewById(R.id.movieProfileCalendarView);
-        calendarView.setClickable(false);
-        calendarView.setVisibility(View.INVISIBLE);
     }
 
     private void bindData(){
-        yearTextView.setText(MediaObjectHelper.stringDate(mediaObject.getReleaseDate()));
-        titleTextView.setText(mediaObject.getTitle());
+        textReleaseDate.setText(MediaObjectHelper.dateToString(mediaObject.getReleaseDate()));
+        textTitle.setText(mediaObject.getTitle());
 
-        ratingTextView.setText(String.valueOf(mediaObject.getRating()));
-        ratingTextView.setOnEditorActionListener((v,a,k) -> {
-            String userText = ratingTextView.getText().toString();
+        textRating.setText(String.valueOf(mediaObject.getRating()));
+        textRating.setOnEditorActionListener((v,a,k) -> {
+            String userText = textRating.getText().toString();
             int userInput = MediaObjectHelper.checkInt(userText);
             if(userInput >= 0 && userInput <= 100){
                 mediaObject.setRating(userInput);
                 closeKeyboard(v);
             }else {
-                ratingTextView.setText(String.valueOf(mediaObject.getRating()));
+                textRating.setText(String.valueOf(mediaObject.getRating()));
                 Toast.makeText(this.getContext(), "Invalid input, try again", Toast.LENGTH_SHORT).show();
             }
             return true;
         });
 
-        seenBtn.getDrawable().mutate().setTint(seenColor());
-        genre.setSelection(getDefaultSelected(mediaObject.getGenre().name()));
-        genre.setOnItemSelectedListener(spinnerSelect);
+        btnSeen.getDrawable().mutate().setTint(seenColor());
+        spinnerGenre1.setSelection(getDefaultSelected(mediaObject.getGenre().name()));
+        spinnerGenre1.setOnItemSelectedListener(spinnerSelect);
         if(mediaObject instanceof Movie){
-            subGenre.setSelection(getDefaultSelected(((Movie) mediaObject).getSubGenre().name()));
-            subGenre.setOnItemSelectedListener(spinnerSelect);
-            minGenre.setSelection(getDefaultSelected(((Movie) mediaObject).getMinGenre().name()));
-            minGenre.setOnItemSelectedListener(spinnerSelect);
+            spinnerGenre2.setSelection(getDefaultSelected(((Movie) mediaObject).getSubGenre().name()));
+            spinnerGenre2.setOnItemSelectedListener(spinnerSelect);
+            spinnerGenre3.setSelection(getDefaultSelected(((Movie) mediaObject).getMinGenre().name()));
+            spinnerGenre3.setOnItemSelectedListener(spinnerSelect);
         }else {
-            subGenre.setVisibility(View.INVISIBLE);
-            minGenre.setVisibility(View.INVISIBLE);
+            spinnerGenre2.setVisibility(View.INVISIBLE);
+            spinnerGenre3.setVisibility(View.INVISIBLE);
         }
 
-        calendarView.setDate(mediaObject.getReleaseDate().getTime());
-        calendarView.setOnDateChangeListener( (calendarView, year, month, dayOfMonth) -> {
-            Calendar cal = new GregorianCalendar(year, month, dayOfMonth);
-            yearTextView.setText(MediaObjectHelper.stringDate(cal.getTime()));
-            mediaObject.setReleaseDate(cal.getTime());
-            closeCalendar(calendarView);
-        });
-
-        if(mediaObject.getDescriptor() != null){
-            descriptionTextView.setText(mediaObject.getDescriptor().getDescription());
+        if(mediaObject.getStatistic() != null){
+            textDescription.setText(mediaObject.getStatistic().getDescription());
         }
 
         if(mediaObject.getImageData() != null) {
             if (mediaObject.getImageData().getPosterImagePath() != null) {
                 Picasso.get().load(posterConfig + mediaObject.getImageData().getPosterImagePath())
-                        .fit().centerCrop().into(moviePoster);
+                        .fit().centerCrop().into(imagePoster);
             }
             if (mediaObject.getImageData().getBackdropImagePath() != null) {
                 Picasso.get().load(backdropConfig + mediaObject.getImageData().getBackdropImagePath())
-                        .fit().centerCrop().into(movieBackDrop);
+                        .fit().centerCrop().into(imageBackDrop);
             }
         }
     }
@@ -163,11 +158,11 @@ public class MediaProfileFragment extends Fragment {
     AdapterView.OnItemSelectedListener spinnerSelect = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            if(parent == genre) {
+            if(parent == spinnerGenre1) {
                 mediaObject.setGenre(Genre.valueOf((String) parent.getSelectedItem()));
-            }else if (parent == subGenre){
+            }else if (parent == spinnerGenre2){
                 ((Movie) mediaObject).setSubGenre(Genre.valueOf((String) parent.getSelectedItem()));
-            }else if (parent == minGenre){
+            }else if (parent == spinnerGenre3){
                 ((Movie) mediaObject).setMinGenre(Genre.valueOf((String) parent.getSelectedItem()));
             }
         }
@@ -191,11 +186,11 @@ public class MediaProfileFragment extends Fragment {
         return mediaObject;
     }
 
-    public static void setMediaObject(Media media) {
+    public static void setMovie(Media media) {
         if(media != null){
             mediaObject = media;
         } else{
-            mediaObject = new Movie(true, new Date(), "Error Getting Movie", 99, Genre.ACTION );
+            mediaObject = new Movie();
         }
     }
 
@@ -223,7 +218,7 @@ public class MediaProfileFragment extends Fragment {
             if(!mediaObject.getTitle().equals(toChange)){
                 if(!toChange.isEmpty()) {
                     mediaObject.setTitle(toChange);
-                    titleTextView.setText(toChange);
+                    textTitle.setText(toChange);
                 }
             }
             closeKeyboard(vw);
@@ -242,7 +237,7 @@ public class MediaProfileFragment extends Fragment {
 
     private Spinner loadSpinner(Spinner spinner){
         arrayAdapter = ArrayAdapter.createFromResource(spinner.getContext(),
-                R.array.media_genres, android.R.layout.simple_spinner_item);
+                R.array.movie_genres, android.R.layout.simple_spinner_item);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(arrayAdapter);
         return spinner;
@@ -279,15 +274,5 @@ public class MediaProfileFragment extends Fragment {
             }
         }
         return true;
-    }
-
-    public static boolean isCalendarOpen(){
-        return calendarOpen;
-    }
-
-    public static void closeCalendar(CalendarView view){
-        view.setVisibility(View.INVISIBLE);
-        view.setClickable(false);
-        calendarOpen = false;
     }
 }

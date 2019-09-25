@@ -2,13 +2,9 @@
 
     <item android:id="@+id/menu_option_trending"
         android:title="@string/menu_trending"
-        android:icon="@drawable/ic_trending" />
+        android:icon="@drawable/icon_globe" />
 
-    <item android:id="@+id/menu_option_search"
-        android:title="@string/menu_search"
-        android:icon="@drawable/icon_search" />
-
-    <item android:id="@+id/menu_option_personal"
+    <item android:id="@+id/menu_option_watch_list"
         android:title="@string/menu_myList"
-        android:icon="@drawable/icon_list" />
+        android:icon="@drawable/icon_bookmark" />
 </menu>

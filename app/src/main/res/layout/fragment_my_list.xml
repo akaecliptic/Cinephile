@@ -1,57 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/myListRecyclerView"
+        android:id="@+id/myList_recycler"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:layout_below="@+id/myListSearchView"
-        android:layout_alignParentBottom="true"
+        android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:padding="1dp"/>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/addActionButton"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="20dp"
-        android:clickable="true"
-        android:focusable="true"
-        app:backgroundTint="#000"
-        app:srcCompat="@android:drawable/ic_input_add" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/sortActionButton"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
         android:layout_marginTop="5dp"
-        android:layout_marginEnd="20dp"
-        android:clickable="true"
-        android:focusable="true"
-        app:backgroundTint="#151515"
-        app:srcCompat="@drawable/icon_sort_sort" />
-
-    <android.support.v7.widget.SearchView
-        android:id="@+id/myListSearchView"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="5dp"
-        android:layout_toStartOf="@+id/sortActionButton"
-        android:background="#151515"
-        android:queryHint="@string/Search" />
+        android:layout_marginBottom="5dp"
+        android:padding="1dp" />
 
 </RelativeLayout>

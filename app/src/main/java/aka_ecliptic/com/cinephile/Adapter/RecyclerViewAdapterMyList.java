@@ -19,7 +19,6 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Objects;
@@ -51,7 +50,7 @@ public class RecyclerViewAdapterMyList extends RecyclerView.Adapter<RecyclerView
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.recycler_my_list, parent, false);
+        View view = mInflater.inflate(R.layout.recycler_myList, parent, false);
         return new ViewHolder(view);
     }
 
@@ -122,7 +121,7 @@ public class RecyclerViewAdapterMyList extends RecyclerView.Adapter<RecyclerView
             itemView.setOnLongClickListener(this);
             seenCheckbox.setOnClickListener((View sv) ->{
                 data.get(getAdapterPosition()).setSeen(seenCheckbox.isChecked());
-                SQLiteHandler.getInstance(context).updateEntry(data.get(getAdapterPosition()));
+                SQLiteHandler.getInstance(context).updateMovie(data.get(getAdapterPosition()));
                 int index = data.indexOf(data.get(getAdapterPosition()));
                 RecyclerViewAdapterMyList.this.notifyItemChanged(index);
             });
@@ -136,7 +135,7 @@ public class RecyclerViewAdapterMyList extends RecyclerView.Adapter<RecyclerView
 
         private void removeItem(){
             Media tempMedia = data.get(getAdapterPosition());
-            SQLiteHandler.getInstance(context).deleteEntry(tempMedia.getId());
+            SQLiteHandler.getInstance(context).deleteMovie(tempMedia.getId());
             int index = data.indexOf(tempMedia);
             data.remove(index);
             displayedData = new ArrayList<>(data);
@@ -148,47 +147,24 @@ public class RecyclerViewAdapterMyList extends RecyclerView.Adapter<RecyclerView
 
             Dialog dialogDelete = new Dialog(context);
 
-            Button btnAdd;
+            Button btnConfirm;
             Button btnCancel;
             TextView textViewDel;
-            String prompt = "Do You want to delete '" + titleTextView.getText().toString() + "'" +
-                    " or update from online";
+            String prompt = "Do You want to delete '" + titleTextView.getText().toString() + "'?";
 
             dialogDelete.setContentView(R.layout.popup_movie_options);
 
             btnCancel = dialogDelete.findViewById(R.id.btnDelCancel);
-            btnAdd = dialogDelete.findViewById(R.id.btnDelete);
+            btnConfirm = dialogDelete.findViewById(R.id.btnDelete);
             textViewDel = dialogDelete.findViewById(R.id.textViewDelete);
             textViewDel.setText(prompt);
 
-            btnAdd.setOnClickListener((View vw) -> {
+            btnConfirm.setOnClickListener((View vw) -> {
                 removeItem();
                 dialogDelete.dismiss();
             });
 
             btnCancel.setOnClickListener((View vw) -> {
-                TMDBHandler.getInstance(context).getMovie(id, result -> {
-                    Gson gson = GsonMovieConverter.getCustomGsonMovieUpdate();
-                    Movie m = gson.fromJson(result.toString(),Movie.class);
-
-                    SQLiteHandler.getInstance(context).updateEntry(m);
-
-                    ListIterator<Media> it = displayedData.listIterator();
-                    while (it.hasNext()){
-                        Movie movie = (Movie)it.next();
-                        if(m.getId() == movie.getId()){
-                            m.setSeen(movie.isSeen());
-                            m.setRating(movie.getRating());
-                            m.setDescriptor(movie.getDescriptor());
-                            m.setImageData(movie.getImageData());
-                            it.set(m);
-                            new Repository<>(context).replaceItem(m, context);
-                        }
-                    }
-
-                    Toast.makeText(context, titleTextView.getText().toString() + " has been updated",
-                            Toast.LENGTH_SHORT).show();
-                });
                 dialogDelete.dismiss();
             });
             Objects.requireNonNull(dialogDelete.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.BLACK));

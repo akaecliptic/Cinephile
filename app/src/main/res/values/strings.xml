@@ -1,39 +1,10 @@
 <resources>
     <string name="app_name">Cinephile</string>
-    <string name="title">Title</string>
-    <string name="rating">Rating</string>
-    <string name="releaseDate">Year</string>
-    <string name="Search">Search</string>
+    <string name="menu_myList">MyList</string>
     <string name="menu_trending">Trending</string>
-    <string name="menu_search">Search</string>
-    <string name="menu_myList">My List</string>
-    <string name="sort_seen" />
-    <string name="sort_date" />
-    <string name="sort_alphabetically" />
-    <string name="sort_rating" />
+    <string name="place_holder">To Edit</string>
 
-    <array name="sort_icons">
-        <item>@drawable/icon_sort_sort</item>
-        <item>@drawable/icon_sort_rating</item>
-        <item>@drawable/icon_sort_alphabetically</item>
-        <item>@drawable/icon_sort_date</item>
-    </array>
-
-    <array name="trending_type_icons">
-        <item>@drawable/trending_ic_popular</item>
-        <item>@drawable/trending_ic_new</item>
-        <item>@drawable/trending_ic_upcoming</item>
-        <item>@drawable/trending_ic_top_rated</item>
-    </array>
-
-    <array name="trending_type_titles">
-        <item>Popular</item>
-        <item>New Releases</item>
-        <item>Upcoming</item>
-        <item>Top Rated</item>
-    </array>
-
-    <string-array name="media_genres">
+    <string-array name="movie_genres">
         <item>ACTION</item>
         <item>ADVENTURE</item>
         <item>ANIMATION</item>
@@ -55,13 +26,4 @@
         <item>WESTERN</item>
         <item>NONE</item>
     </string-array>
-
-    <string name="title_activity_main2">Main2Activity</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
-    <string name="edit_on_create">edit_on_create</string>
-    <string name="Online">Online</string>
-    <string name="release_date">Release Date</string>
-    <string name="load_more">Load More</string>
 </resources>

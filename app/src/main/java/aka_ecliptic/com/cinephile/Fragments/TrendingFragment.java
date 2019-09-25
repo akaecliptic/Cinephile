@@ -38,9 +38,6 @@ public class TrendingFragment extends Fragment implements RecyclerViewAdapterTre
     private TMDBHandler tmdbHandler;
     private int pageCount = 1;
     private int insertAmount;
-    private TMDBHandler.TrendingType trendingType;
-    private FloatingActionButton trendingBtn;
-    private TextView trendingTitle;
 
     @Nullable
     @Override
@@ -48,34 +45,25 @@ public class TrendingFragment extends Fragment implements RecyclerViewAdapterTre
 
         View view = inflater.inflate(R.layout.fragment_trending, container, false);
 
-        RecyclerView recyclerView = view.findViewById(R.id.trendingRecyclerView);
+        RecyclerView recyclerView = view.findViewById(R.id.trending_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
-        trendingTitle = view.findViewById(R.id.trendingRecyclerTitle);
-        trendingTitle.setText(getResources().getStringArray(R.array.trending_type_titles)[0]);
-
-        trendingBtn = view.findViewById(R.id.trendingActionButton);
-        trendingBtn.getDrawable().mutate().setTint(getResources().getColor(R.color.colorAccent, null));
-        trendingBtn.setOnClickListener((View v) -> switchTrendingType());
-
-        trendingType = TMDBHandler.TrendingType.POPULAR;
-
-        tmdbHandler = TMDBHandler.getInstance(this.getContext());
-        tmdbHandler.getTrending(pageCount, trendingType, result -> {
+        //tmdbHandler = TMDBHandler.getInstance(this.getContext());
+        /*tmdbHandler.getTrending(pageCount, trendingType, result -> {
             loadTrending(result);
             adapter.notifyDataSetChanged();
-        });
+        });*/
 
         adapter = new RecyclerViewAdapterTrending(this.getContext(), repository.getItems(),
                 tmdbHandler.getImageConfig("w92"));
 
-        adapter.setAddMoreClickListener((v)->
+        /*adapter.setAddMoreClickListener((v)->
                 tmdbHandler.getTrending(getNewPageCount(), trendingType, toAdd -> {
                     int before = adapter.getItemCount();
                     loadTrending(toAdd);
                     adapter.notifyItemRangeInserted(before, insertAmount);
                 })
-        );
+        );*/
 
         adapter.setSelectedItemListener(this);
         recyclerView.setAdapter(adapter);
@@ -83,37 +71,8 @@ public class TrendingFragment extends Fragment implements RecyclerViewAdapterTre
         return view;
     }
 
-    private void switchTrendingType() {
-
-        TypedArray icons = getResources().obtainTypedArray(R.array.trending_type_icons);
-        TypedArray titles = getResources().obtainTypedArray(R.array.trending_type_titles);
-
-        int index = trendingType.ordinal();
-        index += 1;
-        if(index >= icons.length())
-            index = 0;
-
-        trendingType = TMDBHandler.TrendingType.values()[index];
-        trendingTitle.setText(titles.getString(index));
-
-        pageCount = 1;
-        tmdbHandler.getTrending(pageCount, trendingType, result -> {
-            repository.getItems().clear();
-            loadTrending(result);
-            adapter.setData(repository.getItems());
-            adapter.notifyDataSetChanged();
-        });
-
-        trendingBtn.setImageDrawable(icons.getDrawable(index));
-        trendingBtn.getDrawable().mutate().setTint(getResources().getColor(R.color.colorAccent, null));
-
-        titles.recycle();
-        icons.recycle();
-    }
-
     private int getNewPageCount() {
-        pageCount += 1;
-        return pageCount;
+        return ++pageCount;
     }
 
     private void loadTrending(JSONObject result){

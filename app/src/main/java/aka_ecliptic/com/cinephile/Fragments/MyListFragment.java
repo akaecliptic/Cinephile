@@ -25,18 +25,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.util.Date;
 import java.util.Objects;
 
 import aka_ecliptic.com.cinephile.Activity.MovieProfileActivity;
-import aka_ecliptic.com.cinephile.Handler.GsonMovieConverter;
-import aka_ecliptic.com.cinephile.Handler.SQLiteHandler;
-import aka_ecliptic.com.cinephile.Handler.TMDBHandler;
 import aka_ecliptic.com.cinephile.Helper.MediaObjectHelper;
 import aka_ecliptic.com.cinephile.Model.Genre;
 import aka_ecliptic.com.cinephile.Model.Media;
@@ -49,13 +40,8 @@ public class MyListFragment extends Fragment implements RecyclerViewAdapterMyLis
 
     public static final String TAG = "MyListFragment";
 
-    private FloatingActionButton sortBtn;
-
-    private Dialog dialogAddMovie;
     private RecyclerViewAdapterMyList adapter;
-    private SearchView searchView;
-
-    private Repository<Media> repository;
+    private static Repository<Media> repository;
 
     @Nullable
     @Override
@@ -63,71 +49,27 @@ public class MyListFragment extends Fragment implements RecyclerViewAdapterMyLis
 
         View view = inflater.inflate(R.layout.fragment_my_list, container, false);
 
-        repository = new Repository<>(view.getContext());
-
-        RecyclerView recyclerView = view.findViewById(R.id.myListRecyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        adapter = new RecyclerViewAdapterMyList(this.getContext(), repository.getItems());
-        adapter.setClickListener(this);
-        recyclerView.setAdapter(adapter);
-
-        dialogAddMovie = new Dialog(inflater.getContext());
-
-        searchView = view.findViewById(R.id.myListSearchView);
-        searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
-        searchView.setOnClickListener(v -> searchView.setIconified(false));
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                adapter.getFilter().filter(newText);
-                return false;
-            }
-        });
-
-        searchView.setOnQueryTextFocusChangeListener((v, hasFocus) -> {
-            if(!hasFocus){
-                if(searchView.getQuery() == null || searchView.getQuery().length() <= 0){
-                    searchView.setIconified(true);
-                }
-            }
-        });
-
-        //TODO: Rework implementation of adding offline movies.
-        FloatingActionButton addBtn = view.findViewById(R.id.addActionButton);
-        addBtn.getDrawable().mutate().setTint(getResources().getColor(R.color.colorAccent, null));
-        addBtn.hide();
-        //addBtn.setOnClickListener((View v) ->  this.addMovie());
-
-        sortBtn = view.findViewById(R.id.sortActionButton);
-        sortBtn.getDrawable().mutate().setTint(getResources().getColor(R.color.colorAccent, null));
-        sortBtn.setOnClickListener((View v) -> sortMovies());
+        initialiseViews(view);
+        bindData();
 
         return view;
     }
 
-    private void sortMovies() {
+    private void initialiseViews(View view) {
 
-        TypedArray icons = getResources().obtainTypedArray(R.array.sort_icons);
+        repository = new Repository<>(view.getContext());
 
-        int index = this.repository.getSortType().getSortIndex();
-        index += 1;
-        if(index >= icons.length())
-            index = 0;
+        RecyclerView recyclerView = view.findViewById(R.id.myList_recycler);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
-        repository.sortBySortType(Repository.Sort.valueOf(index).get());
-        adapter.setData(repository.getItems());
-        adapter.notifyDataSetChanged();
+        adapter = new RecyclerViewAdapterMyList(this.getContext(), repository.getItems());
 
-        sortBtn.setImageDrawable(icons.getDrawable(index));
-        sortBtn.getDrawable().mutate().setTint(getResources().getColor(R.color.colorAccent, null));
+        recyclerView.setAdapter(adapter);
+    }
 
-        icons.recycle();
+    private void bindData() {
+        adapter.setClickListener(this);
+//        adapter.setData();
     }
 
     @Override
@@ -146,66 +88,6 @@ public class MyListFragment extends Fragment implements RecyclerViewAdapterMyLis
         Toast.makeText(this.getContext(), message, Toast.LENGTH_SHORT).show();
     }
 
-    private void addMovie(){
-
-        Button btnAdd;
-        Button btnCancel;
-        CheckBox seenAdd;
-        EditText titleEdit;
-        EditText yearEdit;
-        EditText ratingEdit;
-        Spinner spinnerEdit;
-
-        dialogAddMovie.setContentView(R.layout.popup_add_movie);
-
-        btnCancel = dialogAddMovie.findViewById(R.id.btnAddMovieCancel);
-        btnAdd = dialogAddMovie.findViewById(R.id.btnAddMovieAccept);
-
-        seenAdd = dialogAddMovie.findViewById(R.id.checkBoxAddSeen);
-
-        titleEdit = dialogAddMovie.findViewById(R.id.editTextTitle);
-        yearEdit = dialogAddMovie.findViewById(R.id.editTextYear);
-        ratingEdit = dialogAddMovie.findViewById(R.id.editTextRating);
-        spinnerEdit = loadSpinner(dialogAddMovie.findViewById(R.id.spinnerAdd));
-
-        btnAdd.setOnClickListener((View v) -> {
-            try{
-
-                boolean seen = seenAdd.isChecked();
-                String title = titleEdit.getText().toString();
-                String year = yearEdit.getText().toString();
-                int rating = Integer.parseInt(ratingEdit.getText().toString());
-                String genre = spinnerEdit.getSelectedItem().toString();
-
-                int index = repository.getItems().size();
-                repository.addItem(new Movie(seen, MediaObjectHelper.parseDate(year), title, rating, Genre.valueOf(genre)), this.getContext());
-                adapter.notifyItemInserted(index);
-
-                makeToast("The Movie " + title + " has been added");
-                dialogAddMovie.dismiss();
-            }catch (Exception e){
-                if(e instanceof NullPointerException || e instanceof NumberFormatException){
-                    makeToast("please fill out all fields");
-                }else{
-                    dialogAddMovie.dismiss();
-                    Log.d(TAG, "Exception "+ e +" found");
-                }
-            }
-        });
-
-        btnCancel.setOnClickListener((View v) -> dialogAddMovie.dismiss());
-        Objects.requireNonNull(dialogAddMovie.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.BLACK));
-        dialogAddMovie.show();
-    }
-
-    private Spinner loadSpinner(Spinner spinner){
-        ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(spinner.getContext(),
-                R.array.media_genres, android.R.layout.simple_spinner_item);
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(arrayAdapter);
-        return spinner;
-    }
-
    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
@@ -217,7 +99,6 @@ public class MyListFragment extends Fragment implements RecyclerViewAdapterMyLis
                 Movie temp = (Movie) b.getSerializable(Movie.class.getName());
                 int index = repository.replaceItem(temp, this.getContext());
                 if (index != -1){
-                    adapter.getFilter().filter(searchView.getQuery().toString());
                     adapter.setData(repository.getItems());
                     adapter.notifyDataSetChanged();
                 }else {

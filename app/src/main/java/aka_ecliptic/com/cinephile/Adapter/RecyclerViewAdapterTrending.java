@@ -15,11 +15,9 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import aka_ecliptic.com.cinephile.DataRepository.Repository;
-import aka_ecliptic.com.cinephile.Handler.SQLiteHandler;
 import aka_ecliptic.com.cinephile.Helper.MediaObjectHelper;
 import aka_ecliptic.com.cinephile.Model.Media;
 import aka_ecliptic.com.cinephile.Model.Movie;
@@ -65,7 +63,7 @@ public class RecyclerViewAdapterTrending extends RecyclerView.Adapter<RecyclerVi
         if(viewHolder.viewType == VIEW_TYPE_CELL) {
             Media tempMedia = data.get(position);
 
-            viewHolder.yearTextView.setText(MediaObjectHelper.stringDate(tempMedia.getReleaseDate()));
+            viewHolder.yearTextView.setText(MediaObjectHelper.dateToString(tempMedia.getReleaseDate()));
             viewHolder.titleTextView.setText(tempMedia.getTitle());
             viewHolder.ratingTextView.setText(String.valueOf(tempMedia.getRating()));
             Picasso.get().load(imageConfig + tempMedia.getImageData().getPosterImagePath()).

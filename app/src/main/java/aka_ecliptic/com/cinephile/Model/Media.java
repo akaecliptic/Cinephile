@@ -1,12 +1,11 @@
 package aka_ecliptic.com.cinephile.Model;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import java.io.Serializable;
-import java.util.Calendar;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.Iterator;
 
 import aka_ecliptic.com.cinephile.Helper.MediaObjectHelper;
 
@@ -19,10 +18,10 @@ public abstract class Media implements Comparable<Media>, Serializable {
     protected int rating;
     protected Genre genre;
     protected ImageData imageData;
-    protected Descriptor descriptor;
+    protected Statistic statistic;
 
-    public Media(){
-        this.id = 0;
+    public Media() {
+        this.id = -1;
         this.seen = false;
         this.releaseDate = new Date();
         this.title = "null";
@@ -30,16 +29,7 @@ public abstract class Media implements Comparable<Media>, Serializable {
         this.genre = Genre.NONE;
     }
 
-    public Media(boolean seen, Date releaseDate, String title, int rating, Genre genre){
-        this.id = 0;
-        this.seen = seen;
-        this.releaseDate = releaseDate;
-        this.title = title;
-        this.rating = rating;
-        this.genre = genre;
-    }
-
-    public Media(int id, boolean seen, Date releaseDate, String title, int rating, Genre genre){
+    public Media(int id, boolean seen, Date releaseDate, String title, int rating, Genre genre) {
         this.id = id;
         this.seen = seen;
         this.releaseDate = releaseDate;
@@ -96,30 +86,31 @@ public abstract class Media implements Comparable<Media>, Serializable {
         this.genre = genre;
     }
 
-    public ImageData getImageData(){
+    public ImageData getImageData() {
         return this.imageData;
     }
 
-    public void setImageData(@Nullable ImageData imageData){
+    public void setImageData(ImageData imageData) {
         this.imageData = imageData;
     }
 
-    public Descriptor getDescriptor() {
-        return descriptor;
+    public Statistic getStatistic() {
+        return statistic;
     }
 
-    public void setDescriptor(Descriptor descriptor) {
-        this.descriptor = descriptor;
-    }
-
-    @Override
-    public int compareTo(@NonNull Media mediaObj){
-            return Integer.compare(this.id, mediaObj.id);
+    public void setStatistic(Statistic statistic) {
+        this.statistic = statistic;
     }
 
     @Override
-    public boolean equals(Object o){
-        if(o instanceof Media)  {
+    public int compareTo(@NonNull Media mediaObj) {
+        return Integer.compare(this.id, mediaObj.id);
+    }
+
+    //TODO revise equals methods
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Media) {
             Media m = (Media) o;
             return this.id == m.getId() && MediaObjectHelper.releaseDateEquals(this.getReleaseDate(), m.getReleaseDate()) &&
                     this.title.equals(m.getTitle());
@@ -127,8 +118,8 @@ public abstract class Media implements Comparable<Media>, Serializable {
         return false;
     }
 
-    public boolean equals2(Object o){
-        if(o instanceof Media)  {
+    public boolean equals2(Object o) {
+        if (o instanceof Media) {
             Media m = (Media) o;
             return this.id == m.getId() && this.seen == m.isSeen() && MediaObjectHelper.releaseDateEquals(this.getReleaseDate(), m.getReleaseDate()) &&
                     this.title.equals(m.getTitle()) && this.rating == m.getRating() &&

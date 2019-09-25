@@ -6,150 +6,209 @@
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true">
 
-    <Spinner
-        android:id="@+id/movieProfileGenre3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/movieProfileGenre2"
-        android:layout_alignParentEnd="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:layout_toEndOf="@+id/movieProfileDesc"
-        android:hint="Genre"
-        android:textAlignment="center"
-        android:textSize="12sp" />
-
-    <Spinner
-        android:id="@+id/movieProfileGenre2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/movieProfileGenre"
-        android:layout_alignParentEnd="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:layout_toEndOf="@+id/movieProfileDesc"
-        android:hint="Genre"
-        android:textAlignment="center"
-        android:textSize="12sp" />
-
-    <Spinner
-        android:id="@+id/movieProfileGenre"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/movieProfileYear"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="20dp"
-        android:layout_centerHorizontal="true"
-        android:layout_toEndOf="@+id/movieProfileDesc"
-        android:hint="Genre"
-        android:textAlignment="center"
-        android:textSize="12sp" />
 
     <ImageView
-        android:id="@+id/movieProfileBackdrop"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="150dp"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="0dp"
+        android:id="@+id/profile_image_poster"
+        android:layout_width="81dp"
+        android:layout_height="120dp"
+        android:layout_below="@+id/profile_image_backdrop"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="-40dp"
         app:srcCompat="?android:attr/alertDialogIcon" />
 
-    <EditText
-        android:id="@+id/movieProfileRating"
-        android:layout_width="wrap_content"
+    <ImageView
+        android:id="@+id/profile_image_backdrop"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/movieProfileBackdrop"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="15dp"
-        android:hint="Rating"
-        android:inputType="number"
-        android:textAlignment="center"
-        android:textSize="17sp"
-        android:background="@android:color/transparent"/>
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:minHeight="150dp"
+        app:srcCompat="?android:attr/alertDialogIcon" />
 
     <TextView
-        android:id="@+id/movieProfileTitle"
+        android:id="@+id/profile_text_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/movieProfileBackdrop"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_toStartOf="@+id/movieProfileRating"
-        android:layout_toEndOf="@+id/movieProfileImage"
-        android:hint="Title"
-        android:textAlignment="center"
-        android:textSize="17sp"
-
+        android:layout_below="@+id/profile_image_backdrop"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="25dp"
+        android:layout_toEndOf="@+id/profile_image_poster"
         android:ellipsize="marquee"
         android:focusable="true"
+
+        android:hint="@string/place_holder"
         android:marqueeRepeatLimit="marquee_forever"
         android:scrollHorizontally="true"
         android:singleLine="true"
-        />
+        android:textAlignment="center"
+        android:textSize="17sp" />
 
-    <ImageView
-        android:id="@+id/movieProfileImage"
-        android:layout_width="77dp"
-        android:layout_height="114dp"
-        android:layout_below="@+id/movieProfileBackdrop"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="-57dp"
-        app:srcCompat="?android:attr/alertDialogIcon" />
+    <TextView
+        android:id="@+id/profile_text_release_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/profile_text_title"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="15dp"
+        android:layout_toEndOf="@id/profile_image_poster"
+
+        android:hint="@string/place_holder"
+        android:textAlignment="center"
+        android:textSize="15sp" />
+
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/movieProfileSeen"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="15dp"
+        android:id="@+id/profile_button_seen"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/profile_image_backdrop"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="-25dp"
+        android:layout_toEndOf="@+id/profile_image_poster"
         android:clickable="true"
         android:focusable="true"
         app:backgroundTint="@color/colorPrimaryDark"
-        app:rippleColor="@android:color/transparent"
-        app:srcCompat="@drawable/icon_sort_seen"/>
+        app:srcCompat="@drawable/icon_seen" />
 
-    <TextView
-        android:id="@+id/movieProfileYear"
+    <FrameLayout
+        android:id="@+id/profile_frame"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/profile_image_backdrop"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="-25dp"
+        android:layout_toEndOf="@+id/profile_button_seen">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/profile_button_rating"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:clickable="true"
+            android:elevation="0dp"
+            android:focusable="true"
+            app:backgroundTint="@color/colorPrimaryDark" />
+
+        <TextView
+            android:id="@+id/profile_text_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:elevation="9dp"
+            android:hint="@string/place_holder"
+            android:textColor="@color/colorPrimaryBright"
+            android:textColorHint="@color/colorPrimaryBright"
+            android:textSize="12sp" />
+
+        <android.support.v4.widget.ContentLoadingProgressBar
+            android:id="@+id/profile_progress_rating"
+            style="@style/Widget.AppCompat.ProgressBar"
+            android:layout_width="61dp"
+            android:layout_height="61dp"
+            android:layout_gravity="center"
+            android:elevation="7dp"
+            android:progressTint="@color/colorPrimary" />
+    </FrameLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/profile_button_more"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/profile_image_backdrop"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="-25dp"
+        android:layout_toEndOf="@+id/profile_frame"
+        android:clickable="true"
+        android:focusable="true"
+        app:backgroundTint="@color/colorPrimaryDark"
+        app:srcCompat="@drawable/icon_more_horizontal" />
+
+    <Spinner
+        android:id="@+id/profile_spinner_genre_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/movieProfileDesc"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="0dp"
-        android:layout_centerHorizontal="true"
-        android:layout_toEndOf="@+id/movieProfileDesc"
-        android:hint="@string/releaseDate"
-        android:textAlignment="center"
-        android:textSize="17sp"
-        android:background="@android:color/transparent"/>
 
-    <CalendarView
-        android:id="@+id/movieProfileCalendarView"
-        android:layout_width="250dp"
-        android:layout_height="300dp"
-        android:layout_alignTop="@+id/movieProfileYear"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp"
-        android:layout_toEndOf="@+id/movieProfileDesc"
-        android:background="@color/cardview_dark_background" />
+        android:layout_below="@+id/profile_text_release_date"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="15dp"
+        android:layout_toEndOf="@+id/profile_text_description"
+
+        android:hint="@string/place_holder"
+        android:textAlignment="center"
+        android:textSize="12sp" />
+
+    <Spinner
+        android:id="@+id/profile_spinner_genre_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_below="@+id/profile_spinner_genre_1"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_toEndOf="@+id/profile_text_description"
+
+        android:hint="@string/place_holder"
+        android:textAlignment="center"
+        android:textSize="12sp" />
+
+    <Spinner
+        android:id="@+id/profile_spinner_genre_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_below="@+id/profile_spinner_genre_2"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_toEndOf="@+id/profile_text_description"
+
+        android:hint="@string/place_holder"
+        android:textAlignment="center"
+        android:textSize="12sp" />
 
     <TextView
-        android:id="@+id/movieProfileDesc"
-        android:layout_width="175dp"
+        android:id="@+id/profile_text_description"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/movieProfileImage"
+
+        android:layout_below="@+id/profile_image_poster"
         android:layout_alignParentStart="true"
         android:layout_marginStart="10dp"
         android:layout_marginTop="25dp"
+
         android:ems="10"
-        android:hint="Description"
+        android:hint="@string/place_holder"
         android:inputType="none"
         android:minHeight="200dp"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/profile_text_other_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_below="@+id/profile_spinner_genre_3"
+        android:layout_alignBottom="@+id/profile_text_description"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="15dp"
+        android:layout_toEndOf="@+id/profile_text_description"
+
+        android:ems="10"
+        android:hint="@string/place_holder"
+        android:inputType="none"
+        android:minHeight="50dp"
         android:textSize="12sp" />
 
 

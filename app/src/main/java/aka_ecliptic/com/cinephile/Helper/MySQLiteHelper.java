@@ -2,16 +2,18 @@ package aka_ecliptic.com.cinephile.Helper;
 
 public class MySQLiteHelper {
 
-    public static final String MOVIE_TABLE = "movie_data";
-    public static final String POSTER_TABLE = "movie_posters";
-    public static final String DESCRIPTOR_TABLE = "movie_descriptors";
+    public static final String[] TABLE_NAMES = {"movies", "movie_statistics", "movie_images"};
 
-    //SELECTS
-    public static final String SELECT_ALL_MOVIES = "SELECT * FROM 'movie_data'";
-    public static final String SELECT_POSTERS_BY_ID = "SELECT Backdrop, ProfilePoster FROM 'movie_posters' WHERE MovieID = ?";
-    public static final String SELECT_DESCRIPTORS_BY_ID = "SELECT Description FROM 'movie_descriptors' WHERE MovieID = ?";
+    public static final String[] TABLE_HEADING_MOVIE = {"ID", "Seen", "ReleaseDate", "Title",
+            "Rating", "Genre", "SubGenre", "MinGenre"};
 
-    public static final String SELECT_ALL_MOVIE_INFO = "SELECT m.*, d.Description, p.Backdrop, p.ProfilePoster " +
+    public static final String[] TABLE_HEADING_MOVIE_STATS = {"MovieID", "Description",
+            "SiteRating", "Runtime"};
+
+    public static final String[] TABLE_HEADING_MOVIE_IMAGES = {"MovieID", "PosterPath",
+            "BackdropPath"};
+
+    public static final String SELECT_ALL_MOVIE_DATA = "SELECT m.*, d.Description, d.SiteRating, d.Runtime, p.PosterPath, p.BackdropPath " +
                                                         "FROM 'movie_data' m " +
                                                         "LEFT JOIN 'movie_descriptors' d " +
                                                         "ON m.ID = d.MovieID " +

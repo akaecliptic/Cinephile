@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/footer"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
-    android:id="@+id/recycler_footer">
+    android:layout_height="50dp">
 
     <Button
-        android:id="@+id/footerButton"
+        android:id="@+id/footer_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:text="@string/edit_on_create"
-        android:background="#222"/>
+        android:background="@color/colorPrimaryDark"
+        android:text="@string/place_holder"
+        android:textColor="@color/colorPrimaryBright" />
 
 </RelativeLayout>

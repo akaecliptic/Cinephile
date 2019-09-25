@@ -6,9 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
 import aka_ecliptic.com.cinephile.Fragments.MyListFragment;
-import aka_ecliptic.com.cinephile.Fragments.SearchFragment;
 import aka_ecliptic.com.cinephile.Fragments.TrendingFragment;
-import aka_ecliptic.com.cinephile.Handler.SQLiteHandler;
 import aka_ecliptic.com.cinephile.R;
 
 public class ActivityMain extends AppCompatActivity {
@@ -24,11 +22,11 @@ public class ActivityMain extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNav);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.navigation_bar_bottom);
         bottomNavigationView.setOnNavigationItemSelectedListener(navigationListener);
-        bottomNavigationView.setSelectedItemId(R.id.menu_option_personal);
+        bottomNavigationView.setSelectedItemId(R.id.menu_option_watch_list);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer,
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_container,
                 new MyListFragment()).commit();
 
     }
@@ -41,18 +39,15 @@ public class ActivityMain extends AppCompatActivity {
                 Fragment selectedFragment = null;
 
                 switch (item.getItemId()){
-                    case R.id.menu_option_personal:
+                    case R.id.menu_option_watch_list:
                         selectedFragment = new MyListFragment();
-                        break;
-                    case R.id.menu_option_search:
-                        selectedFragment = new SearchFragment();
                         break;
                     case R.id.menu_option_trending:
                         selectedFragment = new TrendingFragment();
                         break;
                 }
 
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer,
+                getSupportFragmentManager().beginTransaction().replace(R.id.main_container,
                         selectedFragment).commit();
 
                 return true;
