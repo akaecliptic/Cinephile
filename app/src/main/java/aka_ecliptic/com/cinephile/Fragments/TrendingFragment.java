@@ -1,11 +1,9 @@
 package aka_ecliptic.com.cinephile.Fragments;
 
 import android.content.Intent;
-import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -22,19 +19,22 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import aka_ecliptic.com.cinephile.Activity.MovieProfileActivity;
-import aka_ecliptic.com.cinephile.Adapter.RecyclerViewAdapterTrending;
+import aka_ecliptic.com.cinephile.Adapter.TrendingRecyclerViewAdapter;
 import aka_ecliptic.com.cinephile.DataRepository.Repository;
-import aka_ecliptic.com.cinephile.Handler.GsonMovieConverter;
+import aka_ecliptic.com.cinephile.Handler.GsonJsonHandler;
 import aka_ecliptic.com.cinephile.Handler.TMDBHandler;
 import aka_ecliptic.com.cinephile.Model.Media;
 import aka_ecliptic.com.cinephile.Model.Movie;
 import aka_ecliptic.com.cinephile.R;
 
-public class TrendingFragment extends Fragment implements RecyclerViewAdapterTrending.SelectedItemListener{
+public class TrendingFragment extends Fragment implements TrendingRecyclerViewAdapter.SelectedItemListener{
 
     private static final String TAG = "TrendingFragment";
-    private RecyclerViewAdapterTrending adapter;
+
+    private RecyclerView recyclerView;
+    private TrendingRecyclerViewAdapter adapter;
     private final Repository<Media> repository = new Repository<>();
+
     private TMDBHandler tmdbHandler;
     private int pageCount = 1;
     private int insertAmount;
@@ -45,20 +45,31 @@ public class TrendingFragment extends Fragment implements RecyclerViewAdapterTre
 
         View view = inflater.inflate(R.layout.fragment_trending, container, false);
 
+        initialiseViews(view);
+        bindData();
+
+        return view;
+    }
+
+    private void initialiseViews(View view) {
         RecyclerView recyclerView = view.findViewById(R.id.trending_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
-        //tmdbHandler = TMDBHandler.getInstance(this.getContext());
-        /*tmdbHandler.getTrending(pageCount, trendingType, result -> {
+        tmdbHandler = TMDBHandler.getInstance(this.getContext());
+
+        adapter = new TrendingRecyclerViewAdapter(this.getContext(), repository.getItems(),
+                tmdbHandler.getImageConfig("w92"));
+    }
+
+    private void bindData() {
+
+        tmdbHandler.getTrending(getPageCount(), TMDBHandler.TrendingType.POPULAR, result -> {
             loadTrending(result);
             adapter.notifyDataSetChanged();
-        });*/
-
-        adapter = new RecyclerViewAdapterTrending(this.getContext(), repository.getItems(),
-                tmdbHandler.getImageConfig("w92"));
+        });
 
         /*adapter.setAddMoreClickListener((v)->
-                tmdbHandler.getTrending(getNewPageCount(), trendingType, toAdd -> {
+                tmdbHandler.getTrending(getPageCount(), TMDBHandler.TrendingType.POPULAR, toAdd -> {
                     int before = adapter.getItemCount();
                     loadTrending(toAdd);
                     adapter.notifyItemRangeInserted(before, insertAmount);
@@ -67,12 +78,11 @@ public class TrendingFragment extends Fragment implements RecyclerViewAdapterTre
 
         adapter.setSelectedItemListener(this);
         recyclerView.setAdapter(adapter);
-
-        return view;
     }
 
-    private int getNewPageCount() {
-        return ++pageCount;
+
+    private int getPageCount() {
+        return pageCount++;
     }
 
     private void loadTrending(JSONObject result){
@@ -80,8 +90,8 @@ public class TrendingFragment extends Fragment implements RecyclerViewAdapterTre
             JSONArray jsonArray = result.getJSONArray("results");
             for(insertAmount = 0; insertAmount < jsonArray.length(); insertAmount++){
                 JSONObject jso = (JSONObject) jsonArray.get(insertAmount);
-                Gson gson = GsonMovieConverter.getCustomGson();
-                Movie m = gson.fromJson(jso.toString(),Movie.class);
+                Gson gson = GsonJsonHandler.getCustomGson();
+                Movie m = gson.fromJson(jso.toString(), Movie.class);
 
                 repository.getItems().add(m);
             }

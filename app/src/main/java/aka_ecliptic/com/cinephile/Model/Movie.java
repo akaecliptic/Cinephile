@@ -1,10 +1,12 @@
 package aka_ecliptic.com.cinephile.Model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.Date;
 
 public class Movie extends Media {
-    private Genre subGenre;
-    private Genre minGenre;
+    @SerializedName("sub_genre") private Genre subGenre;
+    @SerializedName("min_genre") private Genre minGenre;
 
     public Movie(){
         super();
@@ -40,12 +42,18 @@ public class Movie extends Media {
         this.minGenre = minGenre;
     }
 
+    @Override
+    public MovieStatistic getStatistic() {
+        //TODO: Reconsider.
+        return (this.statistic instanceof MovieStatistic) ? (MovieStatistic) this.statistic : new MovieStatistic(this.statistic.getDescription(), this.statistic.getSiteRating(), -1);
+    }
+
     public boolean movieEquals(Movie m) {
         return super.equals2(m) && this.subGenre.equals(m.getSubGenre()) && this.minGenre.equals(m.minGenre);
     }
 
     public static class MovieStatistic extends Statistic{
-        private int runtime; //The runtime of the movie in minutes, as provided by API
+        @SerializedName("runtime") private int runtime; //The runtime of the movie in minutes, as provided by API
 
         public MovieStatistic(){
             super();

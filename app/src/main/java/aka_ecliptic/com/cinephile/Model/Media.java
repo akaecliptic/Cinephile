@@ -3,24 +3,22 @@ package aka_ecliptic.com.cinephile.Model;
 import android.support.annotation.NonNull;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
+import com.google.gson.annotations.SerializedName;
 
 import aka_ecliptic.com.cinephile.Helper.MediaObjectHelper;
 
 public abstract class Media implements Comparable<Media>, Serializable {
+    @SerializedName("id") protected int id;
+    @SerializedName("seen") private boolean seen;
+    @SerializedName("release_date") private Date releaseDate;
+    @SerializedName("title") private String title;
+    @SerializedName("rating") private int rating;
+    @SerializedName("genre") private Genre genre;
+    @SerializedName("image_data") private ImageData imageData;
+    @SerializedName("statistics") protected Statistic statistic;
 
-    protected int id;
-    protected boolean seen;
-    protected Date releaseDate;
-    protected String title;
-    protected int rating;
-    protected Genre genre;
-    protected ImageData imageData;
-    protected Statistic statistic;
-
-    public Media() {
+    Media() {
         this.id = -1;
         this.seen = false;
         this.releaseDate = new Date();
@@ -29,7 +27,7 @@ public abstract class Media implements Comparable<Media>, Serializable {
         this.genre = Genre.NONE;
     }
 
-    public Media(int id, boolean seen, Date releaseDate, String title, int rating, Genre genre) {
+    Media(int id, boolean seen, Date releaseDate, String title, int rating, Genre genre) {
         this.id = id;
         this.seen = seen;
         this.releaseDate = releaseDate;
@@ -118,7 +116,7 @@ public abstract class Media implements Comparable<Media>, Serializable {
         return false;
     }
 
-    public boolean equals2(Object o) {
+    boolean equals2(Object o) {
         if (o instanceof Media) {
             Media m = (Media) o;
             return this.id == m.getId() && this.seen == m.isSeen() && MediaObjectHelper.releaseDateEquals(this.getReleaseDate(), m.getReleaseDate()) &&

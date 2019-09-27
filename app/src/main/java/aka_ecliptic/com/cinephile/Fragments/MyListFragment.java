@@ -1,46 +1,30 @@
 package aka_ecliptic.com.cinephile.Fragments;
 
-import android.app.Dialog;
 import android.content.Intent;
-import android.content.res.TypedArray;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.Toast;
 
-import java.util.Objects;
-
 import aka_ecliptic.com.cinephile.Activity.MovieProfileActivity;
-import aka_ecliptic.com.cinephile.Helper.MediaObjectHelper;
-import aka_ecliptic.com.cinephile.Model.Genre;
 import aka_ecliptic.com.cinephile.Model.Media;
 import aka_ecliptic.com.cinephile.Model.Movie;
 import aka_ecliptic.com.cinephile.R;
-import aka_ecliptic.com.cinephile.Adapter.RecyclerViewAdapterMyList;
+import aka_ecliptic.com.cinephile.Adapter.MyListRecyclerViewAdapter;
 import aka_ecliptic.com.cinephile.DataRepository.Repository;
 
-public class MyListFragment extends Fragment implements RecyclerViewAdapterMyList.ItemClickListener {
+public class MyListFragment extends Fragment implements MyListRecyclerViewAdapter.ItemClickListener {
 
     public static final String TAG = "MyListFragment";
 
-    private RecyclerViewAdapterMyList adapter;
+    private RecyclerView recyclerView;
+    private MyListRecyclerViewAdapter adapter;
     private static Repository<Media> repository;
 
     @Nullable
@@ -59,17 +43,17 @@ public class MyListFragment extends Fragment implements RecyclerViewAdapterMyLis
 
         repository = new Repository<>(view.getContext());
 
-        RecyclerView recyclerView = view.findViewById(R.id.myList_recycler);
+        recyclerView = view.findViewById(R.id.myList_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
-        adapter = new RecyclerViewAdapterMyList(this.getContext(), repository.getItems());
+        adapter = new MyListRecyclerViewAdapter(this.getContext(), repository.getItems());
 
-        recyclerView.setAdapter(adapter);
+
     }
 
     private void bindData() {
         adapter.setClickListener(this);
-//        adapter.setData();
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
@@ -99,7 +83,7 @@ public class MyListFragment extends Fragment implements RecyclerViewAdapterMyLis
                 Movie temp = (Movie) b.getSerializable(Movie.class.getName());
                 int index = repository.replaceItem(temp, this.getContext());
                 if (index != -1){
-                    adapter.setData(repository.getItems());
+                    adapter.setMediaList(repository.getItems());
                     adapter.notifyDataSetChanged();
                 }else {
                     makeToast("There was an error when editing the movie");

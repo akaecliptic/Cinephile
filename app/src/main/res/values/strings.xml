@@ -3,6 +3,9 @@
     <string name="menu_myList">MyList</string>
     <string name="menu_trending">Trending</string>
     <string name="place_holder">To Edit</string>
+    <string name="option_cancel">Cancel</string>
+    <string name="option_confirm">Confirm</string>
+    <string name="option_more">More</string>
 
     <string-array name="movie_genres">
         <item>ACTION</item>

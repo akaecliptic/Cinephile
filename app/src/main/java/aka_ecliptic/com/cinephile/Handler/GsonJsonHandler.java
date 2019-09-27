@@ -6,7 +6,10 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 
+import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
@@ -18,7 +21,7 @@ import aka_ecliptic.com.cinephile.Model.Genre;
 import aka_ecliptic.com.cinephile.Model.ImageData;
 import aka_ecliptic.com.cinephile.Model.Movie;
 
-public class GsonMovieConverter {
+public class GsonJsonHandler {
 
     public static Gson getCustomGson(){
         GsonBuilder gsonB = new GsonBuilder();

@@ -1,10 +1,11 @@
 package aka_ecliptic.com.cinephile.Model;
 
 import java.io.Serializable;
+import com.google.gson.annotations.SerializedName;
 
 public class ImageData implements Serializable {
-    private String posterImagePath; //The image path for movie poster
-    private String backdropImagePath; //The image path for movie backdrop
+    @SerializedName("poster_path") private String posterImagePath; //The image path for movie poster
+    @SerializedName("backdrop_path") private String backdropImagePath; //The image path for movie backdrop
 
     /**
      *
@@ -19,7 +20,7 @@ public class ImageData implements Serializable {
      * @param backdropImagePath
      * @param posterImagePath
      */
-    public ImageData(String backdropImagePath, String posterImagePath){
+    public ImageData(String posterImagePath, String backdropImagePath){
         this.posterImagePath = posterImagePath;
         this.backdropImagePath = backdropImagePath;
 

@@ -2,8 +2,6 @@ package aka_ecliptic.com.cinephile.Adapter;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,43 +12,35 @@ import android.widget.CheckBox;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
-import java.util.Objects;
 
-import aka_ecliptic.com.cinephile.DataRepository.Repository;
-import aka_ecliptic.com.cinephile.Handler.GsonMovieConverter;
 import aka_ecliptic.com.cinephile.Handler.SQLiteHandler;
-import aka_ecliptic.com.cinephile.Handler.TMDBHandler;
 import aka_ecliptic.com.cinephile.Helper.MediaObjectHelper;
 import aka_ecliptic.com.cinephile.Model.Media;
 import aka_ecliptic.com.cinephile.Model.Movie;
 import aka_ecliptic.com.cinephile.R;
 
-public class RecyclerViewAdapterMyList extends RecyclerView.Adapter<RecyclerViewAdapterMyList.ViewHolder> implements Filterable {
+public class MyListRecyclerViewAdapter extends RecyclerView.Adapter<MyListRecyclerViewAdapter.ViewHolder> implements Filterable {
 
-    private List<Media> data;
+    private List<Media> mediaList;
     private List<Media> displayedData;
     private LayoutInflater mInflater;
     private ItemClickListener rcClickListener;
     private Context context;
 
-    public RecyclerViewAdapterMyList(Context context, List<Media> list){
+    public MyListRecyclerViewAdapter(Context context, List<Media> list){
         this.mInflater = LayoutInflater.from(context);
         this.context = context;
-        this.data = list;
+        this.mediaList = list;
         displayedData = new ArrayList<>(list);
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.recycler_myList, parent, false);
+        View view = mInflater.inflate(R.layout.recycler_my_list, parent, false);
         return new ViewHolder(view);
     }
 
@@ -58,10 +48,10 @@ public class RecyclerViewAdapterMyList extends RecyclerView.Adapter<RecyclerView
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         Media tempMedia = displayedData.get(position);
         viewHolder.id = tempMedia.getId();
-        viewHolder.yearTextView.setText(MediaObjectHelper.dateYear(tempMedia.getReleaseDate()));
-        viewHolder.titleTextView.setText(tempMedia.getTitle());
-        viewHolder.ratingTextView.setText(String.valueOf(tempMedia.getRating()));
-        viewHolder.seenCheckbox.setChecked(tempMedia.isSeen());
+        viewHolder.textYear.setText(MediaObjectHelper.dateYear(tempMedia.getReleaseDate()));
+        viewHolder.textTitle.setText(tempMedia.getTitle());
+        viewHolder.textRating.setText(String.valueOf(tempMedia.getRating()));
+        viewHolder.checkSeen.setChecked(tempMedia.isSeen());
     }
 
     @Override
@@ -71,20 +61,20 @@ public class RecyclerViewAdapterMyList extends RecyclerView.Adapter<RecyclerView
 
     @Override
     public Filter getFilter() {
-        return filter;
+        return null;
     }
 
-    private Filter filter = new Filter() {
+    /*private Filter filter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             List<Media> filteredMedia = new ArrayList<>();
 
             if(constraint == null || constraint.length() == 0){
-                filteredMedia.addAll(data);
+                filteredMedia.addAll(mediaList);
             }else{
                 String filterPattern = constraint.toString().toLowerCase().trim();
 
-                data.stream().filter(media -> media.getTitle().toLowerCase().trim().contains(filterPattern))
+                mediaList.stream().filter(media -> media.getTitle().toLowerCase().trim().contains(filterPattern))
                         .forEach(filteredMedia::add);
             }
 
@@ -101,29 +91,35 @@ public class RecyclerViewAdapterMyList extends RecyclerView.Adapter<RecyclerView
 
             notifyDataSetChanged();
         }
-    };
+    };*/
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         int id;
-        TextView yearTextView;
-        TextView titleTextView;
-        TextView ratingTextView;
-        CheckBox seenCheckbox;
+
+        TextView textYear;
+        TextView textTitle;
+        TextView textRating;
+
+        CheckBox checkSeen;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
-            yearTextView = itemView.findViewById(R.id.myListTVYear);
-            titleTextView = itemView.findViewById(R.id.myListTVTitle);
-            titleTextView.setSelected(true);
-            ratingTextView = itemView.findViewById(R.id.myListTVRating);
-            seenCheckbox = itemView.findViewById(R.id.checkBoxSeen);
+
+            textYear = itemView.findViewById(R.id.myList_text_year);
+            textTitle = itemView.findViewById(R.id.myList_text_title);
+            textTitle.setSelected(true);
+            textRating = itemView.findViewById(R.id.myList_text_rating);
+
+            checkSeen = itemView.findViewById(R.id.myList_check);
+
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
-            seenCheckbox.setOnClickListener((View sv) ->{
-                data.get(getAdapterPosition()).setSeen(seenCheckbox.isChecked());
-                SQLiteHandler.getInstance(context).updateMovie(data.get(getAdapterPosition()));
-                int index = data.indexOf(data.get(getAdapterPosition()));
-                RecyclerViewAdapterMyList.this.notifyItemChanged(index);
+            checkSeen.setOnClickListener((View sv) ->{
+                mediaList.get(getAdapterPosition()).setSeen(checkSeen.isChecked());
+                //TODO will new to change when future media objects are implemented
+                SQLiteHandler.getInstance(context).updateMovie((Movie)mediaList.get(getAdapterPosition()));
+                int index = mediaList.indexOf(mediaList.get(getAdapterPosition()));
+                MyListRecyclerViewAdapter.this.notifyItemChanged(index);
             });
         }
 
@@ -134,11 +130,11 @@ public class RecyclerViewAdapterMyList extends RecyclerView.Adapter<RecyclerView
         }
 
         private void removeItem(){
-            Media tempMedia = data.get(getAdapterPosition());
+            Media tempMedia = mediaList.get(getAdapterPosition());
             SQLiteHandler.getInstance(context).deleteMovie(tempMedia.getId());
-            int index = data.indexOf(tempMedia);
-            data.remove(index);
-            displayedData = new ArrayList<>(data);
+            int index = mediaList.indexOf(tempMedia);
+            mediaList.remove(index);
+            displayedData = new ArrayList<>(mediaList);
             notifyItemRemoved(index);
         }
 
@@ -149,37 +145,35 @@ public class RecyclerViewAdapterMyList extends RecyclerView.Adapter<RecyclerView
 
             Button btnConfirm;
             Button btnCancel;
-            TextView textViewDel;
-            String prompt = "Do You want to delete '" + titleTextView.getText().toString() + "'?";
+            TextView textPrompt;
+            String prompt = "Do You want to delete '" + textTitle.getText().toString() + "'?";
 
-            dialogDelete.setContentView(R.layout.popup_movie_options);
+            dialogDelete.setContentView(R.layout.popup_generic);
 
-            btnCancel = dialogDelete.findViewById(R.id.btnDelCancel);
-            btnConfirm = dialogDelete.findViewById(R.id.btnDelete);
-            textViewDel = dialogDelete.findViewById(R.id.textViewDelete);
-            textViewDel.setText(prompt);
+            btnCancel = dialogDelete.findViewById(R.id.popup_button_cancel);
+            btnConfirm = dialogDelete.findViewById(R.id.popup_button_confirm);
+            textPrompt = dialogDelete.findViewById(R.id.popup_text_message);
+            textPrompt.setText(prompt);
 
             btnConfirm.setOnClickListener((View vw) -> {
                 removeItem();
                 dialogDelete.dismiss();
             });
 
-            btnCancel.setOnClickListener((View vw) -> {
-                dialogDelete.dismiss();
-            });
-            Objects.requireNonNull(dialogDelete.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.BLACK));
+            btnCancel.setOnClickListener((View vw) -> dialogDelete.dismiss());
+
             dialogDelete.show();
             return true;
         }
     }
 
-    public void setData(List<Media> list){
-        this.data = list;
+    public void setMediaList(List<Media> list){
+        this.mediaList = list;
         this.displayedData = new ArrayList<>(list);
     }
 
-    public Movie getItem(int id){
-        return (Movie) displayedData.get(id);
+    public Media getItem(int id){
+        return displayedData.get(id);
     }
 
     public void setClickListener(ItemClickListener iCL){

@@ -2,6 +2,7 @@
   <dictionary name="miche">
     <words>
       <w>gson</w>
+      <w>tmdb</w>
     </words>
   </dictionary>
 </component>

@@ -15,15 +15,16 @@ import aka_ecliptic.com.cinephile.BuildConfig;
 
 public class TMDBHandler {
 
-    public static final String TAG = "TMDBHandlerActivity";
+    private static final String TAG = "TMDBHandlerActivity";
 
     private static TMDBHandler tmdbInstance;
     private RequestQueue tmdbRequestQueue;
-    private static Context tmdbContext;
+    private Context tmdbContext;
 
-    private static final String API_KEY = BuildConfig.ApiKey;
-    private static final String BASE_URL = "https://api.themoviedb.org/3/";
+    private static final String API_KEY = "?api_key=" + BuildConfig.ApiKey;
     private static final String QUERY = "&query=";
+
+    private static final String BASE_URL = "https://api.themoviedb.org/3/";
     private static final String BASE_IMAGE_URL = "https://image.tmdb.org/t/p/";
 
     private TMDBHandler(Context context){
@@ -49,40 +50,9 @@ public class TMDBHandler {
         getRequestQueue().add(req);
     }
 
-    public void search(String query ,int page, final VolleyCallback callback){
-
-        String url = BASE_URL + "search/movie?api_key=" + API_KEY + "&query=" + query + "&page=" + page;
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null
-                , callback::onSuccess
-                , error -> {
-            Log.d(TAG,"Error "+ error + "found making an API request");
-            Toast.makeText(tmdbContext, "There was an error making request",
-                    Toast.LENGTH_SHORT).show();
-        });
-
-        TMDBHandler.getInstance(tmdbContext).addToRequestQueue(jsonObjectRequest);
-
-    }
-
     public void getTrending(int page, TrendingType trendingType, final VolleyCallback callback){
 
-        String url = BASE_URL + "movie/" + trendingType.type + "?api_key=" + API_KEY + "&language=en-GB&page=" + page + "&region=GB";
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null
-                , callback::onSuccess
-                , error -> {
-                    Log.d(TAG,"Error "+ error + "found making an API request");
-                    Toast.makeText(tmdbContext, "There was an error making request",
-                                    Toast.LENGTH_SHORT).show();
-                });
-
-        TMDBHandler.getInstance(tmdbContext).addToRequestQueue(jsonObjectRequest);
-    }
-
-    public void getMovie(int movieId, final VolleyCallback callback){
-
-        String url = BASE_URL + "movie/" + movieId + "?api_key=" + API_KEY + "&language=en-GB&append_to_response=release_dates";
+        String url = BASE_URL + "movie/" + trendingType.type + API_KEY + "&language=en-GB&page=" + page + "&region=GB";
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null
                 , callback::onSuccess
@@ -94,6 +64,37 @@ public class TMDBHandler {
 
         TMDBHandler.getInstance(tmdbContext).addToRequestQueue(jsonObjectRequest);
     }
+
+    /*public void search(String query ,int page, final VolleyCallback callback){
+
+        String url = BASE_URL + "search/movie" + API_KEY + QUERY + query + "&page=" + page;
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null
+                , callback::onSuccess
+                , error -> {
+            Log.d(TAG,"Error "+ error + "found making an API request");
+            Toast.makeText(tmdbContext, "There was an error making request",
+                    Toast.LENGTH_SHORT).show();
+        });
+
+        TMDBHandler.getInstance(tmdbContext).addToRequestQueue(jsonObjectRequest);
+
+    }*/
+
+    /*public void getMovie(int movieId, final VolleyCallback callback){
+
+        String url = BASE_URL + "movie/" + movieId + API_KEY + "&language=en-GB&append_to_response=release_dates";
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null
+                , callback::onSuccess
+                , error -> {
+            Log.d(TAG,"Error "+ error + "found making an API request");
+            Toast.makeText(tmdbContext, "There was an error making request",
+                    Toast.LENGTH_SHORT).show();
+        });
+
+        TMDBHandler.getInstance(tmdbContext).addToRequestQueue(jsonObjectRequest);
+    }*/
 
     public String getImageConfig(String size){
         return BASE_IMAGE_URL + size;

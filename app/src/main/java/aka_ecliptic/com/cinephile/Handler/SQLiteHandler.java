@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -175,7 +176,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         statsValues.put(MySQLiteHelper.TABLE_HEADING_MOVIE_STATS[0], movie.getId()); //MovieID
         statsValues.put(MySQLiteHelper.TABLE_HEADING_MOVIE_STATS[1], movie.getStatistic().getDescription()); //Description
         statsValues.put(MySQLiteHelper.TABLE_HEADING_MOVIE_STATS[2], movie.getStatistic().getSiteRating()); //SiteRating
-        statsValues.put(MySQLiteHelper.TABLE_HEADING_MOVIE_STATS[3], ((Movie.MovieStatistic)movie.getStatistic()).getRuntime()); //Runtime
+        statsValues.put(MySQLiteHelper.TABLE_HEADING_MOVIE_STATS[3], movie.getStatistic().getRuntime()); //Runtime
 
         db.insert(MySQLiteHelper.TABLE_NAMES[1], null, statsValues);
 
@@ -198,14 +199,14 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         while (!c.isAfterLast()){
 
             Movie m = new Movie(
-                    c.getInt(1), //ID
-                    MediaObjectHelper.isSeen(c.getInt(2)), //Seen
-                    MediaObjectHelper.stringToDate(c.getString(3)), //ReleaseDate
-                    c.getString(4), //Title
-                    c.getInt(5), //Rating
-                    Genre.valueOf(c.getString(6)), //Genre
-                    Genre.valueOf(c.getString(7)), //SubGenre
-                    Genre.valueOf(c.getString(8)) //MinGenre
+                    c.getInt(0), //ID
+                    MediaObjectHelper.isSeen(c.getInt(1)), //Seen
+                    MediaObjectHelper.stringToDate(c.getString(2)), //ReleaseDate
+                    c.getString(3), //Title
+                    c.getInt(4), //Rating
+                    Genre.valueOf(c.getString(5)), //Genre
+                    Genre.valueOf(c.getString(6)), //SubGenre
+                    Genre.valueOf(c.getString(7)) //MinGenre
             );
 
             Movie.MovieStatistic statistic = new Movie.MovieStatistic(
