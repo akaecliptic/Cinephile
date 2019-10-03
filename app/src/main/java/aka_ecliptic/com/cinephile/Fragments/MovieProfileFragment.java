@@ -98,6 +98,8 @@ public class MovieProfileFragment extends Fragment {
 
         btnMore = view.findViewById(R.id.profile_button_more);
 
+        progressRating = view.findViewById(R.id.profile_progress_rating);
+
         spinnerGenre1 = loadSpinner(view.findViewById(R.id.profile_spinner_genre_1));
         spinnerGenre2 = loadSpinner(view.findViewById(R.id.profile_spinner_genre_2));
         spinnerGenre3 = loadSpinner(view.findViewById(R.id.profile_spinner_genre_3));
@@ -125,6 +127,8 @@ public class MovieProfileFragment extends Fragment {
             }
             return true;
         });
+
+        progressRating.setProgress(mediaObject.getRating());
 
         btnSeen.getDrawable().mutate().setTint(seenColor());
         spinnerGenre1.setSelection(getDefaultSelected(mediaObject.getGenre().name()));

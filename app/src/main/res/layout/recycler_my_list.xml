@@ -23,12 +23,13 @@
         android:layout_height="25dp"
         android:layout_centerVertical="true"
         android:layout_marginStart="7dp"
-        android:layout_marginTop="0dp"
+        android:layout_marginEnd="7dp"
+        android:layout_toStartOf="@+id/myList_text_rating"
         android:layout_toEndOf="@+id/myList_text_year"
         android:ellipsize="marquee"
+
         android:focusable="true"
         android:marqueeRepeatLimit="marquee_forever"
-
         android:scrollHorizontally="true"
         android:singleLine="true"
         android:text="@string/place_holder"
@@ -39,10 +40,9 @@
         android:id="@+id/myList_text_rating"
         android:layout_width="wrap_content"
         android:layout_height="25dp"
+        android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:layout_marginStart="7dp"
-        android:layout_marginTop="0dp"
-        android:layout_toEndOf="@+id/myList_text_title"
+        android:layout_marginEnd="7dp"
         android:maxLength="3"
         android:text="@string/place_holder"
         android:textColor="@color/colorPrimaryBright"
@@ -56,6 +56,6 @@
         android:layout_centerVertical="true"
         android:layout_marginStart="7dp"
         android:layout_marginTop="0dp"
-        android:textColorLink="@color/colorPrimaryBright" />
+        android:theme="@style/CheckboxStyle"/>
 
 </RelativeLayout>

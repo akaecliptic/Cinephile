@@ -15,6 +15,7 @@
         android:layout_alignParentStart="true"
         android:layout_marginStart="20dp"
         android:layout_marginTop="-40dp"
+        android:elevation="1dp"
         app:srcCompat="?android:attr/alertDialogIcon" />
 
     <ImageView
@@ -89,7 +90,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="center"
-            android:clickable="true"
+            android:clickable="false"
             android:elevation="0dp"
             android:focusable="true"
             app:backgroundTint="@color/colorPrimaryDark" />
@@ -99,20 +100,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:textAlignment="center"
             android:elevation="9dp"
             android:hint="@string/place_holder"
             android:textColor="@color/colorPrimaryBright"
             android:textColorHint="@color/colorPrimaryBright"
             android:textSize="12sp" />
 
-        <android.support.v4.widget.ContentLoadingProgressBar
+        <ProgressBar
             android:id="@+id/profile_progress_rating"
-            style="@style/Widget.AppCompat.ProgressBar"
-            android:layout_width="61dp"
-            android:layout_height="61dp"
+            style="?android:progressBarStyleHorizontal"
+            android:progress="50"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:elevation="7dp"
-            android:progressTint="@color/colorPrimary" />
+            android:elevation="6dp"
+            android:rotation="90"
+            android:progressDrawable="@drawable/progress_bar_circle" />
     </FrameLayout>
 
     <android.support.design.widget.FloatingActionButton
@@ -135,7 +139,7 @@
 
         android:layout_below="@+id/profile_text_release_date"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="15dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="25dp"
         android:layout_marginEnd="15dp"
         android:layout_toEndOf="@+id/profile_text_description"
@@ -151,7 +155,7 @@
 
         android:layout_below="@+id/profile_spinner_genre_1"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="15dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="15dp"
         android:layout_marginEnd="15dp"
         android:layout_toEndOf="@+id/profile_text_description"
@@ -167,7 +171,7 @@
 
         android:layout_below="@+id/profile_spinner_genre_2"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="15dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="15dp"
         android:layout_marginEnd="15dp"
         android:layout_toEndOf="@+id/profile_text_description"
@@ -178,7 +182,7 @@
 
     <TextView
         android:id="@+id/profile_text_description"
-        android:layout_width="200dp"
+        android:layout_width="185dp"
         android:layout_height="wrap_content"
 
         android:layout_below="@+id/profile_image_poster"
@@ -200,7 +204,7 @@
         android:layout_below="@+id/profile_spinner_genre_3"
         android:layout_alignBottom="@+id/profile_text_description"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="15dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="50dp"
         android:layout_marginEnd="15dp"
         android:layout_toEndOf="@+id/profile_text_description"
