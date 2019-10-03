@@ -3,7 +3,6 @@ package aka_ecliptic.com.cinephile.Fragments;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,7 +15,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -26,9 +24,6 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Objects;
 
 import aka_ecliptic.com.cinephile.Handler.TMDBHandler;
@@ -61,7 +56,6 @@ public class MovieProfileFragment extends Fragment {
     private FloatingActionButton btnSeen;
     private FloatingActionButton btnMore;
 
-    private FloatingActionButton btnRating;
     private TextView textRating;
     private ProgressBar progressRating;
 
@@ -83,65 +77,49 @@ public class MovieProfileFragment extends Fragment {
         textReleaseDate = view.findViewById(R.id.profile_text_release_date);
 
         textTitle = view.findViewById(R.id.profile_text_title);
-        textTitle.setSelected(true);
-        textTitle.setOnLongClickListener(l -> createDialog());
 
-        textRating = view.findViewById(R.id.profile_text_rating);
         textDescription = view.findViewById(R.id.profile_text_description);
 
         imagePoster = view.findViewById(R.id.profile_image_poster);
         imageBackDrop = view.findViewById(R.id.profile_image_backdrop);
 
-        //Buttons
         btnSeen = view.findViewById(R.id.profile_button_seen);
-        btnRating = view.findViewById(R.id.profile_button_rating);
-
         btnMore = view.findViewById(R.id.profile_button_more);
 
+        //Rating stuff
+        textRating = view.findViewById(R.id.profile_text_rating);
         progressRating = view.findViewById(R.id.profile_progress_rating);
 
         spinnerGenre1 = loadSpinner(view.findViewById(R.id.profile_spinner_genre_1));
         spinnerGenre2 = loadSpinner(view.findViewById(R.id.profile_spinner_genre_2));
         spinnerGenre3 = loadSpinner(view.findViewById(R.id.profile_spinner_genre_3));
-
-        btnSeen.setOnClickListener((View vw) -> {
-            mediaObject.setSeen(!mediaObject.isSeen());
-            btnSeen.getDrawable().mutate().setTint(seenColor());
-        });
     }
 
     private void bindData(){
         textReleaseDate.setText(MediaObjectHelper.dateToString(mediaObject.getReleaseDate()));
+
         textTitle.setText(mediaObject.getTitle());
+        textTitle.setSelected(true);
+        textTitle.setOnLongClickListener(l -> CreateEditTitleDialog());
 
         textRating.setText(String.valueOf(mediaObject.getRating()));
-        textRating.setOnEditorActionListener((v,a,k) -> {
-            String userText = textRating.getText().toString();
-            int userInput = MediaObjectHelper.checkInt(userText);
-            if(userInput >= 0 && userInput <= 100){
-                mediaObject.setRating(userInput);
-                closeKeyboard(v);
-            }else {
-                textRating.setText(String.valueOf(mediaObject.getRating()));
-                Toast.makeText(this.getContext(), "Invalid input, try again", Toast.LENGTH_SHORT).show();
-            }
-            return true;
-        });
+        textRating.setOnLongClickListener(l -> CreateEditRatingDialog());
 
         progressRating.setProgress(mediaObject.getRating());
 
         btnSeen.getDrawable().mutate().setTint(seenColor());
+        btnSeen.setOnClickListener((View vw) -> {
+            mediaObject.setSeen(!mediaObject.isSeen());
+            btnSeen.getDrawable().mutate().setTint(seenColor());
+        });
+
         spinnerGenre1.setSelection(getDefaultSelected(mediaObject.getGenre().name()));
         spinnerGenre1.setOnItemSelectedListener(spinnerSelect);
-        if(mediaObject instanceof Movie){
-            spinnerGenre2.setSelection(getDefaultSelected(((Movie) mediaObject).getSubGenre().name()));
-            spinnerGenre2.setOnItemSelectedListener(spinnerSelect);
-            spinnerGenre3.setSelection(getDefaultSelected(((Movie) mediaObject).getMinGenre().name()));
-            spinnerGenre3.setOnItemSelectedListener(spinnerSelect);
-        }else {
-            spinnerGenre2.setVisibility(View.INVISIBLE);
-            spinnerGenre3.setVisibility(View.INVISIBLE);
-        }
+        spinnerGenre2.setSelection(getDefaultSelected(((Movie) mediaObject).getSubGenre().name()));
+        spinnerGenre2.setOnItemSelectedListener(spinnerSelect);
+        spinnerGenre3.setSelection(getDefaultSelected(((Movie) mediaObject).getMinGenre().name()));
+        spinnerGenre3.setOnItemSelectedListener(spinnerSelect);
+
 
         if(mediaObject.getStatistic() != null){
             textDescription.setText(mediaObject.getStatistic().getDescription());
@@ -198,7 +176,7 @@ public class MovieProfileFragment extends Fragment {
         }
     }
 
-    private boolean createDialog() {
+    private boolean CreateEditTitleDialog() {
 
         Dialog dialogEdit = new Dialog(Objects.requireNonNull(this.getContext()));
 
@@ -234,8 +212,40 @@ public class MovieProfileFragment extends Fragment {
             dialogEdit.dismiss();
         });
 
-        Objects.requireNonNull(dialogEdit.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.BLACK));
         dialogEdit.show();
+        return true;
+    }
+
+    private boolean CreateEditRatingDialog() {
+
+        /*Dialog dialogEdit = new Dialog(Objects.requireNonNull(this.getContext()));
+
+        Button btnDone;
+        Button btnCancel;
+        TextView editPrompt;
+        EditText movieTitle;
+        String prompt = "Editing Title";
+
+        dialogEdit.setContentView(R.layout.popup_edit_movie_title);
+
+        btnDone.setOnClickListener((View vw) -> {
+            String toChange = movieTitle.getText().toString();
+            if(!mediaObject.getTitle().equals(toChange)){
+                if(!toChange.isEmpty()) {
+                    mediaObject.setTitle(toChange);
+                    textTitle.setText(toChange);
+                }
+            }
+            closeKeyboard(vw);
+            dialogEdit.dismiss();
+        });
+
+        btnCancel.setOnClickListener((View vw) -> {
+            closeKeyboard(vw);
+            dialogEdit.dismiss();
+        });
+
+        dialogEdit.show();*/
         return true;
     }
 

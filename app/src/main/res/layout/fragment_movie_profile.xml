@@ -83,17 +83,8 @@
         android:layout_below="@+id/profile_image_backdrop"
         android:layout_marginStart="25dp"
         android:layout_marginTop="-25dp"
-        android:layout_toEndOf="@+id/profile_button_seen">
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/profile_button_rating"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:clickable="false"
-            android:elevation="0dp"
-            android:focusable="true"
-            app:backgroundTint="@color/colorPrimaryDark" />
+        android:layout_toEndOf="@+id/profile_button_seen"
+        android:background="@drawable/shape_circle">
 
         <TextView
             android:id="@+id/profile_text_rating"
