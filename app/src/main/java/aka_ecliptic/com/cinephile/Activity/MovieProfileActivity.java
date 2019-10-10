@@ -5,6 +5,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageButton;
 
 import java.util.Objects;
 
@@ -18,15 +19,14 @@ public class MovieProfileActivity extends AppCompatActivity {
      * Used to create activity, load movie object into profile fragment, and then add profile fragment
      * to fragment container.
      *
-     * @param savedInstanceState
+     * @param savedInstanceState A passed bundle object.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_container);
 
-        FloatingActionButton backBtn = findViewById(R.id.profile_button_back);
-        backBtn.getDrawable().mutate().setTint(getResources().getColor(R.color.colorPrimary, null));
+        ImageButton backBtn = findViewById(R.id.profile_button_back);
 
         MovieProfileFragment.setMovie(getMovie());
 

@@ -4,9 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:descendantFocusability="beforeDescendants"
-    android:focusableInTouchMode="true">
+    android:focusableInTouchMode="true"
+    android:background="@color/colorSecondaryDark">
 
-
+<!--TODO add content descriptions-->
     <ImageView
         android:id="@+id/profile_image_poster"
         android:layout_width="81dp"
@@ -14,9 +15,10 @@
         android:layout_below="@+id/profile_image_backdrop"
         android:layout_alignParentStart="true"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="-40dp"
+        android:layout_marginTop="-60dp"
         android:elevation="1dp"
-        app:srcCompat="?android:attr/alertDialogIcon" />
+        app:srcCompat="?android:attr/alertDialogIcon"
+        android:contentDescription="@string/place_holder" />
 
     <ImageView
         android:id="@+id/profile_image_backdrop"
@@ -25,7 +27,8 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:minHeight="150dp"
-        app:srcCompat="?android:attr/alertDialogIcon" />
+        app:srcCompat="?android:attr/alertDialogIcon"
+        android:contentDescription="@string/place_holder" />
 
     <TextView
         android:id="@+id/profile_text_title"
@@ -121,7 +124,8 @@
         android:clickable="true"
         android:focusable="true"
         app:backgroundTint="@color/colorPrimaryDark"
-        app:srcCompat="@drawable/icon_more_horizontal" />
+        app:srcCompat="@drawable/icon_more_horizontal"
+        android:tint="@color/colorPrimaryBright"/>
 
     <Spinner
         android:id="@+id/profile_spinner_genre_1"
