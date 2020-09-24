@@ -1,4 +1,4 @@
-package aka_ecliptic.com.cinephile.Handler;
+package aka_ecliptic.com.cinephile.Architecture;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,35 +6,32 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import aka_ecliptic.com.cinephile.Helper.MediaObjectHelper;
 import aka_ecliptic.com.cinephile.Helper.MySQLiteHelper;
 import aka_ecliptic.com.cinephile.Model.Genre;
-import aka_ecliptic.com.cinephile.Model.Statistic;
 import aka_ecliptic.com.cinephile.Model.ImageData;
-import aka_ecliptic.com.cinephile.Model.Media;
 import aka_ecliptic.com.cinephile.Model.Movie;
 
-public class SQLiteHandler extends SQLiteOpenHelper {
+class SQLiteDAO extends SQLiteOpenHelper {
 
     private static String TAG = "SQLDataBase";
     private static String DB_NAME = "Cinephile.db";
 
     private static SQLiteDatabase movieDB;
-    private static SQLiteHandler sqLiteHandler;
+    private static SQLiteDAO sqLiteDAO;
 
-    private SQLiteHandler(Context context) {
+    private SQLiteDAO(Context context) {
         super(context, DB_NAME, null, 1);
     }
 
-    public static synchronized SQLiteHandler getInstance(Context context){
-        if (sqLiteHandler == null){
-            sqLiteHandler = new SQLiteHandler(context);
+    static synchronized SQLiteDAO getInstance(Context context){
+        if (sqLiteDAO == null){
+            sqLiteDAO = new SQLiteDAO(context);
         }
-        return sqLiteHandler;
+        return sqLiteDAO;
     }
 
     @Override
@@ -76,8 +73,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     }
 
     @Override
-    public synchronized void close()
-    {
+    public synchronized void close() {
         if(movieDB != null)
             movieDB.close();
         super.close();
@@ -90,8 +86,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
      * @param statistic The Statistics object to be updated.
      * @param imageData The ImageData object to be updated.
      */
-    //TODO: rename to something more fitting
-    public void updateMovieHolders(int id, Movie.MovieStatistic statistic, ImageData imageData){
+    public void updateMovieData(int id, Movie.MovieStatistic statistic, ImageData imageData){
         SQLiteDatabase db = getWritableDatabase();
 
         ContentValues posterValues = new ContentValues();
@@ -113,7 +108,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
      *
      * @param movie The movie to be updated.
      */
-    public void updateMovie(Movie movie){
+    void updateMovie(Movie movie){
         SQLiteDatabase db = getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -135,7 +130,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
      *
      * @param id The id of the movie to be deleted.
      */
-    public void deleteMovie(int id){
+    void deleteMovie(int id){
         SQLiteDatabase db = getWritableDatabase();
 
         db.delete(MySQLiteHelper.TABLE_NAMES[0], "ID = ?", new String[] {String.valueOf(id)});
@@ -150,7 +145,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
      *
      * @param movie The movie to be added.
      */
-    public void newMovie(Movie movie){
+    void addMovie(Movie movie){
         SQLiteDatabase db = getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -189,7 +184,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
      *
      * @return List<Movie> A list of movie objects.
      */
-    public List<Movie> getMovieList(){
+    List<Movie> getAllMovies(){
         SQLiteDatabase db = getWritableDatabase();
 
         Cursor c = db.rawQuery(MySQLiteHelper.SELECT_ALL_MOVIE_DATA, null);

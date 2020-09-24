@@ -1,32 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include
-        android:id="@+id/toolbar"
-        layout="@layout/toolbar" />
-
-    <android.support.v7.widget.ContentFrameLayout
-        android:id="@+id/main_container"
+    <fragment
+        android:id="@+id/nav_host_fragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/navigation_bar_bottom"
+
+        android:layout_above="@+id/bottom_nav_bar"
         android:layout_below="@+id/toolbar"
         android:layout_marginTop="0dp"
-        android:layout_marginBottom="0dp"
-        android:background="@color/colorSecondaryDark" />
+        android:layout_marginBottom="-0dp"
 
-    <android.support.design.widget.BottomNavigationView
-        android:id="@+id/navigation_bar_bottom"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/nav_graph"
+        tools:ignore="FragmentTagUsage" />
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_alignParentBottom="true"
-        android:background="?android:attr/windowBackground"
-        android:backgroundTint="@color/colorPrimaryDark"
-        app:itemIconTint="@color/colorPrimaryBright"
-        app:itemTextColor="@color/colorPrimaryBright"
-        app:menu="@menu/bottom_menu" />
+        android:layout_height="35dp"
+        android:layout_alignParentStart="true" />
+
+    <include
+        android:id="@+id/bottom_nav_bar"
+        layout="@layout/bottom_nav"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true" />
 
 </RelativeLayout>

@@ -5,15 +5,7 @@
     <item
         android:id="@+id/toolbar_search"
         android:icon="@drawable/icon_search"
-        android:title="search"
+        android:title="@string/toolbar_search"
         app:showAsAction="ifRoom"/>
-
-    <item android:id="@+id/item2"
-        android:title="@string/place_holder"
-        app:showAsAction="never"/>
-
-    <item android:id="@+id/item3"
-        android:title="@string/place_holder"
-        app:showAsAction="never"/>
 
 </menu>

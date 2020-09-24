@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_centerInParent="true"
+    tools:context=".Fragment.ExploreFragment">
+
+    <TextView
+        android:id="@+id/explore_trending_divider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:drawableBottom="@drawable/line_divider"
+        android:text="@string/trending" />
+
+    <TextView
+        android:id="@+id/explore_recent_divider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/explore_trending_recycler"
+        android:layout_marginTop="2dp"
+        android:drawableBottom="@drawable/line_divider"
+        android:text="@string/recent" />
+
+    <TextView
+        android:id="@+id/explore_upcoming_divider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/explore_recent_recycler"
+        android:layout_marginTop="2dp"
+        android:drawableBottom="@drawable/line_divider"
+        android:text="@string/upcoming" />
+
+    <TextView
+        android:id="@+id/explore_favourites_divider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/explore_upcoming_recycler"
+        android:layout_marginTop="2dp"
+        android:drawableBottom="@drawable/line_divider"
+        android:text="@string/favourites" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/explore_recent_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/explore_recent_divider"
+        android:layout_marginTop="1dp"
+        android:minHeight="115dp"
+        android:orientation="horizontal"
+        app:layoutManager="LinearLayoutManager"
+        tools:listitem="@layout/recycler_item_movie_card" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/explore_trending_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/explore_trending_divider"
+        android:layout_marginTop="1dp"
+        android:minHeight="115dp"
+        android:orientation="horizontal"
+        app:layoutManager="LinearLayoutManager"
+        tools:listitem="@layout/recycler_item_movie_card" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/explore_upcoming_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/explore_upcoming_divider"
+        android:layout_marginTop="1dp"
+        android:minHeight="115dp"
+        android:orientation="horizontal"
+        app:layoutManager="LinearLayoutManager"
+        tools:listitem="@layout/recycler_item_movie_card" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/explore_favourites_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/explore_favourites_divider"
+        android:layout_marginTop="1dp"
+        android:minHeight="115dp"
+        android:orientation="horizontal"
+        app:layoutManager="LinearLayoutManager"
+        tools:listitem="@layout/recycler_item_movie_card" />
+
+</RelativeLayout>

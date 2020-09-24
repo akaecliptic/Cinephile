@@ -47,6 +47,17 @@ public class MediaObjectHelper {
         return year.format(date);
     }
 
+    public static String dateYearVert(Date date){
+        SimpleDateFormat year = new SimpleDateFormat("yyyy", Locale.UK);
+        String before = year.format(date);
+        String after = "";
+        for (int i = 0; i < before.length(); i++) {
+            after = after.concat(before.charAt(i) + "\n");
+        }
+
+        return after;
+    }
+
     public static int checkInt(String in){
         if(in != null && !in.isEmpty()){
             try{

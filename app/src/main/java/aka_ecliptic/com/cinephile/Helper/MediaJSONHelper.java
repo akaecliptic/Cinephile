@@ -1,4 +1,4 @@
-package aka_ecliptic.com.cinephile.Handler;
+package aka_ecliptic.com.cinephile.Helper;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -11,6 +11,8 @@ import com.google.gson.JsonSerializer;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -21,12 +23,12 @@ import aka_ecliptic.com.cinephile.Model.Genre;
 import aka_ecliptic.com.cinephile.Model.ImageData;
 import aka_ecliptic.com.cinephile.Model.Movie;
 
-public class GsonJsonHandler {
+public class MediaJSONHelper {
 
-    public static Gson getCustomGson(){
+    public static Gson getGson(){
         GsonBuilder gsonB = new GsonBuilder();
         JsonDeserializer<Movie> jsonD = (json, typeOfT, context) -> {
-        if (!json.isJsonNull()) {
+            if (!json.isJsonNull()) {
                 JsonObject jsonObject = json.getAsJsonObject();
 
                 Genre[] genres = getGenres(jsonObject.getAsJsonArray("genre_ids"));
@@ -34,9 +36,9 @@ public class GsonJsonHandler {
                 Movie movie = new Movie(
                         jsonObject.get("id").getAsInt(),
                         false,
-                        getYear(jsonObject.get("release_date").getAsString()),
+                        MediaObjectHelper.stringToDate(jsonObject.get("release_date").getAsString()),
                         jsonObject.get("title").getAsString(),
-                        jsonObject.get("vote_average").getAsBigDecimal().multiply(new BigDecimal(10)).intValue(),
+                        jsonObject.get("vote_average").getAsBigDecimal().round(new MathContext(1, RoundingMode.HALF_UP)).intValue(),
                         genres[0],
                         genres[1],
                         genres[2]
@@ -60,36 +62,6 @@ public class GsonJsonHandler {
                 movie.setImageData(imageData);
                 movie.setStatistic(statistic);
                 return movie;
-            }
-            return null;
-        };
-
-        gsonB.registerTypeAdapter(Movie.class, jsonD);
-        return gsonB.create();
-    }
-
-    public static Gson getCustomGsonMovieUpdate(){
-        GsonBuilder gsonB = new GsonBuilder();
-        JsonDeserializer<Movie> jsonD = (json, typeOfT, context) -> {
-            if (!json.isJsonNull()) {
-                JsonObject jsonObject = json.getAsJsonObject();
-
-                Genre[] genres = getGenres(jsonObject.getAsJsonArray("genres"));
-                Date date = getReleaseDates(jsonObject.get("release_dates").getAsJsonObject().getAsJsonArray("results"));
-                if(date == null)
-                    date = getYear(jsonObject.get("release_date").getAsString());
-
-                return new Movie(
-                        jsonObject.get("id").getAsInt(),
-                        false,
-                        date,
-                        jsonObject.get("title").getAsString(),
-                        jsonObject.get("vote_average").getAsBigDecimal().multiply(new BigDecimal(10)).intValue(),
-                        genres[0],
-                        genres[1],
-                        genres[2]
-                );
-
             }
             return null;
         };

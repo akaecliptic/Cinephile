@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <!--Default-->
     <color name="DefaultColorPrimary">#008577</color>
     <color name="DefaultColorPrimaryDark">#00574B</color>
     <color name="DefaultColorAccent">#D81B60</color>
 
-    <!--Mine-->
+    <!--Cinephile-->
     <color name="colorPrimary">#A900A9</color>
     <color name="colorPrimaryDark">#000000</color>
     <color name="colorSecondaryDark">#111111</color>
-    <color name="colorPrimaryBright">#FFFFFF</color>
+    <color name="colorTertiaryDark">#333333</color>
+    <color name="colorTextPrimary">#EEEEEE</color>
 </resources>

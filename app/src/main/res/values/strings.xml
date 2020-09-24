@@ -1,32 +1,22 @@
 <resources>
     <string name="app_name">Cinephile</string>
     <string name="menu_myList">MyList</string>
-    <string name="menu_trending">Trending</string>
-    <string name="place_holder">To Edit</string>
+    <string name="menu_explore">Explore</string>
+    <string name="place_holder">TODO</string>
     <string name="option_cancel">Cancel</string>
     <string name="option_confirm">Confirm</string>
     <string name="option_more">More</string>
 
-    <string-array name="movie_genres">
-        <item>ACTION</item>
-        <item>ADVENTURE</item>
-        <item>ANIMATION</item>
-        <item>COMEDY</item>
-        <item>CRIME</item>
-        <item>DOCUMENTARY</item>
-        <item>DRAMA</item>
-        <item>FAMILY</item>
-        <item>FANTASY</item>
-        <item>HISTORY</item>
-        <item>HORROR</item>
-        <item>MUSIC</item>
-        <item>MYSTERY</item>
-        <item>ROMANTIC</item>
-        <item>SCI_FI</item>
-        <item>TV</item>
-        <item>THRILLER</item>
-        <item>WAR</item>
-        <item>WESTERN</item>
-        <item>NONE</item>
-    </string-array>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="placeholder_year">2020</string>
+    <string name="placeholder_movie_title">Movie Title</string>
+    <string name="placeholder_rating">7/10</string>
+    <string name="more">MORE</string>
+    <string name="placeholder_year_vert">2\n0\n2\n0</string>
+    <string name="content_description_movie_poster">movie poster</string>
+    <string name="toolbar_search">search</string>
+    <string name="trending">Trending</string>
+    <string name="recent">Recent</string>
+    <string name="upcoming">Upcoming</string>
+    <string name="favourites">Favourites</string>
 </resources>
