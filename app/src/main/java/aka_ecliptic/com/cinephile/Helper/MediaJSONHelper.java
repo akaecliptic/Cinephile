@@ -36,7 +36,7 @@ public class MediaJSONHelper {
                 Movie movie = new Movie(
                         jsonObject.get("id").getAsInt(),
                         false,
-                        MediaObjectHelper.stringToDate(jsonObject.get("release_date").getAsString()),
+                        MediaObjectHelper.stringToDate((jsonObject.get("release_date") != null) ? jsonObject.get("release_date").getAsString() : ""),
                         jsonObject.get("title").getAsString(),
                         jsonObject.get("vote_average").getAsBigDecimal().round(new MathContext(1, RoundingMode.HALF_UP)).intValue(),
                         genres[0],

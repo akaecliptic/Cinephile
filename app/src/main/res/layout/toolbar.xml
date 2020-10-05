@@ -11,7 +11,7 @@
         android:id="@+id/toolbar_title"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="?attr/actionBarSize"
+        android:layout_marginHorizontal="?attr/actionBarSize"
         android:gravity="center"
         android:text="@string/app_name"
         android:textAlignment="center" />

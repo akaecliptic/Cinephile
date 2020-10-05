@@ -19,4 +19,12 @@
     <string name="recent">Recent</string>
     <string name="upcoming">Upcoming</string>
     <string name="favourites">Favourites</string>
+    <string name="content_description_movie_backdrop">movie backdrop</string>
+    <string name="placeholder_description">description</string>
+    <string name="add">add</string>
+    <string name="favourite">favourite</string>
+    <string name="dialog_title_rating">Set Movie Rating</string>
+    <string name="search_hint">Movie Title</string>
+    <string name="dialog_title_delete">Would you like to delete:</string>
+    <string name="empty_mylist">"Looks like you have no movies in your list. \n Try checking out the Explore page."</string>
 </resources>

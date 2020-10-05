@@ -10,7 +10,10 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONObject;
 
+import java.util.List;
+
 import aka_ecliptic.com.cinephile.BuildConfig;
+import aka_ecliptic.com.cinephile.Model.Movie;
 
 public class MovieApiDAO {
 
@@ -20,7 +23,10 @@ public class MovieApiDAO {
     private RequestQueue tmdbRequestQueue;
 
     private static final String API_KEY = "?api_key=" + BuildConfig.ApiKey;
+    private static final String LANGUAGE = "&language=en-GB";
+    private static final String REGION = "&region=GB";
     private static final String QUERY = "&query=";
+    private static final String PAGE = "&page=";
 
     private static final String BASE_URL = "https://api.themoviedb.org/3/";
     private static final String BASE_IMAGE_URL = "https://image.tmdb.org/t/p/";
@@ -49,7 +55,17 @@ public class MovieApiDAO {
 
     void getMovies(int page, MovieType movieType, final VolleyCallback callback){
 
-        String url = BASE_URL + "movie/" + movieType.type + API_KEY + "&language=en-GB&page=" + page + "&region=GB";
+        String url = BASE_URL + "movie/" + movieType.type + API_KEY + LANGUAGE + PAGE + page + REGION;
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null
+                , callback::onSuccess
+                , error -> Log.d(TAG,"Error "+ error + "found making an API request at " + TAG));
+
+        tmdbInstance.addToRequestQueue(jsonObjectRequest);
+    }
+
+    void queryMovie(String query, int page, final VolleyCallback callback) {
+        String url = BASE_URL + "search/movie" + API_KEY + LANGUAGE + QUERY + query + PAGE + page + REGION;
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null
                 , callback::onSuccess

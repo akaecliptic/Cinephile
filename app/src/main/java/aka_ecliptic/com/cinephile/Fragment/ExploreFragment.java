@@ -1,16 +1,21 @@
 package aka_ecliptic.com.cinephile.Fragment;
 
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,6 +27,10 @@ import aka_ecliptic.com.cinephile.Architecture.MediaViewModel;
 import aka_ecliptic.com.cinephile.Architecture.MovieApiDAO;
 import aka_ecliptic.com.cinephile.Model.Movie;
 import aka_ecliptic.com.cinephile.R;
+
+import static aka_ecliptic.com.cinephile.Fragment.MyListFragment.SELECTED_MOVIE;
+import static aka_ecliptic.com.cinephile.Fragment.MyListFragment.SELECTED_SAVED;
+import static aka_ecliptic.com.cinephile.Fragment.MyListFragment.SELECTED_TYPE;
 
 
 /**
@@ -43,13 +52,13 @@ public class ExploreFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        setUpViewModelLink();
         return inflater.inflate(R.layout.fragment_explore, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setUpViewModelLink();
         setUpRecycler();
     }
 
@@ -66,10 +75,10 @@ public class ExploreFragment extends Fragment {
 
         String imageConfig = mediaViewModel.getImageConfig(MovieApiDAO.ImageType.PROFILE);
 
-        ExploreAdapter trendingAdapter = new ExploreAdapter(requireContext(), null, imageConfig);
-        ExploreAdapter recentAdapter = new ExploreAdapter(requireContext(), null, imageConfig);
-        ExploreAdapter upcomingAdapter = new ExploreAdapter(requireContext(), null, imageConfig);
-        ExploreAdapter favouritesAdapter = new ExploreAdapter(requireContext(), null, imageConfig);
+        ExploreAdapter trendingAdapter = new ExploreAdapter(requireContext(), null, imageConfig, MovieApiDAO.MovieType.TRENDING);
+        ExploreAdapter recentAdapter = new ExploreAdapter(requireContext(), null, imageConfig, MovieApiDAO.MovieType.RECENT);
+        ExploreAdapter upcomingAdapter = new ExploreAdapter(requireContext(), null, imageConfig, MovieApiDAO.MovieType.UPCOMING);
+        ExploreAdapter favouritesAdapter = new ExploreAdapter(requireContext(), null, imageConfig, MovieApiDAO.MovieType.FAVOURITES);
 
         setUpAdapterClicks(trendingAdapter, recentAdapter, upcomingAdapter, favouritesAdapter);
 
@@ -84,11 +93,29 @@ public class ExploreFragment extends Fragment {
 
     private void setUpAdapterClicks(ExploreAdapter... adapters) {
         ExploreAdapter.ItemClickListener itemClickListener = (view, movie) -> {
-            Toast.makeText(requireContext(), movie.getTitle().concat(" Clicked"), Toast.LENGTH_SHORT).show();
+            Bundle bundle = new Bundle();
+            boolean haveMovie = mediaViewModel.getItems().stream().anyMatch(m -> m.getId() == movie.getId());
+
+            bundle.putSerializable(SELECTED_MOVIE, movie);
+            bundle.putBoolean(SELECTED_SAVED, haveMovie);
+
+            Navigation.findNavController(requireView())
+                    .navigate(R.id.action_explore_fragment_to_movie_profile_fragment, bundle);
+
+            Snackbar snackbar = Snackbar.make(requireActivity().findViewById(R.id.main_coordinator),
+                    "Opening '" + movie.getTitle() + "'",
+                    Snackbar.LENGTH_SHORT);
+            snackbar.getView().setBackgroundColor(requireActivity().getColor(R.color.colorSecondaryDark));
+            snackbar.show();
         };
 
-        MyListAdapter.ItemClickListener buttonClickListener = (view, position) -> {
-            Toast.makeText(requireContext(), "Button Clicked", Toast.LENGTH_SHORT).show();
+        ExploreAdapter.MoreClickListener buttonClickListener = (view, movieType) -> {
+            Bundle bundle = new Bundle();
+
+            bundle.putSerializable(SELECTED_TYPE, movieType);
+
+            Navigation.findNavController(requireView())
+                    .navigate(R.id.action_explore_fragment_to_movie_list_fragment, bundle);
         };
 
         for (ExploreAdapter adapter : adapters) {

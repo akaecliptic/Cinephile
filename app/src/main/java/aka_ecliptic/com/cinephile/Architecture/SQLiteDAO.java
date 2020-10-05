@@ -178,6 +178,63 @@ class SQLiteDAO extends SQLiteOpenHelper {
         db.close();
     }
 
+    boolean isMoviePresent(int id){
+        SQLiteDatabase db = getWritableDatabase();
+
+        Cursor c = db.rawQuery(MySQLiteHelper.SELECT_MOVIE_ID, new String[]{String.valueOf(id)});
+        c.moveToFirst();
+
+        boolean isPresent = c.getCount() != 0;
+
+        c.close();
+        db.close();
+        return isPresent;
+    }
+
+    Movie getMovie(int id){
+        SQLiteDatabase db = getWritableDatabase();
+
+        Cursor c = db.rawQuery(MySQLiteHelper.SELECT_MOVIE_BY_ID, new String[]{String.valueOf(id)});
+        Movie movie;
+
+        c.moveToFirst();
+
+        if (c.getCount() == 0){
+            c.close();
+            db.close();
+            return null;
+        }
+
+        movie = new Movie(
+                c.getInt(0), //ID
+                MediaObjectHelper.isSeen(c.getInt(1)), //Seen
+                MediaObjectHelper.stringToDate(c.getString(2)), //ReleaseDate
+                c.getString(3), //Title
+                c.getInt(4), //Rating
+                Genre.valueOf(c.getString(5)), //Genre
+                Genre.valueOf(c.getString(6)), //SubGenre
+                Genre.valueOf(c.getString(7)) //MinGenre
+        );
+
+        Movie.MovieStatistic statistic = new Movie.MovieStatistic(
+                c.getString(c.getColumnIndex(MySQLiteHelper.TABLE_HEADING_MOVIE_STATS[1])), //Description
+                c.getInt(c.getColumnIndex(MySQLiteHelper.TABLE_HEADING_MOVIE_STATS[2])), //SiteRating
+                c.getInt(c.getColumnIndex(MySQLiteHelper.TABLE_HEADING_MOVIE_STATS[3])) //Runtime
+        );
+
+        ImageData imageData = new ImageData(
+                c.getString(c.getColumnIndex(MySQLiteHelper.TABLE_HEADING_MOVIE_IMAGES[1])), //PosterPath
+                c.getString(c.getColumnIndex(MySQLiteHelper.TABLE_HEADING_MOVIE_IMAGES[2])) //BackdropPath
+        );
+
+        movie.setStatistic(statistic);
+        movie.setImageData(imageData);
+
+        c.close();
+        db.close();
+        return movie;
+    }
+
     /**
      * Primary Select method, retrieves all movie data from database, this include poster and
      * statistic data. Used to fill repository with data.
@@ -188,6 +245,49 @@ class SQLiteDAO extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
 
         Cursor c = db.rawQuery(MySQLiteHelper.SELECT_ALL_MOVIE_DATA, null);
+        ArrayList<Movie> movies = new ArrayList<>();
+
+        c.moveToFirst();
+        while (!c.isAfterLast()){
+
+            Movie m = new Movie(
+                    c.getInt(0), //ID
+                    MediaObjectHelper.isSeen(c.getInt(1)), //Seen
+                    MediaObjectHelper.stringToDate(c.getString(2)), //ReleaseDate
+                    c.getString(3), //Title
+                    c.getInt(4), //Rating
+                    Genre.valueOf(c.getString(5)), //Genre
+                    Genre.valueOf(c.getString(6)), //SubGenre
+                    Genre.valueOf(c.getString(7)) //MinGenre
+            );
+
+            Movie.MovieStatistic statistic = new Movie.MovieStatistic(
+                    c.getString(c.getColumnIndex(MySQLiteHelper.TABLE_HEADING_MOVIE_STATS[1])), //Description
+                    c.getInt(c.getColumnIndex(MySQLiteHelper.TABLE_HEADING_MOVIE_STATS[2])), //SiteRating
+                    c.getInt(c.getColumnIndex(MySQLiteHelper.TABLE_HEADING_MOVIE_STATS[3])) //Runtime
+            );
+
+            ImageData imageData = new ImageData(
+                    c.getString(c.getColumnIndex(MySQLiteHelper.TABLE_HEADING_MOVIE_IMAGES[1])), //PosterPath
+                    c.getString(c.getColumnIndex(MySQLiteHelper.TABLE_HEADING_MOVIE_IMAGES[2])) //BackdropPath
+            );
+
+
+            m.setStatistic(statistic);
+            m.setImageData(imageData);
+            movies.add(m);
+            c.moveToNext();
+        }
+
+        c.close();
+        db.close();
+        return movies;
+    }
+
+    List<Movie> getMoviesLike(String query) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        Cursor c = db.rawQuery(MySQLiteHelper.SELECT_MOVIE_LIKE, new String[]{"%" + query + "%"});
         ArrayList<Movie> movies = new ArrayList<>();
 
         c.moveToFirst();

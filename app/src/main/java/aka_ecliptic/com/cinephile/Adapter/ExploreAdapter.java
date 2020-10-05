@@ -16,6 +16,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import aka_ecliptic.com.cinephile.Architecture.MovieApiDAO;
 import aka_ecliptic.com.cinephile.Helper.MediaObjectHelper;
 import aka_ecliptic.com.cinephile.Model.Movie;
 import aka_ecliptic.com.cinephile.R;
@@ -42,7 +43,7 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.ViewHold
                 itemView.setOnClickListener((view) -> itemClick.onItemClick(view, getItem(getAdapterPosition())));
             } else {
                 btnFooter = itemView.findViewById(R.id.rci_footer_btn);
-                btnFooter.setOnClickListener((view) -> buttonClick.onItemClick(view, -1));
+                btnFooter.setOnClickListener((view) -> buttonClick.onItemClick(view, movieType));
             }
 
             this.viewType = viewType;
@@ -56,12 +57,14 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.ViewHold
     private LayoutInflater mInflater;
     private String imageConfig;
     private ItemClickListener itemClick;
-    private MyListAdapter.ItemClickListener buttonClick;
+    private MoreClickListener buttonClick;
+    private MovieApiDAO.MovieType movieType;
 
-    public ExploreAdapter(Context context, @Nullable List<Movie> list, String imageConfig){
+    public ExploreAdapter(Context context, @Nullable List<Movie> list, String imageConfig, MovieApiDAO.MovieType movieType){
         this.mInflater = LayoutInflater.from(context);
         this.mediaList = list;
         this.imageConfig = imageConfig;
+        this.movieType = movieType;
     }
 
     @NonNull
@@ -105,7 +108,7 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.ViewHold
         notifyDataSetChanged();
     }
 
-    public Movie getItem(int position) {
+    private Movie getItem(int position) {
         return mediaList.get(position);
     }
 
@@ -113,11 +116,15 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.ViewHold
         this.itemClick = itemClickListener;
     }
 
-    public void setButtonClickListener(MyListAdapter.ItemClickListener buttonClickListener){
+    public void setButtonClickListener(MoreClickListener buttonClickListener){
         this.buttonClick = buttonClickListener;
     }
 
     public interface ItemClickListener{
         void onItemClick(View view, Movie movie);
+    }
+
+    public interface MoreClickListener{
+        void onItemClick(View view, MovieApiDAO.MovieType movieType);
     }
 }

@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -45,12 +46,69 @@ public class Repository{
         this.sortType = Sort.DEFAULT;
     }
 
+    List<Movie> reCacheItems() {
+        this.mediaList = sqLiteDAO.getAllMovies();
+        return this.mediaList;
+    }
+
+    boolean isMoviePresent(int id){
+        return this.sqLiteDAO.isMoviePresent(id);
+    }
+
+    Movie getItem(int id){
+        return this.sqLiteDAO.getMovie(id);
+    }
+
     List<Movie> getItems(){
         return this.mediaList;
     }
 
+    List<Movie> getItemsLike(String query) {
+        return sqLiteDAO.getMoviesLike(query);
+    }
+
     Movie[][] getOnlineList(){
         return this.onlineList;
+    }
+
+    void requestMoviesType(MovieApiDAO.MovieType movieType, int page, ExploreFragment.RequestResult requestResult) {
+        movieDAO.getMovies(page, movieType, (result) -> {
+            Movie[] toReturn = {};
+            try {
+                JSONArray jsonArray = result.getJSONArray("results");
+                toReturn = new Movie[jsonArray.length()];
+                Gson gson = MediaJSONHelper.getGson();
+                for(int i = 0; i < jsonArray.length(); i++){
+                    JSONObject jso = (JSONObject) jsonArray.get(i);
+                    Movie m = gson.fromJson(jso.toString(), Movie.class);
+
+                    toReturn[i] = (m);
+                }
+            }catch (Exception e){
+                Log.d(TAG,"Error "+ e + "found making an API request at " + TAG);
+            }
+            requestResult.onResolved(toReturn);
+        });
+    }
+
+    void requestOnlineListLike(String query, int page, ExploreFragment.RequestResult requestResult) {
+        movieDAO.queryMovie(query, page, (result) -> {
+            Movie[] toReturn = {};
+            try {
+                JSONArray jsonArray = result.getJSONArray("results");
+                toReturn = new Movie[jsonArray.length()];
+                Gson gson = MediaJSONHelper.getGson();
+                for(int i = 0; i < jsonArray.length(); i++){
+                    JSONObject jso = (JSONObject) jsonArray.get(i);
+                    Movie m = gson.fromJson(jso.toString(), Movie.class);
+
+                    toReturn[i] = (m);
+                }
+            }catch (Exception e){
+                Log.d(TAG,"Error "+ e + "found making an API request at " + TAG);
+            }
+            requestResult.onResolved(toReturn);
+        });
     }
 
     private void requestExploreItems(int page, MovieApiDAO.MovieType movieType, ExploreFragment.RequestResult requestResult) {
@@ -58,10 +116,10 @@ public class Repository{
             Movie[] toReturn = new Movie[9];
             try {
                 JSONArray jsonArray = result.getJSONArray("results");
+                Gson gson = MediaJSONHelper.getGson();
                 for(int i = 0; i < 9; i++){
                     JSONObject jso = (JSONObject) jsonArray.get(i);
-                    Gson gson = MediaJSONHelper.getGson();
-                    Movie m = gson.fromJson(jso.toString(),Movie.class);
+                    Movie m = gson.fromJson(jso.toString(), Movie.class);
 
                     toReturn[i] = m;
                 }
@@ -110,7 +168,6 @@ public class Repository{
     void addItem(Movie movie) {
         sqLiteDAO.addMovie(movie);
         this.mediaList.add(movie);
-
     }
 
     int removeItem(Movie item) {
@@ -128,11 +185,16 @@ public class Repository{
         return index;
     }
 
-    public Sort getSortType(){
-        return this.sortType;
+    void cycleSort(){
+        this.sortType = Sort.valueOf(this.sortType.getSortIndex() + 1);
+        sortBySortType(this.sortType);
     }
 
-    public void sortBySortType(Sort sortOrder){
+    String getSortType(){
+        return this.sortType.getSortType();
+    }
+
+    private void sortBySortType(Sort sortOrder){
         switch (sortOrder){
             case DEFAULT: sortDefault();
                 break;
@@ -171,9 +233,9 @@ public class Repository{
         ALPHABETICALLY(2),
         YEAR(3);
 
-        private final Integer index;
+        private final int index;
 
-        Sort(Integer index) {
+        Sort(int index) {
             this.index = index;
         }
 
@@ -181,10 +243,25 @@ public class Repository{
             return index;
         }
 
-        public static Optional<Sort> valueOf(Integer value) {
-            return Arrays.stream(values())
-                    .filter(Sort -> Sort.index.equals(value))
-                    .findFirst();
+        public static Sort valueOf(int value) {
+            for (Sort sort : Sort.values()){
+                if(sort.getSortIndex() == value)
+                    return sort;
+            }
+            return Sort.DEFAULT;
+        }
+
+        public String getSortType(){
+            switch (this){
+                case RATING:
+                    return "Sort by Rating";
+                case ALPHABETICALLY:
+                    return "Alphabetically Sorted";
+                case YEAR:
+                    return "Sorted by Year";
+                default:
+                    return "Default Sort";
+            }
         }
     }
 }

@@ -13,6 +13,7 @@ public class MediaObjectHelper {
     private static final SimpleDateFormat format =
             new SimpleDateFormat("yyyy-MM-dd", Locale.UK);
     private static final Calendar calendar = new GregorianCalendar();
+    private static final String INDEFINITE_DATE = "2199-10-31";
 
     public static int isSeen(boolean s){
         return s ? 1 : 0;
@@ -23,7 +24,7 @@ public class MediaObjectHelper {
     }
 
     public static boolean releaseDateEquals(Date date1, Date date2){
-        return dateToString(date1).equals(dateToString(date2));
+        return dateToString(date1).equals(dateToString(date2)) || dateYear(date1).equals(dateYear(date2));
     }
 
     public static String dateToString(Date date){
@@ -32,10 +33,11 @@ public class MediaObjectHelper {
 
     public static Date stringToDate(String date){
         try {
-            if(date.length() > 4)
+            if(date.length() > 4){
                 return format.parse(date);
-            calendar.set(Integer.parseInt(date), 0, 1);
-            return calendar.getTime();
+            }else {
+                return format.parse(INDEFINITE_DATE);
+            }
         } catch (ParseException e) {
             e.printStackTrace();
         }

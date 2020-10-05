@@ -9,8 +9,14 @@
     </style>
 
     <style name="MyCheckboxStyle" parent="AppTheme">
-        <item name="android:button">@drawable/ic_checkbox</item>
+        <item name="android:button">@drawable/button_checkbox</item>
         <item name="android:background">@color/colorSecondaryDark</item>
+    </style>
+
+    <style name="MyCheckboxSeen" parent="AppTheme">
+        <item name="android:button">@drawable/ic_seen</item>
+        <item name="android:buttonTint">@drawable/tint_menu</item>
+        <item name="android:outlineProvider">none</item>
     </style>
 
     <style name="MyToolBar" parent="AppTheme">
@@ -22,5 +28,11 @@
         <item name="android:background">@color/colorSecondaryDark</item>
         <item name="android:textColor">@color/colorTextPrimary</item>
         <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="MyDialogButtons" parent="AppTheme">
+        <item name="android:background">@null</item>
+        <item name="android:textColor">@color/colorTextPrimary</item>
+        <item name="android:textSize">15sp</item>
     </style>
 </resources>

@@ -2,10 +2,10 @@
 
     <item android:id="@+id/mylist_fragment"
         android:title="@string/menu_myList"
-        android:icon="@drawable/icon_bookmark" />
+        android:icon="@drawable/ic_bookmark" />
 
     <item android:id="@+id/explore_fragment"
         android:title="@string/menu_explore"
-        android:icon="@drawable/icon_globe" />
+        android:icon="@drawable/ic_globe" />
 
 </menu>

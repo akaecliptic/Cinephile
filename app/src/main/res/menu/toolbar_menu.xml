@@ -3,9 +3,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:visible="true"
         android:id="@+id/toolbar_search"
-        android:icon="@drawable/icon_search"
+        android:icon="@drawable/ic_search"
         android:title="@string/toolbar_search"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="ifRoom|collapseActionView"/>
+
+    <item
+        android:visible="false"
+        android:id="@+id/toolbar_add"
+        android:icon="@drawable/ic_add"
+        android:title="@string/add"
+        app:showAsAction="always"/>
+
+    <item
+        android:visible="false"
+        android:id="@+id/toolbar_favourite"
+        android:checkable="true"
+        android:title="@string/favourite"
         app:showAsAction="ifRoom"/>
 
 </menu>

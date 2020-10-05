@@ -37,6 +37,7 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ViewHolder
 
             checkSeen.setOnClickListener((view) -> checkedBox.onItemClick(view, getAdapterPosition()));
             itemView.setOnClickListener((view) -> itemClick.onItemClick(view, getAdapterPosition()));
+            itemView.setOnLongClickListener((view -> longClick.onLongClick(view, getAdapterPosition())));
         }
     }
 
@@ -45,6 +46,7 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ViewHolder
 
     private ItemClickListener itemClick;
     private ItemClickListener checkedBox;
+    private ItemLongClickListener longClick;
 
     public MyListAdapter(Context context, List<Movie> list){
         this.inflater = LayoutInflater.from(context);
@@ -64,7 +66,7 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ViewHolder
 
         viewHolder.textYear.setText(MediaObjectHelper.dateYear(current.getReleaseDate()));
         viewHolder.textTitle.setText(current.getTitle());
-        viewHolder.textRating.setText(String.valueOf(current.getRating()));
+        viewHolder.textRating.setText(String.valueOf(current.getRating() * 10));
         viewHolder.checkSeen.setChecked(current.isSeen());
     }
 
@@ -87,12 +89,25 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ViewHolder
         notifyItemChanged(position);
     }
 
+    public void setItems(List<Movie> items){
+        mediaList = items;
+        notifyDataSetChanged();
+    }
+
+    public void setOnLongClickListener(ItemLongClickListener longClickListener) {
+        longClick = longClickListener;
+    }
+
     public void setClickListener(ItemClickListener itemClickListener){
         this.itemClick = itemClickListener;
     }
 
     public void setCheckBoxListener(ItemClickListener checkBoxListener){
         this.checkedBox = checkBoxListener;
+    }
+
+    public interface ItemLongClickListener{
+        boolean onLongClick(View view, int position);
     }
 
     public interface ItemClickListener{

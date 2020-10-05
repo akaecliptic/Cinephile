@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/mylist_fragment">
+
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="aka_ecliptic.com.cinephile.MainActivity"
+        android:label="MainActivity" />
+
+    <fragment
+        android:id="@+id/explore_fragment"
+        android:name="aka_ecliptic.com.cinephile.Fragment.ExploreFragment"
+        android:label="fragment_explore"
+        tools:layout="@layout/fragment_explore">
+        <action
+            android:id="@+id/action_explore_fragment_to_movie_profile_fragment"
+            app:destination="@id/movie_profile_fragment" />
+        <action
+            android:id="@+id/action_explore_fragment_to_movie_list_fragment"
+            app:destination="@id/movie_list_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/movie_profile_fragment"
+        android:name="aka_ecliptic.com.cinephile.Fragment.MovieProfileFragment"
+        android:label="fragment_movie_profile"
+        tools:layout="@layout/fragment_movie_profile" />
+
+    <fragment
+        android:id="@+id/mylist_fragment"
+        android:name="aka_ecliptic.com.cinephile.Fragment.MyListFragment"
+        android:label="fragment_mylist"
+        tools:layout="@layout/fragment_mylist">
+        <action
+            android:id="@+id/action_mylist_fragment_to_movie_profile_fragment"
+            app:destination="@id/movie_profile_fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/movie_list_fragment"
+        android:name="aka_ecliptic.com.cinephile.Fragment.MovieListFragment"
+        android:label="fragment_movie_list"
+        tools:layout="@layout/fragment_movie_list">
+        <action
+            android:id="@+id/action_movie_list_fragment_to_movie_profile_fragment"
+            app:destination="@id/movie_profile_fragment" />
+    </fragment>
+</navigation>

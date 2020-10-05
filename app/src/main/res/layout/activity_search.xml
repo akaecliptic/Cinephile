@@ -2,28 +2,13 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main_coordinator"
+    android:id="@+id/search_coordinator"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <fragment
-            android:id="@+id/nav_host_fragment"
-            android:name="androidx.navigation.fragment.NavHostFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-
-            android:layout_above="@+id/bottom_nav_bar"
-            android:layout_below="@+id/toolbar"
-            android:layout_marginTop="0dp"
-            android:layout_marginBottom="-0dp"
-
-            app:defaultNavHost="true"
-            app:navGraph="@navigation/nav_graph_main"
-            tools:ignore="FragmentTagUsage" />
 
         <include
             android:id="@+id/toolbar"
@@ -32,12 +17,17 @@
             android:layout_height="35dp"
             android:layout_alignParentStart="true" />
 
-        <include
-            android:id="@+id/bottom_nav_bar"
-            layout="@layout/bottom_nav"
+        <fragment
+            android:id="@+id/nav_host_fragment"
+            android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_alignParentBottom="true" />
+            android:layout_height="match_parent"
 
+            android:layout_below="@+id/toolbar"
+            android:layout_marginTop="0dp"
+
+            app:defaultNavHost="true"
+            app:navGraph="@navigation/nav_graph_search"
+            tools:ignore="FragmentTagUsage" />
     </RelativeLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

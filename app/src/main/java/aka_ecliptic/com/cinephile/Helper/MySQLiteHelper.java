@@ -19,4 +19,24 @@ public class MySQLiteHelper {
                                                         "ON m.ID = s.MovieID " +
                                                         "LEFT JOIN 'movie_images' i " +
                                                         "ON m.ID = i.MovieID";
+
+    public static final String SELECT_MOVIE_LIKE = "SELECT m.*, s.Description, s.SiteRating, s.Runtime, i.PosterPath, i.BackdropPath " +
+            "FROM 'movies' m " +
+            "LEFT JOIN 'movie_statistics' s " +
+            "ON m.ID = s.MovieID " +
+            "LEFT JOIN 'movie_images' i " +
+            "ON m.ID = i.MovieID " +
+            "WHERE m.Title LIKE ?";
+
+    public static final String SELECT_MOVIE_BY_ID = "SELECT m.*, s.Description, s.SiteRating, s.Runtime, i.PosterPath, i.BackdropPath " +
+            "FROM 'movies' m " +
+            "LEFT JOIN 'movie_statistics' s " +
+            "ON m.ID = s.MovieID " +
+            "LEFT JOIN 'movie_images' i " +
+            "ON m.ID = i.MovieID " +
+            "WHERE m.ID = ?";
+
+    public static final String SELECT_MOVIE_ID = "SELECT m.ID " +
+            "FROM 'movies' m " +
+            "WHERE m.ID = ?";
 }

@@ -5,4 +5,5 @@
     android:layout_height="50dp"
     android:background="@android:color/black"
     app:menu="@menu/bottom_menu"
-    app:itemIconSize="25sp"/>
+    app:itemIconSize="25sp"
+    android:animateLayoutChanges="true" />
