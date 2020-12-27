@@ -20,6 +20,7 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import aka_ecliptic.com.cinephile.Adapter.ExploreAdapter;
 import aka_ecliptic.com.cinephile.Adapter.MyListAdapter;
@@ -126,7 +127,9 @@ public class ExploreFragment extends Fragment {
 
     private void setUpAdapterList(Movie[][] list, ExploreAdapter... adapters) {
         for (int i = 0; i < adapters.length; i++) {
-            adapters[i].setItemList(Arrays.asList(list[i]));
+            List<Movie> toSet = new ArrayList<>(Arrays.asList(list[i]));
+            toSet.removeIf(Objects::isNull);
+            adapters[i].setItemList(toSet);
         }
     }
 

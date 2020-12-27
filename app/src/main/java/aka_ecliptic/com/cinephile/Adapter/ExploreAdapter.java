@@ -86,10 +86,12 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.ViewHold
         if(viewHolder.viewType == VIEW_TYPE_CELL) {
             Movie current = mediaList.get(position);
 
-            Picasso.get().load(imageConfig + current.getImageData().getPosterImagePath()).
-                    fit().centerCrop().into(viewHolder.imagePoster);
-            viewHolder.textYear.setText(MediaObjectHelper.dateYearVert(current.getReleaseDate()));
-            viewHolder.textTitle.setText(current.getTitle());
+            if(current != null) {
+                Picasso.get().load(imageConfig + current.getImageData().getPosterImagePath()).
+                        fit().centerCrop().into(viewHolder.imagePoster);
+                viewHolder.textYear.setText(MediaObjectHelper.dateYearVert(current.getReleaseDate()));
+                viewHolder.textTitle.setText(current.getTitle());
+            }
         }
     }
 
