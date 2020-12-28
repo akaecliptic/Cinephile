@@ -35,6 +35,7 @@ public class SearchActivity extends AppCompatActivity {
     private MediaViewModel mediaViewModel;
     public static RequestListener searchRequestListener;
     private static String queryString;
+    private NavController navController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +47,7 @@ public class SearchActivity extends AppCompatActivity {
         setUpViewModelLink();
         setSupportActionBar(findViewById(R.id.toolbar));
 
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
 
         NavigationUI.setupWithNavController(findViewById(R.id.toolbar), navController, appBarConfiguration);
@@ -103,6 +104,15 @@ public class SearchActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.onNavDestinationSelected(item, navController)
                 || super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(navController.getCurrentDestination() != null){
+            if(navController.getCurrentDestination().getId() == R.id.movie_list_fragment)
+                MyListFragment.updateCacheMyList();
+        }
+        super.onBackPressed();
     }
 
     private void setUpViewModelLink() {

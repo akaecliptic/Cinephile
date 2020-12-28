@@ -1,12 +1,9 @@
 package aka_ecliptic.com.cinephile.Fragment;
 
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,7 +20,6 @@ import java.util.List;
 import java.util.Objects;
 
 import aka_ecliptic.com.cinephile.Adapter.ExploreAdapter;
-import aka_ecliptic.com.cinephile.Adapter.MyListAdapter;
 import aka_ecliptic.com.cinephile.Architecture.MediaViewModel;
 import aka_ecliptic.com.cinephile.Architecture.MovieApiDAO;
 import aka_ecliptic.com.cinephile.Model.Movie;

@@ -8,11 +8,8 @@ import com.google.gson.Gson;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 
 import aka_ecliptic.com.cinephile.Fragment.ExploreFragment;
 import aka_ecliptic.com.cinephile.Helper.MediaJSONHelper;

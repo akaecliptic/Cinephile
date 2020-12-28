@@ -6,10 +6,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
 
-import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
@@ -17,11 +14,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import aka_ecliptic.com.cinephile.Helper.MediaObjectHelper;
-import aka_ecliptic.com.cinephile.Model.Statistic;
 import aka_ecliptic.com.cinephile.Model.Genre;
 import aka_ecliptic.com.cinephile.Model.ImageData;
 import aka_ecliptic.com.cinephile.Model.Movie;
+import aka_ecliptic.com.cinephile.Model.Statistic;
 
 public class MediaJSONHelper {
 

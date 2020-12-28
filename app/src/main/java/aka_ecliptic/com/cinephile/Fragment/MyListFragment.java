@@ -25,7 +25,6 @@ import aka_ecliptic.com.cinephile.Architecture.MediaViewModel;
 import aka_ecliptic.com.cinephile.MainActivity;
 import aka_ecliptic.com.cinephile.Model.Movie;
 import aka_ecliptic.com.cinephile.R;
-import aka_ecliptic.com.cinephile.SearchActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,7 +34,6 @@ public class MyListFragment extends Fragment {
     private static NotifyMyList notify;
 
     private MediaViewModel mediaViewModel;
-    private BottomNavigationView bottomNavigationView;
 
     static final String SELECTED_MOVIE = "SELECTED_MOVIE";
     static final String SELECTED_SAVED = "SELECTED_SAVED";
@@ -131,7 +129,10 @@ public class MyListFragment extends Fragment {
             adapter.setItems(mediaViewModel.getItems());
         });
 
-        notify = () -> adapter.setItems(mediaViewModel.reCacheItems());
+        notify = () -> {
+            adapter.setItems(mediaViewModel.reCacheItems());
+            emptyPrompt.setVisibility((adapter.getItemCount() > 0) ? View.GONE : View.VISIBLE);
+        };
 
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));

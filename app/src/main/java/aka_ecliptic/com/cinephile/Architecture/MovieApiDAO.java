@@ -10,10 +10,7 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONObject;
 
-import java.util.List;
-
 import aka_ecliptic.com.cinephile.BuildConfig;
-import aka_ecliptic.com.cinephile.Model.Movie;
 
 public class MovieApiDAO {
 
