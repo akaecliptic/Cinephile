@@ -39,8 +39,13 @@
         android:id="@+id/rci_movie_card_tv_year"
         android:layout_width="wrap_content"
         android:layout_height="95dp"
+
         android:background="@android:color/transparent"
         android:elevation="5dp"
+
+        android:shadowColor="@color/colorPrimaryDark"
+        android:shadowRadius="15"
+
         android:text="@string/placeholder_year_vert"
         android:textAlignment="textStart" />
 </RelativeLayout>

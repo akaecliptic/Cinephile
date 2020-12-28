@@ -211,7 +211,7 @@ public class MovieProfileFragment extends Fragment {
 
             Spinner spinner = dialog.findViewById(R.id.rating_dialog_spinner_rating);
             spinner.setAdapter(new ArrayAdapter<>(requireContext(),
-                    R.layout.genre_spinner_item,
+                    R.layout.underline_spinner_item,
                     IntStream.rangeClosed(0, 10).boxed().collect(Collectors.toList())));
             spinner.setSelection(selected.getRating());
 

@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:background="@drawable/spinner_background"
-        tools:listitem="@layout/genre_spinner_item" />
+        tools:listitem="@layout/underline_spinner_item" />
 
     <LinearLayout
         android:layout_width="match_parent"
