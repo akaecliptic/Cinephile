@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import aka_ecliptic.com.cinephile.Helper.MediaObjectHelper;
@@ -19,12 +20,13 @@ class SQLiteDAO extends SQLiteOpenHelper {
 
     private static String TAG = "SQLDataBase";
     private static String DB_NAME = "Cinephile.db";
+    private static int DB_VERSION = 2;
 
     private static SQLiteDatabase movieDB;
     private static SQLiteDAO sqLiteDAO;
 
     private SQLiteDAO(Context context) {
-        super(context, DB_NAME, null, 1);
+        super(context, DB_NAME, null, DB_VERSION);
     }
 
     static synchronized SQLiteDAO getInstance(Context context){
@@ -36,40 +38,23 @@ class SQLiteDAO extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        generateTables(db);
+        generateTablesCurrent(db);
     }
 
-    private void generateTables(SQLiteDatabase db) {
-        String exe1 = "CREATE TABLE IF NOT EXISTS 'movies' (" +
-                "'ID'	INTEGER NOT NULL PRIMARY KEY," +
-                "'Seen'	INTEGER NOT NULL," +
-                "'ReleaseDate'	TEXT NOT NULL," +
-                "'Title'	TEXT NOT NULL," +
-                "'Rating'	INTEGER NOT NULL," +
-                "'Genre'	TEXT NOT NULL," +
-                "'SubGenre' TEXT NOT NULL," +
-                "'MinGenre' TEXT NOT NULL)";
+    private void generateTablesPrev(SQLiteDatabase db) {
+        for (int i = 0; i < 3; i++)
+            db.execSQL(MySQLiteHelper.TABLE_CREATES[i]);
+    }
 
-        String exe2 = "CREATE TABLE IF NOT EXISTS 'movie_statistics' (" +
-                "'MovieID' INTEGER NOT NULL UNIQUE," +
-                "'Description' TEXT," +
-                "'SiteRating' INTEGER," +
-                "'Runtime' INTEGER," +
-                "FOREIGN KEY(MovieID) REFERENCES movies(ID))";
-
-        String exe3 = "CREATE TABLE IF NOT EXISTS 'movie_images' ( " +
-                "'MovieID' INTEGER NOT NULL UNIQUE, " +
-                "'PosterPath' TEXT, " +
-                "'BackdropPath' TEXT, " +
-                "FOREIGN KEY(MovieID) REFERENCES movies(ID))";
-
-        db.execSQL(exe1);
-        db.execSQL(exe2);
-        db.execSQL(exe3);
+    private void generateTablesCurrent(SQLiteDatabase db) {
+        Arrays.stream(MySQLiteHelper.TABLE_CREATES).forEach(db::execSQL);
+        db.execSQL(MySQLiteHelper.DEFAULT_INSERT_COLLECTIONS);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        if (newVersion == DB_VERSION)
+            generateTablesCurrent(db);
     }
 
     @Override
@@ -92,13 +77,13 @@ class SQLiteDAO extends SQLiteOpenHelper {
         ContentValues posterValues = new ContentValues();
         posterValues.put(MySQLiteHelper.TABLE_HEADING_MOVIE_IMAGES[1], imageData.getPosterImagePath()); //PosterPath
         posterValues.put(MySQLiteHelper.TABLE_HEADING_MOVIE_IMAGES[2], imageData.getBackdropImagePath()); //BackdropPath
-        db.update(MySQLiteHelper.TABLE_NAMES[0],  posterValues, "ID = ?", new String[] {String.valueOf(id)});
+        db.update(MySQLiteHelper.TABLE_NAMES.get("m_images"),  posterValues, "ID = ?", new String[] {String.valueOf(id)});
 
         ContentValues statsValues = new ContentValues();
         statsValues.put(MySQLiteHelper.TABLE_HEADING_MOVIE_STATS[1], statistic.getDescription()); //Description
         statsValues.put(MySQLiteHelper.TABLE_HEADING_MOVIE_STATS[2], statistic.getSiteRating()); //SiteRating
         statsValues.put(MySQLiteHelper.TABLE_HEADING_MOVIE_STATS[3], statistic.getRuntime()); //Runtime
-        db.update(MySQLiteHelper.TABLE_NAMES[0],  statsValues, "ID = ?", new String[] {String.valueOf(id)});
+        db.update(MySQLiteHelper.TABLE_NAMES.get("m_stats"),  statsValues, "ID = ?", new String[] {String.valueOf(id)});
 
         db.close();
     }
@@ -120,7 +105,7 @@ class SQLiteDAO extends SQLiteOpenHelper {
         values.put(MySQLiteHelper.TABLE_HEADING_MOVIE[6], movie.getSubGenre().toString()); //SubGenre
         values.put(MySQLiteHelper.TABLE_HEADING_MOVIE[7], movie.getMinGenre().toString()); //MinGenre
 
-        db.update(MySQLiteHelper.TABLE_NAMES[0],  values, "ID = ?", new String[] {String.valueOf(movie.getId())});
+        db.update(MySQLiteHelper.TABLE_NAMES.get("movies"),  values, "ID = ?", new String[] {String.valueOf(movie.getId())});
 
         db.close();
     }
@@ -133,9 +118,19 @@ class SQLiteDAO extends SQLiteOpenHelper {
     void deleteMovie(int id){
         SQLiteDatabase db = getWritableDatabase();
 
-        db.delete(MySQLiteHelper.TABLE_NAMES[0], "ID = ?", new String[] {String.valueOf(id)});
-        db.delete(MySQLiteHelper.TABLE_NAMES[1], "MovieID = ?", new String[] {String.valueOf(id)});
-        db.delete(MySQLiteHelper.TABLE_NAMES[2], "MovieID = ?", new String[] {String.valueOf(id)});
+        db.delete(MySQLiteHelper.TABLE_NAMES.get("movies"), "ID = ?", new String[] {String.valueOf(id)});
+        db.delete(MySQLiteHelper.TABLE_NAMES.get("m_stats"), "MovieID = ?", new String[] {String.valueOf(id)});
+        db.delete(MySQLiteHelper.TABLE_NAMES.get("m_images"), "MovieID = ?", new String[] {String.valueOf(id)});
+        db.delete(MySQLiteHelper.TABLE_NAMES.get("c_m_link"), "MovieID = ?", new String[] {String.valueOf(id)});
+
+        db.close();
+    }
+
+    void deleteCollection(String name){
+        SQLiteDatabase db = getWritableDatabase();
+
+        db.execSQL(MySQLiteHelper.DELETE_COLLECTION_LINK, new String[]{name});
+        db.delete(MySQLiteHelper.TABLE_NAMES.get("collections"), "Name = ?", new String[] {String.valueOf(name)});
 
         db.close();
     }
@@ -158,14 +153,14 @@ class SQLiteDAO extends SQLiteOpenHelper {
         values.put(MySQLiteHelper.TABLE_HEADING_MOVIE[6], movie.getSubGenre().toString()); //SubGenre
         values.put(MySQLiteHelper.TABLE_HEADING_MOVIE[7], movie.getMinGenre().toString()); //MinGenre
 
-        db.insert(MySQLiteHelper.TABLE_NAMES[0], null, values);
+        db.insert(MySQLiteHelper.TABLE_NAMES.get("movies"), null, values);
 
         ContentValues posterValues = new ContentValues();
         posterValues.put(MySQLiteHelper.TABLE_HEADING_MOVIE_IMAGES[0], movie.getId()); //MovieID
         posterValues.put(MySQLiteHelper.TABLE_HEADING_MOVIE_IMAGES[1], movie.getImageData().getPosterImagePath()); //PosterPath
         posterValues.put(MySQLiteHelper.TABLE_HEADING_MOVIE_IMAGES[2], movie.getImageData().getBackdropImagePath()); //BackdropPath
 
-        db.insert(MySQLiteHelper.TABLE_NAMES[2], null, posterValues);
+        db.insert(MySQLiteHelper.TABLE_NAMES.get("m_images"), null, posterValues);
 
         ContentValues statsValues = new ContentValues();
         statsValues.put(MySQLiteHelper.TABLE_HEADING_MOVIE_STATS[0], movie.getId()); //MovieID
@@ -173,7 +168,27 @@ class SQLiteDAO extends SQLiteOpenHelper {
         statsValues.put(MySQLiteHelper.TABLE_HEADING_MOVIE_STATS[2], movie.getStatistic().getSiteRating()); //SiteRating
         statsValues.put(MySQLiteHelper.TABLE_HEADING_MOVIE_STATS[3], movie.getStatistic().getRuntime()); //Runtime
 
-        db.insert(MySQLiteHelper.TABLE_NAMES[1], null, statsValues);
+        db.insert(MySQLiteHelper.TABLE_NAMES.get("m_stats"), null, statsValues);
+
+        db.close();
+    }
+
+    void addCollection(String name, int type){
+        SQLiteDatabase db = getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(MySQLiteHelper.TABLE_HEADING_COLLECTIONS[1], name); //Name
+        values.put(MySQLiteHelper.TABLE_HEADING_COLLECTIONS[2], type); //Type
+
+        db.insert(MySQLiteHelper.TABLE_NAMES.get("collections"), null, values);
+
+        db.close();
+    }
+
+    void addMovieToCollection(String collection, Integer movieID){
+        SQLiteDatabase db = getWritableDatabase();
+
+        db.execSQL(MySQLiteHelper.INSERT_COLLECTION_MOVIE, new Object[]{collection, movieID});
 
         db.close();
     }
@@ -189,6 +204,23 @@ class SQLiteDAO extends SQLiteOpenHelper {
         c.close();
         db.close();
         return isPresent;
+    }
+
+    List<String> getCollectionNames(){
+        SQLiteDatabase db = getWritableDatabase();
+
+        Cursor c = db.rawQuery(MySQLiteHelper.SELECT_COLLECTION_NAMES, null);
+        ArrayList<String> names = new ArrayList<>();
+
+        c.moveToFirst();
+        while (!c.isAfterLast()){
+            names.add(c.getString(0));
+            c.moveToNext();
+        }
+
+        c.close();
+        db.close();
+        return names;
     }
 
     Movie getMovie(int id){
@@ -325,6 +357,66 @@ class SQLiteDAO extends SQLiteOpenHelper {
         c.close();
         db.close();
         return movies;
+    }
+
+    List<Movie> getMoviesFromCollection(String name) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        Cursor c = db.rawQuery(MySQLiteHelper.SELECT_MOVIE_FROM_LIST, new String[]{name});
+        ArrayList<Movie> movies = new ArrayList<>();
+
+        c.moveToFirst();
+        while (!c.isAfterLast()){
+
+            Movie m = new Movie(
+                    c.getInt(0), //ID
+                    MediaObjectHelper.isSeen(c.getInt(1)), //Seen
+                    MediaObjectHelper.stringToDate(c.getString(2)), //ReleaseDate
+                    c.getString(3), //Title
+                    c.getInt(4), //Rating
+                    Genre.valueOf(c.getString(5)), //Genre
+                    Genre.valueOf(c.getString(6)), //SubGenre
+                    Genre.valueOf(c.getString(7)) //MinGenre
+            );
+
+            Movie.MovieStatistic statistic = new Movie.MovieStatistic(
+                    c.getString(c.getColumnIndex(MySQLiteHelper.TABLE_HEADING_MOVIE_STATS[1])), //Description
+                    c.getInt(c.getColumnIndex(MySQLiteHelper.TABLE_HEADING_MOVIE_STATS[2])), //SiteRating
+                    c.getInt(c.getColumnIndex(MySQLiteHelper.TABLE_HEADING_MOVIE_STATS[3])) //Runtime
+            );
+
+            ImageData imageData = new ImageData(
+                    c.getString(c.getColumnIndex(MySQLiteHelper.TABLE_HEADING_MOVIE_IMAGES[1])), //PosterPath
+                    c.getString(c.getColumnIndex(MySQLiteHelper.TABLE_HEADING_MOVIE_IMAGES[2])) //BackdropPath
+            );
+
+
+            m.setStatistic(statistic);
+            m.setImageData(imageData);
+            movies.add(m);
+            c.moveToNext();
+        }
+
+        c.close();
+        db.close();
+        return movies;
+    }
+
+    List<Integer> getMovieIDsFromCollection(String name) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        Cursor c = db.rawQuery(MySQLiteHelper.SELECT_MOVIE_ID_FROM_LIST, new String[]{name});
+        ArrayList<Integer> ids = new ArrayList<>();
+
+        c.moveToFirst();
+        while (!c.isAfterLast()){
+            ids.add(c.getInt(0));
+            c.moveToNext();
+        }
+
+        c.close();
+        db.close();
+        return ids;
     }
 }
 
