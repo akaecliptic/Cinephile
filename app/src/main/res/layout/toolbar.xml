@@ -14,6 +14,7 @@
         android:layout_marginHorizontal="?attr/actionBarSize"
         android:gravity="center"
         android:text="@string/app_name"
+        android:textSize="@dimen/_20ssp"
         android:textAlignment="center" />
 
 </androidx.appcompat.widget.Toolbar>

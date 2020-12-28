@@ -15,8 +15,8 @@
 
         <ImageView
             android:id="@+id/rci_movie_card_img_poster"
-            android:layout_width="62dp"
-            android:layout_height="95dp"
+            android:layout_width="@dimen/_52sdp"
+            android:layout_height="@dimen/_80sdp"
             android:contentDescription="@string/content_description_movie_poster"
             app:srcCompat="@mipmap/ic_launcher" />
 
@@ -32,13 +32,13 @@
 
             android:singleLine="true"
             android:text="@string/placeholder_movie_title"
-            android:textSize="15sp" />
+            android:textSize="@dimen/_12ssp" />
     </LinearLayout>
 
     <TextView
         android:id="@+id/rci_movie_card_tv_year"
         android:layout_width="wrap_content"
-        android:layout_height="95dp"
+        android:layout_height="@dimen/_80sdp"
 
         android:background="@android:color/transparent"
         android:elevation="5dp"

@@ -2,8 +2,8 @@
 <com.google.android.material.bottomnavigation.BottomNavigationView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
+    android:layout_height="@dimen/_45sdp"
     android:background="@android:color/black"
     app:menu="@menu/bottom_menu"
-    app:itemIconSize="25sp"
+    app:itemIconSize="@dimen/_20sdp"
     android:animateLayoutChanges="true" />
