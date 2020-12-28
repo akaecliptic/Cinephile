@@ -28,14 +28,12 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.squareup.picasso.Picasso;
 
-import java.util.Arrays;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import aka_ecliptic.com.cinephile.Architecture.MediaViewModel;
 import aka_ecliptic.com.cinephile.Architecture.MovieApiDAO;
 import aka_ecliptic.com.cinephile.Helper.MediaObjectHelper;
-import aka_ecliptic.com.cinephile.Model.Genre;
 import aka_ecliptic.com.cinephile.Model.Movie;
 import aka_ecliptic.com.cinephile.R;
 import aka_ecliptic.com.cinephile.SearchActivity;
@@ -70,9 +68,9 @@ public class MovieProfileFragment extends Fragment {
     private TextView ratingText;
     private CheckBox seenCheck;
     private FloatingActionButton moreButton;
-    private Spinner genreSpinner1;
-    private Spinner genreSpinner2;
-    private Spinner genreSpinner3;
+    private TextView genreText1;
+    private TextView genreText2;
+    private TextView genreText3;
 
     public MovieProfileFragment() {
         // Required empty public constructor
@@ -157,17 +155,9 @@ public class MovieProfileFragment extends Fragment {
         seenCheck = view.findViewById(R.id.movie_profile_check_seen);
         moreButton = view.findViewById(R.id.movie_profile_button_more);
 
-        genreSpinner1 = view.findViewById(R.id.movie_profile_spinner_genre_1);
-        genreSpinner2 = view.findViewById(R.id.movie_profile_spinner_genre_2);
-        genreSpinner3 = view.findViewById(R.id.movie_profile_spinner_genre_3);
-
-        addSpinnerAdapters(genreSpinner1, genreSpinner2, genreSpinner3);
-    }
-
-    private void addSpinnerAdapters(Spinner... genres) {
-        for (Spinner spinner : genres){
-            spinner.setAdapter(new ArrayAdapter<>(requireContext(), R.layout.genre_spinner_item, Genre.values()));
-        }
+        genreText1 = view.findViewById(R.id.movie_profile_text_genre_1);
+        genreText2 = view.findViewById(R.id.movie_profile_text_genre_2);
+        genreText3 = view.findViewById(R.id.movie_profile_text_genre_3);
     }
 
     private void populateViews() {
@@ -191,9 +181,9 @@ public class MovieProfileFragment extends Fragment {
 
         seenCheck.setChecked(selected.isSeen());
 
-        genreSpinner1.setSelection(Arrays.asList(Genre.values()).indexOf(selected.getGenre()));
-        genreSpinner2.setSelection(Arrays.asList(Genre.values()).indexOf(selected.getSubGenre()));
-        genreSpinner3.setSelection(Arrays.asList(Genre.values()).indexOf(selected.getMinGenre()));
+        genreText1.setText(selected.getGenre().toString());
+        genreText2.setText(selected.getSubGenre().toString());
+        genreText3.setText(selected.getMinGenre().toString());
 
         seenCheck.setClickable(isSelectedSaved);
 

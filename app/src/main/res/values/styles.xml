@@ -5,6 +5,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="android:textColor">@color/colorTextPrimary</item>
+        <item name="android:textViewStyle">@style/TextFont</item>
         <item name="android:statusBarColor">@color/colorPrimary</item>
     </style>
 
@@ -22,6 +23,10 @@
     <style name="MyToolBar" parent="AppTheme">
         <item name="android:background">@color/colorPrimaryDark</item>
         <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="TextFont" parent="android:Widget.TextView">
+        <item name="fontFamily">@font/cousine</item>
     </style>
 
     <style name="MyRecyclerItems" parent="AppTheme">

@@ -148,26 +148,26 @@
         android:orientation="vertical"
         android:gravity="center">
 
-        <Spinner
-            android:id="@+id/movie_profile_spinner_genre_1"
+        <TextView
+            android:id="@+id/movie_profile_text_genre_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:listitem="@layout/genre_spinner_item"
+            android:textAlignment="center"
             android:background="@drawable/spinner_background"/>
 
-        <Spinner
-            android:id="@+id/movie_profile_spinner_genre_2"
+        <TextView
+            android:id="@+id/movie_profile_text_genre_2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginVertical="20dp"
-            tools:listitem="@layout/genre_spinner_item"
+            android:textAlignment="center"
             android:background="@drawable/spinner_background"/>
 
-        <Spinner
-            android:id="@+id/movie_profile_spinner_genre_3"
+        <TextView
+            android:id="@+id/movie_profile_text_genre_3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:listitem="@layout/genre_spinner_item"
+            android:textAlignment="center"
             android:background="@drawable/spinner_background"/>
     </LinearLayout>
 
