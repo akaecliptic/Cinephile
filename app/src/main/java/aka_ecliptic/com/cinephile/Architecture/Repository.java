@@ -201,7 +201,7 @@ public class Repository{
                 break;
             case YEAR: sortByYear();
                 break;
-            case WATCHED: sortByWatched();
+            case SEEN: sortBySeen();
                 break;
         }
     }
@@ -226,9 +226,9 @@ public class Repository{
         this.sortType = Sort.YEAR;
     }
 
-    private void sortByWatched(){
-        this.mediaList.sort(Comparator.comparing(Movie::isSeen));
-        this.sortType = Sort.WATCHED;
+    private void sortBySeen(){
+        this.mediaList.sort(Comparator.comparing(Movie::isSeen).reversed());
+        this.sortType = Sort.SEEN;
     }
 
     public enum Sort{
@@ -236,7 +236,7 @@ public class Repository{
         RATING(1),
         ALPHABETICALLY(2),
         YEAR(3),
-        WATCHED(4);
+        SEEN(4);
 
         private final int index;
 
@@ -264,7 +264,7 @@ public class Repository{
                     return "Alphabetically Sorted";
                 case YEAR:
                     return "Sorted by Year";
-                case WATCHED:
+                case SEEN:
                     return "Sorted by Watched";
                 default:
                     return "Default Sort";
