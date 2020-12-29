@@ -135,6 +135,14 @@ class SQLiteDAO extends SQLiteOpenHelper {
         db.close();
     }
 
+    private void removeMovieFromCollection(String collection, Integer movieID){
+        SQLiteDatabase db = getWritableDatabase();
+
+        db.execSQL(MySQLiteHelper.DELETE_FROM_COLLECTION, new Object[]{collection, movieID});
+
+        db.close();
+    }
+
     /**
      *  Adds a new movie to database, with associated poster and statistic data.
      *
@@ -173,6 +181,14 @@ class SQLiteDAO extends SQLiteOpenHelper {
         db.close();
     }
 
+    void toggleFavourite(int id, boolean favourite) {
+        if(favourite){
+            addMovieToCollection(MySQLiteHelper.DEFAULT_COLLECTIONS[1], id);
+        }else {
+            removeMovieFromCollection(MySQLiteHelper.DEFAULT_COLLECTIONS[1], id);
+        }
+    }
+
     void addCollection(String name, int type){
         SQLiteDatabase db = getWritableDatabase();
 
@@ -185,7 +201,7 @@ class SQLiteDAO extends SQLiteOpenHelper {
         db.close();
     }
 
-    void addMovieToCollection(String collection, Integer movieID){
+    private void addMovieToCollection(String collection, Integer movieID){
         SQLiteDatabase db = getWritableDatabase();
 
         db.execSQL(MySQLiteHelper.INSERT_COLLECTION_MOVIE, new Object[]{collection, movieID});
@@ -197,6 +213,19 @@ class SQLiteDAO extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
 
         Cursor c = db.rawQuery(MySQLiteHelper.SELECT_MOVIE_ID, new String[]{String.valueOf(id)});
+        c.moveToFirst();
+
+        boolean isPresent = c.getCount() != 0;
+
+        c.close();
+        db.close();
+        return isPresent;
+    }
+
+    boolean isFavourited(int id){
+        SQLiteDatabase db = getWritableDatabase();
+
+        Cursor c = db.rawQuery(MySQLiteHelper.SELECT_MOVIE_ID_FAVOURITES, new String[]{String.valueOf(id)});
         c.moveToFirst();
 
         boolean isPresent = c.getCount() != 0;
@@ -379,6 +408,23 @@ class SQLiteDAO extends SQLiteOpenHelper {
         c.close();
         db.close();
         return movies;
+    }
+
+    List<Integer> getMoviesLike(List<String> titles) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        Cursor c = db.rawQuery(MySQLiteHelper.SELECT_IDS_WITH_TITLES_IN(titles.size()), titles.toArray(new String[0]));
+        ArrayList<Integer> ids = new ArrayList<>();
+
+        c.moveToFirst();
+        while (!c.isAfterLast()){
+            ids.add(c.getInt(0)); //ID
+            c.moveToNext();
+        }
+
+        c.close();
+        db.close();
+        return ids;
     }
 
     List<Movie> getMoviesFromCollection(String name) {

@@ -57,6 +57,10 @@ public class Repository{
         return this.sqLiteDAO.isMoviePresent(id);
     }
 
+    boolean isFavourited(int id){
+        return this.sqLiteDAO.isFavourited(id);
+    }
+
     Movie getItem(int id){
         return this.sqLiteDAO.getMovie(id);
     }
@@ -67,6 +71,10 @@ public class Repository{
 
     List<Movie> getItemsLike(String query) {
         return sqLiteDAO.getMoviesLike(query);
+    }
+
+    List<Integer> getItemsLike(List<String> titles) {
+        return sqLiteDAO.getMoviesLike(titles);
     }
 
     List<String> getCollectionHeadings() {
@@ -178,6 +186,10 @@ public class Repository{
     void addItem(Movie movie) {
         sqLiteDAO.addMovie(movie);
         this.mediaList.add(movie);
+    }
+
+    void toggleFavourites(int id, boolean favourite) {
+        sqLiteDAO.toggleFavourite(id, favourite);
     }
 
     int removeItem(Movie item) {

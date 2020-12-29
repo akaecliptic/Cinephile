@@ -39,7 +39,7 @@ import static aka_ecliptic.com.cinephile.Architecture.Repository.Sort;
  */
 public class MyListFragment extends Fragment {
 
-    private static NotifyMyList notify;
+    private static List<NotifyMyList> subscribers = new ArrayList<>();
 
     private List<String> collectionHeadings;
 
@@ -78,7 +78,7 @@ public class MyListFragment extends Fragment {
     }
 
     public static void updateCacheMyList(){
-        notify.onNotify();
+        subscribers.forEach(NotifyMyList::onNotify);
     }
 
     public class MyListCollectionAdapter extends FragmentStateAdapter {
@@ -107,10 +107,13 @@ public class MyListFragment extends Fragment {
         static final String INSTANCE_NAME = "INSTANCE";
 
         private String fragName;
+
         private MediaViewModel mediaViewModel;
-        private List<Movie> fragList;
-        private MyListAdapter adapter;
         private Sort currentSort = Sort.DEFAULT;
+        private List<Movie> fragList;
+
+        private MyListAdapter adapter;
+        private TextView emptyPrompt;
 
         @Nullable
         @Override
@@ -152,9 +155,13 @@ public class MyListFragment extends Fragment {
             }
         }
 
+        private void checkPrompt(){
+            emptyPrompt.setVisibility((fragList.isEmpty()) ? View.VISIBLE : View.GONE);
+        }
+
         private void setUpRecycler() {
             if(fragName.equals("All")){
-                fragList = new ArrayList<>(mediaViewModel.getItems());
+                fragList = new ArrayList<>(mediaViewModel.reCacheItems());
             }else {
                 fragList = mediaViewModel.getItemsInCollection(fragName);
             }
@@ -162,16 +169,35 @@ public class MyListFragment extends Fragment {
             RecyclerView recyclerView = requireView().findViewById(R.id.collections_recycler);
             adapter = new MyListAdapter(requireContext(), fragList);
 
-            TextView emptyPrompt = requireView().findViewById(R.id.collections_text_empty_prompt);
-            emptyPrompt.setVisibility((fragList.isEmpty()) ? View.VISIBLE : View.GONE);
+            emptyPrompt = requireView().findViewById(R.id.collections_text_empty_prompt);
+            checkPrompt();
 
             setUpAdapterListeners();
 
-            notify = () -> {
-                fragList = mediaViewModel.reCacheItems();
+            subscribers.add(() -> {
+                if(fragName.equals("All")){
+                    fragList = new ArrayList<>(mediaViewModel.reCacheItems());
+                }else {
+                    fragList = mediaViewModel.getItemsInCollection(fragName);
+                }
+
                 adapter.setItems(fragList);
-                emptyPrompt.setVisibility((adapter.getItemCount() > 0) ? View.GONE : View.VISIBLE);
-            };
+                checkPrompt();
+            });
+
+            mediaViewModel.addSubscriber((update, destructive) -> {
+                int index = fragList.indexOf(update);
+                if(index >= 0){
+                    if(destructive){
+                        fragList.removeIf(m -> m.getId() == update.getId());
+                        adapter.notifyItemRemoved(index);
+                    }else {
+                        fragList.set(index, update);
+                        adapter.notifyItemChanged(index);
+                    }
+                }
+                checkPrompt();
+            });
 
             recyclerView.setAdapter(adapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
@@ -198,7 +224,7 @@ public class MyListFragment extends Fragment {
                 Movie m = adapter.getItem(p);
                 m.setSeen(!m.isSeen());
                 mediaViewModel.updateItem(m);
-                fragList.set(p, m);
+                mediaViewModel.notifyClones(m, false);
             });
 
             adapter.setOnLongClickListener((v, p) -> {
@@ -224,6 +250,7 @@ public class MyListFragment extends Fragment {
                     mediaViewModel.deleteItem(m);
                     fragList.remove(m);
                     adapter.notifyItemRemoved(p);
+                    mediaViewModel.notifyClones(m, true);
 
                     dialog.dismiss();
                 });

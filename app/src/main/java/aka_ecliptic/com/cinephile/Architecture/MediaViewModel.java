@@ -5,6 +5,7 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import aka_ecliptic.com.cinephile.Fragment.ExploreFragment;
@@ -15,6 +16,7 @@ import static aka_ecliptic.com.cinephile.Architecture.Repository.Sort;
 public class MediaViewModel extends AndroidViewModel {
 
     private Repository mediaRepository;
+    private List<OnNotifyClones> subscribers = new ArrayList<>();
 
     public MediaViewModel(@NonNull Application application) {
         super(application);
@@ -26,25 +28,29 @@ public class MediaViewModel extends AndroidViewModel {
     }
 
     public void cycleSort(){
-        this.mediaRepository.cycleSort();
+        mediaRepository.cycleSort();
     }
 
     public Sort cycleSort(Sort sort){
-        return this.mediaRepository.cycleSort(sort);
+        return mediaRepository.cycleSort(sort);
     }
 
     public String getCurrentSortString(){
-        return this.mediaRepository.getSortString();
+        return mediaRepository.getSortString();
     }
 
     public Sort getCurrentSort(){
-        return this.mediaRepository.getSortType();
+        return mediaRepository.getSortType();
     }
 
-    public List<Movie> sortList(List<Movie> toSort, Sort sortBy) { return this.mediaRepository.sortList(toSort, sortBy); }
+    public List<Movie> sortList(List<Movie> toSort, Sort sortBy) { return mediaRepository.sortList(toSort, sortBy); }
 
     public boolean isMoviePresent(int id){
         return mediaRepository.isMoviePresent(id);
+    }
+
+    public boolean isFavourited(int id){
+        return mediaRepository.isFavourited(id);
     }
 
     public Movie getItem(int id){
@@ -54,6 +60,8 @@ public class MediaViewModel extends AndroidViewModel {
     public List<Movie> getItems() { return mediaRepository.getItems(); }
 
     public List<Movie> getItemsLike(String query) { return mediaRepository.getItemsLike(query); }
+
+    public List<Integer> getItemsLike(List<String> titles) { return mediaRepository.getItemsLike(titles); }
 
     public List<String> getCollectionHeadings() { return mediaRepository.getCollectionHeadings(); }
 
@@ -80,4 +88,22 @@ public class MediaViewModel extends AndroidViewModel {
     public int deleteItem(Movie movie) { return mediaRepository.removeItem(movie); }
 
     public void addItem(Movie movie) { mediaRepository.addItem(movie); }
+
+    public void toggleFavourite(int id, boolean favourite) {
+        mediaRepository.toggleFavourites(id, favourite);
+    }
+
+    public void addSubscriber(OnNotifyClones subscriber){
+        subscribers.add(subscriber);
+    }
+
+    public void notifyClones(Movie update, boolean destructive){
+        for (OnNotifyClones subscriber : subscribers) {
+            subscriber.notifyClone(update, destructive);
+        }
+    }
+
+    public interface OnNotifyClones {
+        void notifyClone(Movie pos, boolean des);
+    }
 }

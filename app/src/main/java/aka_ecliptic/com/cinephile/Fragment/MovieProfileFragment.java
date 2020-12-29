@@ -56,6 +56,7 @@ public class MovieProfileFragment extends Fragment {
     private String configBackdrop;
     private Movie selected = null;
     private boolean isSelectedSaved;
+    private boolean isSelectedFavourited;
     private MediaViewModel mediaViewModel;
 
     private BottomNavigationView bottomNavigationView;
@@ -77,8 +78,7 @@ public class MovieProfileFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         setUpViewModelLink();
         attachAnimator();
@@ -98,9 +98,10 @@ public class MovieProfileFragment extends Fragment {
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
         menu.findItem(R.id.toolbar_search).setVisible(false);
         menu.findItem(R.id.toolbar_add).setVisible(!isSelectedSaved);
-        menu.findItem(R.id.toolbar_favourite).setVisible(isSelectedSaved);
+        MenuItem favouriteButton = menu.findItem(R.id.toolbar_favourite);
 
-        setFavouriteIcon(menu.findItem(R.id.toolbar_favourite), false);
+        favouriteButton.setVisible(isSelectedSaved);
+        setFavouriteIcon(favouriteButton, isSelectedFavourited);
 
         this.menu = menu;
         super.onPrepareOptionsMenu(menu);
@@ -110,8 +111,9 @@ public class MovieProfileFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.toolbar_favourite:
-                // TODO: 04/10/2020 FINISH IMPLEMENTATION AFTER ADDING FAVOURITE FEATURE.
-//                setFavouriteIcon(item, !item.isChecked());
+                isSelectedFavourited = !isSelectedFavourited;
+                favouriteMovie(selected, isSelectedFavourited);
+                setFavouriteIcon(item, isSelectedFavourited);
                 break;
             case R.id.toolbar_add:
                 isSelectedSaved = true;
@@ -136,11 +138,34 @@ public class MovieProfileFragment extends Fragment {
         seenCheck.setClickable(isSelectedSaved);
         addViewListeners();
 
-        Snackbar snackbar = Snackbar.make(requireActivity().findViewById(R.id.main_coordinator),
+        Snackbar snackbar = Snackbar.make(assignCoordinator(),
                 "This movie has been added to your list",
                 Snackbar.LENGTH_SHORT);
         snackbar.getView().setBackgroundColor(requireActivity().getColor(R.color.colorSecondaryDark));
         snackbar.show();
+    }
+
+    private void favouriteMovie(Movie movie, boolean favourited) {
+        mediaViewModel.toggleFavourite(movie.getId(), favourited);
+
+        String message = (favourited) ?
+                "You have favourited this movie." : "You have un-favourited this movie.";
+
+        Snackbar snackbar = Snackbar.make(assignCoordinator(),
+                message,
+                Snackbar.LENGTH_SHORT);
+        snackbar.getView().setBackgroundColor(requireActivity().getColor(R.color.colorSecondaryDark));
+        snackbar.show();
+    }
+
+    private View assignCoordinator(){
+        String origin = requireActivity().getLocalClassName();
+
+        if(origin.equals(SearchActivity.class.getSimpleName())) {
+            return requireActivity().findViewById(R.id.search_coordinator);
+        }else{
+            return requireActivity().findViewById(R.id.main_coordinator);
+        }
     }
 
     private void initViews(View view) {
@@ -258,6 +283,7 @@ public class MovieProfileFragment extends Fragment {
         if(getArguments() != null) {
             selected = (Movie) getArguments().getSerializable(SELECTED_MOVIE);
             isSelectedSaved = getArguments().getBoolean(SELECTED_SAVED);
+            isSelectedFavourited = mediaViewModel.isFavourited(selected.getId());
         }
     }
 

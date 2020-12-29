@@ -80,6 +80,9 @@ public class MySQLiteHelper {
     public static final String DEFAULT_INSERT_COLLECTIONS = "INSERT INTO 'collections' ('ID', 'Name', 'Type') " +
             "VALUES (0, 'All', 0), (1, 'Favourites', 0), (2, 'Movies', 1), (3, 'Shows', 2), (4, 'Anime', 3)";
 
+    public static final String[] DEFAULT_COLLECTIONS = { "All", "Favourites", "Movies",
+            "Shows", "Anime" };
+
     public static final String SELECT_ALL_MOVIE_DATA = "SELECT m.*, s.Description, s.SiteRating, s.Runtime, i.PosterPath, i.BackdropPath " +
             "FROM 'movies' m " +
             "LEFT JOIN 'movie_statistics' s " +
@@ -95,6 +98,24 @@ public class MySQLiteHelper {
             "ON m.ID = i.MovieID " +
             "WHERE m.Title LIKE ?";
 
+    public static String SELECT_IDS_WITH_TITLES_IN (int size) {
+        StringBuilder query = new StringBuilder("SELECT m.ID " +
+                "FROM 'movies' m " +
+                "WHERE m.Title IN ( ?");
+
+        if(size <= 1){
+            query.append(" )");
+            return query.toString();
+        }
+
+        for (int i = 2; i <= size; i++) {
+            query.append(", ?");
+        }
+
+        query.append(" )");
+        return query.toString();
+    }
+
     public static final String SELECT_MOVIE_BY_ID = "SELECT m.*, s.Description, s.SiteRating, s.Runtime, i.PosterPath, i.BackdropPath " +
             "FROM 'movies' m " +
             "LEFT JOIN 'movie_statistics' s " +
@@ -106,6 +127,12 @@ public class MySQLiteHelper {
     public static final String SELECT_MOVIE_ID = "SELECT m.ID " +
             "FROM 'movies' m " +
             "WHERE m.ID = ?";
+
+    public static final String SELECT_MOVIE_ID_FAVOURITES = "SELECT m.ID " +
+            "FROM 'movies' m " +
+            "INNER JOIN 'collections_movies' cm " +
+            "ON m.ID = cm.MovieID " +
+            "WHERE m.ID = ? AND cm.CollectionID = 1";
 
     public static final String SELECT_MOVIE_FROM_LIST = "SELECT m.*, s.Description, s.SiteRating, s.Runtime, i.PosterPath, i.BackdropPath " +
             "FROM 'movies' m " +
@@ -138,8 +165,13 @@ public class MySQLiteHelper {
                 " ?" +
             ")";
 
-    public static final String DELETE_COLLECTION_LINK = "DELETE FROM 'collections_movies' cm " +
-            "WHERE cm.CollectionID = (" +
+    public static final String DELETE_COLLECTION_LINK = "DELETE FROM 'collections_movies' " +
+            "WHERE CollectionID = (" +
                 "SELECT c.ID FROM 'collections' c WHERE c.Name = ?" +
             ")";
+
+    public static final String DELETE_FROM_COLLECTION = "DELETE FROM 'collections_movies' " +
+            "WHERE CollectionID = (" +
+                "SELECT c.ID FROM 'collections' c WHERE c.Name = ?" +
+            ") AND MovieID = ?";
 }

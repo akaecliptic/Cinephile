@@ -21,6 +21,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -124,10 +125,11 @@ public class SearchActivity extends AppCompatActivity {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             queryString = (search == null) ? intent.getStringExtra(SearchManager.QUERY) : search;
             mediaViewModel.requestMoviesLike(queryString, 1, movies -> {
-                List<Movie> movieList = new ArrayList<>(mediaViewModel.getItemsLike(queryString));
                 List<Movie> online = Arrays.asList(movies);
+                List<String> movieTitles = online.stream().map(Media::getTitle).collect(Collectors.toList());
+                List<Movie> movieList = new ArrayList<>(mediaViewModel.getItemsLike(queryString));
+                Set<Integer> savedSet = new HashSet<>(mediaViewModel.getItemsLike(movieTitles));
 
-                Set<Integer> savedSet = movieList.stream().map(Media::getId).collect(Collectors.toSet());
                 movieList.addAll(online.stream().filter( m -> !movieList.contains(m)).collect(Collectors.toList()));
 
                 searchRequestListener.onItemsRequested(movieList, savedSet);
