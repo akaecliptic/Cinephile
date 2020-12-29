@@ -16,15 +16,23 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import aka_ecliptic.com.cinephile.Adapter.MyListAdapter;
 import aka_ecliptic.com.cinephile.Architecture.MediaViewModel;
 import aka_ecliptic.com.cinephile.MainActivity;
 import aka_ecliptic.com.cinephile.Model.Movie;
 import aka_ecliptic.com.cinephile.R;
+
+import static aka_ecliptic.com.cinephile.Architecture.Repository.Sort;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,7 +41,7 @@ public class MyListFragment extends Fragment {
 
     private static NotifyMyList notify;
 
-    private MediaViewModel mediaViewModel;
+    private List<String> collectionHeadings;
 
     static final String SELECTED_MOVIE = "SELECTED_MOVIE";
     static final String SELECTED_SAVED = "SELECTED_SAVED";
@@ -46,7 +54,7 @@ public class MyListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        setUpViewModelLink();
+        getHeadingsFromViewModel();
         setHasOptionsMenu(true);
         return inflater.inflate(R.layout.fragment_mylist, container, false);
     }
@@ -54,92 +62,177 @@ public class MyListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setUpRecycler();
+
+        MyListCollectionAdapter myListCollectionAdapter = new MyListCollectionAdapter(this);
+        ViewPager2 viewPager = view.findViewById(R.id.mylist_pager);
+        viewPager.setAdapter(myListCollectionAdapter);
+
+        TabLayout tabLayout = view.findViewById(R.id.mylist_tab_layout);
+        new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
+            tab.setText(collectionHeadings.get(position));
+        }).attach();
     }
 
-    private void setUpViewModelLink() {
-        mediaViewModel = new ViewModelProvider(requireActivity()).get(MediaViewModel.class);
-    }
-
-    private void setUpRecycler() {
-        RecyclerView recyclerView = requireActivity().findViewById(R.id.mylist_recycler);
-        MyListAdapter adapter = new MyListAdapter(requireContext(), mediaViewModel.getItems());
-
-        TextView emptyPrompt = requireView().findViewById(R.id.mylist_text_empty_list);
-        emptyPrompt.setVisibility((mediaViewModel.getItems().isEmpty()) ? View.VISIBLE : View.GONE);
-
-        adapter.setClickListener((v, p) -> {
-            Bundle bundle = new Bundle();
-
-            bundle.putSerializable(SELECTED_MOVIE, adapter.getItem(p));
-            bundle.putBoolean(SELECTED_SAVED, true);
-
-            Navigation.findNavController(requireView())
-                    .navigate(R.id.action_mylist_fragment_to_movie_profile_fragment, bundle);
-
-            Snackbar snackbar = Snackbar.make(requireActivity().findViewById(R.id.main_coordinator),
-                    "Opening '" + adapter.getItem(p).getTitle() + "'",
-                    Snackbar.LENGTH_SHORT);
-            snackbar.getView().setBackgroundColor(requireActivity().getColor(R.color.colorSecondaryDark));
-            snackbar.show();
-        });
-
-        adapter.setCheckBoxListener((v, p) -> {
-            Movie m = adapter.getItem(p);
-            m.setSeen(!m.isSeen());
-            mediaViewModel.updateItem(m);
-        });
-
-        adapter.setOnLongClickListener((v, p) -> {
-            Movie m = adapter.getItem(p);
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            LayoutInflater inflater = requireActivity().getLayoutInflater();
-            builder.setView(inflater.inflate(R.layout.dialog_delete, null));
-
-            AlertDialog dialog = builder.create();
-            dialog.show();
-
-            TextView title = dialog.findViewById(R.id.delete_dialog_text_title);
-            TextView movieTitle = dialog.findViewById(R.id.delete_dialog_text_movie_title);
-
-            title.setText(R.string.dialog_title_delete);
-            movieTitle.setText(m.getTitle());
-
-            Button confirm = dialog.findViewById(R.id.delete_dialog_button_confirm);
-            Button cancel = dialog.findViewById(R.id.delete_dialog_button_cancel);
-
-            confirm.setOnClickListener(view -> {
-                mediaViewModel.deleteItem(m);
-                adapter.notifyItemRemoved(p);
-
-                dialog.dismiss();
-            });
-
-            cancel.setOnClickListener(view -> dialog.cancel());
-
-            return true;
-        });
-
-        MainActivity.setSortClickListener(() -> {
-            mediaViewModel.cycleSort();
-
-            Toast.makeText(requireActivity(), mediaViewModel.getCurrentSort(), Toast.LENGTH_SHORT).show();
-
-            adapter.setItems(mediaViewModel.getItems());
-        });
-
-        notify = () -> {
-            adapter.setItems(mediaViewModel.reCacheItems());
-            emptyPrompt.setVisibility((adapter.getItemCount() > 0) ? View.GONE : View.VISIBLE);
-        };
-
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+    private void getHeadingsFromViewModel() {
+        collectionHeadings = new ViewModelProvider(requireActivity()).get(MediaViewModel.class).getCollectionHeadings();
     }
 
     public static void updateCacheMyList(){
         notify.onNotify();
+    }
+
+    public class MyListCollectionAdapter extends FragmentStateAdapter {
+        MyListCollectionAdapter(Fragment fragment) {
+            super(fragment);
+        }
+
+        @NonNull
+        @Override
+        public Fragment createFragment(int position) {
+            Fragment fragment = new CollectionsFragment();
+            Bundle b = new Bundle();
+
+            b.putString(CollectionsFragment.INSTANCE_NAME, collectionHeadings.get(position));
+            fragment.setArguments(b);
+            return fragment;
+        }
+
+        @Override
+        public int getItemCount() {
+            return collectionHeadings.size();
+        }
+    }
+
+    public static class CollectionsFragment extends Fragment {
+        static final String INSTANCE_NAME = "INSTANCE";
+
+        private String fragName;
+        private MediaViewModel mediaViewModel;
+        private List<Movie> fragList;
+        private MyListAdapter adapter;
+        private Sort currentSort = Sort.DEFAULT;
+
+        @Nullable
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            setUpViewModelLink();
+            assignInstanceName();
+            return inflater.inflate(R.layout.fragment_collections, container, false);
+        }
+
+
+        @Override
+        public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+            setUpRecycler();
+        }
+
+        @Override
+        public void onResume() {
+            MainActivity.setSortClickListener(() -> {
+                currentSort = mediaViewModel.cycleSort(currentSort);
+                fragList = mediaViewModel.sortList(fragList, currentSort);
+
+                Toast.makeText(requireActivity(), currentSort.getSortType(), Toast.LENGTH_SHORT).show();
+
+                adapter.setItems(fragList);
+            });
+
+            super.onResume();
+        }
+
+        private void setUpViewModelLink() {
+            mediaViewModel = new ViewModelProvider(requireActivity()).get(MediaViewModel.class);
+        }
+
+        private void assignInstanceName() {
+            if (getArguments() != null) {
+                fragName = getArguments().getString(INSTANCE_NAME);
+            }else {
+                fragName = "";
+            }
+        }
+
+        private void setUpRecycler() {
+            if(fragName.equals("All")){
+                fragList = new ArrayList<>(mediaViewModel.getItems());
+            }else {
+                fragList = mediaViewModel.getItemsInCollection(fragName);
+            }
+
+            RecyclerView recyclerView = requireView().findViewById(R.id.collections_recycler);
+            adapter = new MyListAdapter(requireContext(), fragList);
+
+            TextView emptyPrompt = requireView().findViewById(R.id.collections_text_empty_prompt);
+            emptyPrompt.setVisibility((fragList.isEmpty()) ? View.VISIBLE : View.GONE);
+
+            setUpAdapterListeners();
+
+            notify = () -> {
+                fragList = mediaViewModel.reCacheItems();
+                adapter.setItems(fragList);
+                emptyPrompt.setVisibility((adapter.getItemCount() > 0) ? View.GONE : View.VISIBLE);
+            };
+
+            recyclerView.setAdapter(adapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        }
+
+        private void setUpAdapterListeners() {
+            adapter.setClickListener((v, p) -> {
+                Bundle bundle = new Bundle();
+
+                bundle.putSerializable(SELECTED_MOVIE, adapter.getItem(p));
+                bundle.putBoolean(SELECTED_SAVED, true);
+
+                Navigation.findNavController(requireView())
+                        .navigate(R.id.action_mylist_fragment_to_movie_profile_fragment, bundle);
+
+                Snackbar snackbar = Snackbar.make(requireActivity().findViewById(R.id.main_coordinator),
+                        "Opening '" + adapter.getItem(p).getTitle() + "'",
+                        Snackbar.LENGTH_SHORT);
+                snackbar.getView().setBackgroundColor(requireActivity().getColor(R.color.colorSecondaryDark));
+                snackbar.show();
+            });
+
+            adapter.setCheckBoxListener((v, p) -> {
+                Movie m = adapter.getItem(p);
+                m.setSeen(!m.isSeen());
+                mediaViewModel.updateItem(m);
+                fragList.set(p, m);
+            });
+
+            adapter.setOnLongClickListener((v, p) -> {
+                Movie m = adapter.getItem(p);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                LayoutInflater inflater = requireActivity().getLayoutInflater();
+                builder.setView(inflater.inflate(R.layout.dialog_delete, null));
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+                TextView title = dialog.findViewById(R.id.delete_dialog_text_title);
+                TextView movieTitle = dialog.findViewById(R.id.delete_dialog_text_movie_title);
+
+                title.setText(R.string.dialog_title_delete);
+                movieTitle.setText(m.getTitle());
+
+                Button confirm = dialog.findViewById(R.id.delete_dialog_button_confirm);
+                Button cancel = dialog.findViewById(R.id.delete_dialog_button_cancel);
+
+                confirm.setOnClickListener(view -> {
+                    mediaViewModel.deleteItem(m);
+                    fragList.remove(m);
+                    adapter.notifyItemRemoved(p);
+
+                    dialog.dismiss();
+                });
+
+                cancel.setOnClickListener(view -> dialog.cancel());
+
+                return true;
+            });
+        }
     }
 
     public interface NotifyMyList{

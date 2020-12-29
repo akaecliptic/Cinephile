@@ -3,6 +3,8 @@ package aka_ecliptic.com.cinephile.Architecture;
 import android.content.Context;
 import android.util.Log;
 
+import androidx.annotation.Nullable;
+
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -10,6 +12,7 @@ import org.json.JSONObject;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 import aka_ecliptic.com.cinephile.Fragment.ExploreFragment;
 import aka_ecliptic.com.cinephile.Helper.MediaJSONHelper;
@@ -23,6 +26,7 @@ public class Repository{
     private MovieApiDAO movieDAO;
     private List<Movie> mediaList;
     private Movie[][] onlineList = new Movie[4][9];
+    private List<String> collectionHeadings;
     private Sort sortType = Sort.DEFAULT;
 
     Repository(Context context){
@@ -31,6 +35,7 @@ public class Repository{
         if(onlineList[0][0] == null)
             cacheExploreList();
         this.mediaList = sqLiteDAO.getAllMovies();
+        this.collectionHeadings = sqLiteDAO.getCollectionHeadings();
     }
 
     public void setItems(List<Movie> list, Sort sort){
@@ -62,6 +67,14 @@ public class Repository{
 
     List<Movie> getItemsLike(String query) {
         return sqLiteDAO.getMoviesLike(query);
+    }
+
+    List<String> getCollectionHeadings() {
+        return this.collectionHeadings;
+    }
+
+    List<Movie> getItemsInCollection(String name) {
+        return this.sqLiteDAO.getMoviesFromCollection(name);
     }
 
     Movie[][] getOnlineList(){
@@ -184,51 +197,86 @@ public class Repository{
 
     void cycleSort(){
         this.sortType = Sort.valueOf(this.sortType.getSortIndex() + 1);
-        sortBySortType(this.sortType);
+        sortBySortType(this.sortType, null);
     }
 
-    String getSortType(){
+    Sort cycleSort(Sort sort){
+        return Sort.valueOf(sort.getSortIndex() + 1);
+    }
+
+    List<Movie> sortList(List<Movie> toSort, @Nullable Sort sortBy){
+        sortBy = (sortBy == null) ? this.sortType : sortBy;
+        sortBySortType(sortBy, toSort);
+        toSort.removeIf(Objects::isNull);
+        return toSort;
+    }
+
+    String getSortString(){
         return this.sortType.getSortType();
     }
 
-    private void sortBySortType(Sort sortOrder){
+    Sort getSortType(){
+        return this.sortType;
+    }
+
+    private void sortBySortType(Sort sortOrder, @Nullable List<Movie> toSort){
         switch (sortOrder){
-            case DEFAULT: sortDefault();
+            case DEFAULT: sortDefault(toSort);
                 break;
-            case ALPHABETICALLY: sortAlphabetically();
+            case ALPHABETICALLY: sortAlphabetically(toSort);
                 break;
-            case RATING: sortByRating();
+            case RATING: sortByRating(toSort);
                 break;
-            case YEAR: sortByYear();
+            case YEAR: sortByYear(toSort);
                 break;
-            case SEEN: sortBySeen();
+            case SEEN: sortBySeen(toSort);
                 break;
         }
     }
 
-    private void sortDefault(){
-        this.mediaList.sort(Comparator.comparing(Movie::getId));
-        this.sortType = Sort.DEFAULT;
+    private void sortDefault(@Nullable List<Movie> toSort){
+        if(toSort == null){
+            this.mediaList.sort(Comparator.comparing(Movie::getId));
+            this.sortType = Sort.DEFAULT;
+        }else {
+            toSort.sort(Comparator.comparing(Movie::getId));
+        }
     }
 
-    private void sortAlphabetically(){
-        this.mediaList.sort(Comparator.comparing(Movie::getTitle));
-        this.sortType = Sort.ALPHABETICALLY;
+    private void sortAlphabetically(@Nullable List<Movie> toSort){
+        if(toSort == null) {
+            this.mediaList.sort(Comparator.comparing(Movie::getTitle));
+            this.sortType = Sort.ALPHABETICALLY;
+        }else {
+            toSort.sort(Comparator.comparing(Movie::getTitle));
+        }
     }
 
-    private void sortByRating(){
-        this.mediaList.sort(Comparator.comparing(Movie::getRating).reversed());
-        this.sortType = Sort.RATING;
+    private void sortByRating(@Nullable List<Movie> toSort){
+        if(toSort == null) {
+            this.mediaList.sort(Comparator.comparing(Movie::getRating).reversed());
+            this.sortType = Sort.RATING;
+        } else {
+            toSort.sort(Comparator.comparing(Movie::getRating).reversed());
+        }
     }
 
-    private void sortByYear(){
-        this.mediaList.sort(Comparator.comparing(Movie::getReleaseDate).reversed());
-        this.sortType = Sort.YEAR;
+    private void sortByYear(@Nullable List<Movie> toSort){
+        if(toSort == null) {
+            this.mediaList.sort(Comparator.comparing(Movie::getReleaseDate).reversed());
+            this.sortType = Sort.YEAR;
+        }else {
+            toSort.sort(Comparator.comparing(Movie::getReleaseDate).reversed());
+        }
     }
 
-    private void sortBySeen(){
-        this.mediaList.sort(Comparator.comparing(Movie::isSeen).reversed());
-        this.sortType = Sort.SEEN;
+    private void sortBySeen(@Nullable List<Movie> toSort){
+        if(toSort == null) {
+            this.mediaList.sort(Comparator.comparing(Movie::isSeen).reversed());
+            this.sortType = Sort.SEEN;
+        }else {
+            toSort.sort(Comparator.comparing(Movie::isSeen).reversed());
+        }
     }
 
     public enum Sort{

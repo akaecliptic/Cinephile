@@ -26,5 +26,5 @@
     <string name="dialog_title_rating">Set Movie Rating</string>
     <string name="search_hint">Movie Title</string>
     <string name="dialog_title_delete">Would you like to delete:</string>
-    <string name="empty_mylist">"Looks like you have no movies in your list. \n Try checking out the Explore page."</string>
+    <string name="empty_collections">"Looks like you have no movies in your list. \n Try checking out the Explore page."</string>
 </resources>

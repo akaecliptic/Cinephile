@@ -10,6 +10,8 @@ import java.util.List;
 import aka_ecliptic.com.cinephile.Fragment.ExploreFragment;
 import aka_ecliptic.com.cinephile.Model.Movie;
 
+import static aka_ecliptic.com.cinephile.Architecture.Repository.Sort;
+
 public class MediaViewModel extends AndroidViewModel {
 
     private Repository mediaRepository;
@@ -27,9 +29,19 @@ public class MediaViewModel extends AndroidViewModel {
         this.mediaRepository.cycleSort();
     }
 
-    public String getCurrentSort(){
+    public Sort cycleSort(Sort sort){
+        return this.mediaRepository.cycleSort(sort);
+    }
+
+    public String getCurrentSortString(){
+        return this.mediaRepository.getSortString();
+    }
+
+    public Sort getCurrentSort(){
         return this.mediaRepository.getSortType();
     }
+
+    public List<Movie> sortList(List<Movie> toSort, Sort sortBy) { return this.mediaRepository.sortList(toSort, sortBy); }
 
     public boolean isMoviePresent(int id){
         return mediaRepository.isMoviePresent(id);
@@ -42,6 +54,10 @@ public class MediaViewModel extends AndroidViewModel {
     public List<Movie> getItems() { return mediaRepository.getItems(); }
 
     public List<Movie> getItemsLike(String query) { return mediaRepository.getItemsLike(query); }
+
+    public List<String> getCollectionHeadings() { return mediaRepository.getCollectionHeadings(); }
+
+    public List<Movie> getItemsInCollection(String name) { return mediaRepository.getItemsInCollection(name); }
 
     public Movie[][] requestMovies() {
         return mediaRepository.getOnlineList();

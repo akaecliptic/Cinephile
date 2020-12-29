@@ -11,4 +11,5 @@
     <color name="colorSecondaryDark">#111111</color>
     <color name="colorTertiaryDark">#333333</color>
     <color name="colorTextPrimary">#EEEEEE</color>
+    <color name="colorTextSecondary">#777777</color>
 </resources>

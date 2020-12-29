@@ -223,6 +223,28 @@ class SQLiteDAO extends SQLiteOpenHelper {
         return names;
     }
 
+    List<String> getCollectionHeadings(){
+        SQLiteDatabase db = getWritableDatabase();
+
+        Cursor c = db.rawQuery(MySQLiteHelper.SELECT_COLLECTION_HEADINGS, null);
+        ArrayList<String> names = new ArrayList<>();
+
+        c.moveToFirst();
+        while (!c.isAfterLast()){
+            names.add(c.getString(0));
+            c.moveToNext();
+        }
+
+        c.close();
+        db.close();
+
+        //TODO: Change/Remove limit as other media types are implemented.
+        int limit = 2;
+        names.removeIf(s -> names.indexOf(s) >= limit);
+
+        return names;
+    }
+
     Movie getMovie(int id){
         SQLiteDatabase db = getWritableDatabase();
 

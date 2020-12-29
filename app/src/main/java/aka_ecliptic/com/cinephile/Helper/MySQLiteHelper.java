@@ -78,7 +78,7 @@ public class MySQLiteHelper {
             CREATE_TABLE_COLLECTIONS, CREATE_TABLE_COLLECTIONS_MOVIES };
 
     public static final String DEFAULT_INSERT_COLLECTIONS = "INSERT INTO 'collections' ('ID', 'Name', 'Type') " +
-            "VALUES (1, 'Favourites', 0), (2, 'Movies', 1), (3, 'Shows', 2), (4, 'Anime', 3)";
+            "VALUES (0, 'All', 0), (1, 'Favourites', 0), (2, 'Movies', 1), (3, 'Shows', 2), (4, 'Anime', 3)";
 
     public static final String SELECT_ALL_MOVIE_DATA = "SELECT m.*, s.Description, s.SiteRating, s.Runtime, i.PosterPath, i.BackdropPath " +
             "FROM 'movies' m " +
@@ -116,7 +116,7 @@ public class MySQLiteHelper {
             "WHERE m.ID IN ( " +
                 "SELECT cm.MovieID FROM 'collections_movies' cm " +
                 "LEFT JOIN 'collections' c " +
-                "ON c.ID = cm.CollectionID" +
+                "ON c.ID = cm.CollectionID " +
                 "WHERE c.Name = ?" +
             ")";
 
@@ -125,10 +125,12 @@ public class MySQLiteHelper {
             "LEFT  JOIN 'collections_movies' cm " +
             "ON m.ID = cm.MovieID" +
             "LEFT JOIN 'collections' c " +
-            "ON c.ID = cm.CollectionID" +
+            "ON c.ID = cm.CollectionID " +
             "WHERE c.Name = ?";
 
-    public static final String SELECT_COLLECTION_NAMES = "SELECT c.Name FROM 'collections' c";
+    public static final String SELECT_COLLECTION_HEADINGS = "SELECT c.Name FROM 'collections' c WHERE c.ID < 5";
+
+    public static final String SELECT_COLLECTION_NAMES = "SELECT c.Name FROM 'collections' c WHERE c.ID > 4";
 
     public static final String INSERT_COLLECTION_MOVIE = "INSERT INTO 'collections_movies' VALUES " +
             "(" +
