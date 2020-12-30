@@ -27,4 +27,11 @@
     <string name="search_hint">Movie Title</string>
     <string name="dialog_title_delete">Would you like to delete:</string>
     <string name="empty_collections">"Looks like you have no movies in your list. \n Try checking out the Explore page."</string>
+    <string name="add_to_collection">Add to collection</string>
+    <string name="option_done">Done</string>
+    <string name="dialog_title_add_collection">Add or remove movie from your collections</string>
+    <string name="added_to_collection">Added to collection</string>
+    <string name="option_new">new</string>
+    <string name="new_collection_dialog_title">Name of collection</string>
+    <string name="placeholder_collection_title">collection title</string>
 </resources>

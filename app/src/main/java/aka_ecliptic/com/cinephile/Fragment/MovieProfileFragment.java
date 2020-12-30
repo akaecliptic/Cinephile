@@ -12,7 +12,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -24,13 +26,15 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.squareup.picasso.Picasso;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import aka_ecliptic.com.cinephile.Adapter.CollectionsArrayAdapter;
 import aka_ecliptic.com.cinephile.Architecture.MediaViewModel;
 import aka_ecliptic.com.cinephile.Architecture.MovieApiDAO;
 import aka_ecliptic.com.cinephile.Helper.MediaObjectHelper;
@@ -58,6 +62,7 @@ public class MovieProfileFragment extends Fragment {
     private boolean isSelectedSaved;
     private boolean isSelectedFavourited;
     private MediaViewModel mediaViewModel;
+    private OnFavourite onFavourite;
 
     private BottomNavigationView bottomNavigationView;
 
@@ -68,7 +73,7 @@ public class MovieProfileFragment extends Fragment {
     private ProgressBar ratingProgress;
     private TextView ratingText;
     private CheckBox seenCheck;
-    private FloatingActionButton moreButton;
+    private ImageView addCollection;
     private TextView genreText1;
     private TextView genreText2;
     private TextView genreText3;
@@ -102,6 +107,8 @@ public class MovieProfileFragment extends Fragment {
 
         favouriteButton.setVisible(isSelectedSaved);
         setFavouriteIcon(favouriteButton, isSelectedFavourited);
+
+        onFavourite = (set) -> setFavouriteIcon(favouriteButton, set);
 
         this.menu = menu;
         super.onPrepareOptionsMenu(menu);
@@ -178,7 +185,7 @@ public class MovieProfileFragment extends Fragment {
         ratingProgress = view.findViewById(R.id.movie_profile_progress_rating);
         ratingText = view.findViewById(R.id.movie_profile_text_rating);
         seenCheck = view.findViewById(R.id.movie_profile_check_seen);
-        moreButton = view.findViewById(R.id.movie_profile_button_more);
+        addCollection = view.findViewById(R.id.movie_profile_selection_more);
 
         genreText1 = view.findViewById(R.id.movie_profile_text_genre_1);
         genreText2 = view.findViewById(R.id.movie_profile_text_genre_2);
@@ -222,42 +229,9 @@ public class MovieProfileFragment extends Fragment {
             mediaViewModel.updateItem(selected);
         });
 
+        ratingProgress.setOnLongClickListener(this::createRatingDialog);
 
-        ratingProgress.setOnLongClickListener(view -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            LayoutInflater inflater = requireActivity().getLayoutInflater();
-            builder.setView(inflater.inflate(R.layout.dialog_rating, null));
-
-            AlertDialog dialog = builder.create();
-            dialog.show();
-
-            TextView title = dialog.findViewById(R.id.rating_dialog_text_title);
-            title.setText(R.string.dialog_title_rating);
-
-            Spinner spinner = dialog.findViewById(R.id.rating_dialog_spinner_rating);
-            spinner.setAdapter(new ArrayAdapter<>(requireContext(),
-                    R.layout.underline_spinner_item,
-                    IntStream.rangeClosed(0, 10).boxed().collect(Collectors.toList())));
-            spinner.setSelection(selected.getRating());
-
-            Button confirm = dialog.findViewById(R.id.rating_dialog_button_confirm);
-            Button cancel = dialog.findViewById(R.id.rating_dialog_button_cancel);
-
-            confirm.setOnClickListener(v -> {
-                selected.setRating((int)spinner.getSelectedItem());
-                mediaViewModel.updateItem(selected);
-
-                ratingProgress.setProgress(selected.getRating() * 10);
-                String rating = selected.getRating() + "/10";
-                ratingText.setText(rating);
-
-                dialog.dismiss();
-            });
-
-            cancel.setOnClickListener(v -> dialog.cancel());
-
-            return true;
-        });
+        addCollection.setOnClickListener(this::createCollectionDialog);
     }
 
     private void setUpViewModelLink() {
@@ -287,6 +261,97 @@ public class MovieProfileFragment extends Fragment {
         }
     }
 
+    private boolean createRatingDialog(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
+        builder.setView(inflater.inflate(R.layout.dialog_rating, (ViewGroup) requireView(), false));
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        TextView title = dialog.findViewById(R.id.rating_dialog_text_title);
+        title.setText(R.string.dialog_title_rating);
+
+        Spinner spinner = dialog.findViewById(R.id.rating_dialog_spinner_rating);
+        spinner.setAdapter(new ArrayAdapter<>(requireContext(),
+                R.layout.underline_spinner_item,
+                IntStream.rangeClosed(0, 10).boxed().collect(Collectors.toList())));
+        spinner.setSelection(selected.getRating());
+
+        Button confirm = dialog.findViewById(R.id.rating_dialog_button_confirm);
+        Button cancel = dialog.findViewById(R.id.rating_dialog_button_cancel);
+
+        confirm.setOnClickListener(v -> {
+            selected.setRating((int) spinner.getSelectedItem());
+            mediaViewModel.updateItem(selected);
+
+            ratingProgress.setProgress(selected.getRating() * 10);
+            String rating = selected.getRating() + "/10";
+            ratingText.setText(rating);
+
+            dialog.dismiss();
+        });
+
+        cancel.setOnClickListener(v -> dialog.cancel());
+
+        return true;
+    }
+
+    private void createCollectionDialog(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
+        builder.setView(inflater.inflate(R.layout.dialog_add_collection, (ViewGroup) requireView(), false));
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        TextView title = dialog.findViewById(R.id.add_collection_dialog_text_title);
+        title.setText(R.string.dialog_title_add_collection);
+
+        ListView list = dialog.findViewById(R.id.add_collection_dialog_list_collections);
+        List<String> collections = mediaViewModel.getCollectionNames();
+        Collections.reverse(collections);
+        CollectionsArrayAdapter<String> listAdapter = new CollectionsArrayAdapter<>(requireContext(),
+                R.layout.list_item_collection,
+                R.id.list_collection_text_title,
+                collections,
+                mediaViewModel.getCollectionsIn(selected));
+
+        listAdapter.setOnCollectionSelected((pos, set) -> {
+            mediaViewModel.toggleCollection(collections.get(pos), selected.getId(), set);
+            if(collections.get(pos).equals("Favourites"))
+                onFavourite.toggle(set);
+        });
+        list.setAdapter(listAdapter);
+
+        Button create = dialog.findViewById(R.id.add_collection_dialog_button_new);
+        Button done = dialog.findViewById(R.id.add_collection_dialog_button_done);
+
+        done.setOnClickListener(v -> dialog.dismiss());
+        create.setOnClickListener(v -> {
+            builder.setView(inflater.inflate(R.layout.dialog_new_collection, (ViewGroup) requireView(), false));
+
+            AlertDialog newCollection = builder.create();
+            newCollection.show();
+
+            Button confirm = newCollection.findViewById(R.id.new_collection_dialog_button_confirm);
+            Button cancel = newCollection.findViewById(R.id.new_collection_dialog_button_cancel);
+
+            confirm.setOnClickListener(vw -> {
+                EditText collection = newCollection.findViewById(R.id.new_collection_dialog_text_collection_title);
+                mediaViewModel.addCollection(collection.getText().toString());
+                listAdapter.add(collection.getText().toString());
+                listAdapter.notifyDataSetChanged();
+                newCollection.dismiss();
+            });
+
+            cancel.setOnClickListener(vw -> newCollection.cancel());
+        });
+    }
+
+    interface OnFavourite {
+        void toggle(boolean set);
+    }
 
     private void animateBottomNav(int direction) {
         bottomNavigationView.animate()

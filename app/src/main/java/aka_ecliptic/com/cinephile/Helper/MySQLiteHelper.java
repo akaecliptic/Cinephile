@@ -155,9 +155,16 @@ public class MySQLiteHelper {
             "ON c.ID = cm.CollectionID " +
             "WHERE c.Name = ?";
 
+    public static final String SELECT_ASSOCIATED_COLLECTIONS = "SELECT c.Name " +
+            "FROM 'collections' c " +
+            "INNER JOIN 'collections_movies' cm " +
+            "ON c.ID = cm.CollectionID " +
+            "WHERE cm.MovieID = ?";
+
+
     public static final String SELECT_COLLECTION_HEADINGS = "SELECT c.Name FROM 'collections' c WHERE c.ID < 5";
 
-    public static final String SELECT_COLLECTION_NAMES = "SELECT c.Name FROM 'collections' c WHERE c.ID > 4";
+    public static final String SELECT_COLLECTION_NAMES = "SELECT c.Name FROM 'collections' c WHERE c.ID > 4 OR c.ID = 1";
 
     public static final String INSERT_COLLECTION_MOVIE = "INSERT INTO 'collections_movies' VALUES " +
             "(" +

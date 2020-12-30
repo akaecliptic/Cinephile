@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:orientation="vertical"
+    android:background="@color/colorTertiaryDark">
+
+    <TextView
+        android:id="@+id/add_collection_dialog_text_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:text="@string/place_holder"
+        android:textAlignment="center"
+        android:textSize="20sp" />
+
+    <ListView
+        android:id="@+id/add_collection_dialog_list_collections"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_225sdp"
+        android:layout_marginVertical="@dimen/_10sdp"
+        tools:listitem="@layout/list_item_collection"
+        android:textSize="17sp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/add_collection_dialog_button_new"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/option_new"
+            style="@style/MyDialogButtons"/>
+
+        <Button
+            android:id="@+id/add_collection_dialog_button_done"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/option_done"
+            style="@style/MyDialogButtons"/>
+    </LinearLayout>
+
+</LinearLayout>

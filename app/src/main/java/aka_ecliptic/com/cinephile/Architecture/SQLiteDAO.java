@@ -135,10 +135,10 @@ class SQLiteDAO extends SQLiteOpenHelper {
         db.close();
     }
 
-    private void removeMovieFromCollection(String collection, Integer movieID){
+    private void removeMovieFromCollection(String collection, Integer movieId){
         SQLiteDatabase db = getWritableDatabase();
 
-        db.execSQL(MySQLiteHelper.DELETE_FROM_COLLECTION, new Object[]{collection, movieID});
+        db.execSQL(MySQLiteHelper.DELETE_FROM_COLLECTION, new Object[]{collection, movieId});
 
         db.close();
     }
@@ -189,6 +189,14 @@ class SQLiteDAO extends SQLiteOpenHelper {
         }
     }
 
+    void toggleCollection(String name, int movieId, boolean set) {
+        if(set){
+            addMovieToCollection(name, movieId);
+        }else {
+            removeMovieFromCollection(name, movieId);
+        }
+    }
+
     void addCollection(String name, int type){
         SQLiteDatabase db = getWritableDatabase();
 
@@ -201,10 +209,10 @@ class SQLiteDAO extends SQLiteOpenHelper {
         db.close();
     }
 
-    private void addMovieToCollection(String collection, Integer movieID){
+    private void addMovieToCollection(String collection, Integer movieId){
         SQLiteDatabase db = getWritableDatabase();
 
-        db.execSQL(MySQLiteHelper.INSERT_COLLECTION_MOVIE, new Object[]{collection, movieID});
+        db.execSQL(MySQLiteHelper.INSERT_COLLECTION_MOVIE, new Object[]{collection, movieId});
 
         db.close();
     }
@@ -485,6 +493,23 @@ class SQLiteDAO extends SQLiteOpenHelper {
         c.close();
         db.close();
         return ids;
+    }
+
+    List<String> getCollectionsIn(Movie movie) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        Cursor c = db.rawQuery(MySQLiteHelper.SELECT_ASSOCIATED_COLLECTIONS, new String[]{String.valueOf(movie.getId())});
+        ArrayList<String> collections = new ArrayList<>();
+
+        c.moveToFirst();
+        while (!c.isAfterLast()){
+            collections.add(c.getString(0));
+            c.moveToNext();
+        }
+
+        c.close();
+        db.close();
+        return collections;
     }
 }
 

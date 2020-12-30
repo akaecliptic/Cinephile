@@ -81,6 +81,16 @@ public class Repository{
         return this.collectionHeadings;
     }
 
+    void addCollection(String name) { this.sqLiteDAO.addCollection(name, 1); }
+
+    List<String> getCollectionNames() {
+        return sqLiteDAO.getCollectionNames();
+    }
+
+    List<String> getCollectionsIn(Movie movie) {
+        return sqLiteDAO.getCollectionsIn(movie);
+    }
+
     List<Movie> getItemsInCollection(String name) {
         return this.sqLiteDAO.getMoviesFromCollection(name);
     }
@@ -190,6 +200,10 @@ public class Repository{
 
     void toggleFavourites(int id, boolean favourite) {
         sqLiteDAO.toggleFavourite(id, favourite);
+    }
+
+    void toggleCollection(String name, int movieId, boolean set) {
+        sqLiteDAO.toggleCollection(name, movieId, set);
     }
 
     int removeItem(Movie item) {

@@ -65,6 +65,12 @@ public class MediaViewModel extends AndroidViewModel {
 
     public List<String> getCollectionHeadings() { return mediaRepository.getCollectionHeadings(); }
 
+    public void addCollection(String name) { this.mediaRepository.addCollection(name); }
+
+    public List<String> getCollectionNames() { return mediaRepository.getCollectionNames(); }
+
+    public List<String> getCollectionsIn(Movie movie) { return mediaRepository.getCollectionsIn(movie); }
+
     public List<Movie> getItemsInCollection(String name) { return mediaRepository.getItemsInCollection(name); }
 
     public Movie[][] requestMovies() {
@@ -91,6 +97,10 @@ public class MediaViewModel extends AndroidViewModel {
 
     public void toggleFavourite(int id, boolean favourite) {
         mediaRepository.toggleFavourites(id, favourite);
+    }
+
+    public void toggleCollection(String name, int movieId, boolean set) {
+        mediaRepository.toggleCollection(name, movieId, set);
     }
 
     public void addSubscriber(OnNotifyClones subscriber){

@@ -232,7 +232,7 @@ public class MyListFragment extends Fragment {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 LayoutInflater inflater = requireActivity().getLayoutInflater();
-                builder.setView(inflater.inflate(R.layout.dialog_delete, null));
+                builder.setView(inflater.inflate(R.layout.dialog_delete, (ViewGroup) requireView(), false));
 
                 AlertDialog dialog = builder.create();
                 dialog.show();
