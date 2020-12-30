@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rci_footer"
     android:layout_width="wrap_content"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingVertical="@dimen/_5sdp"
     android:layout_centerInParent="true"
     android:layout_gravity="center">
 

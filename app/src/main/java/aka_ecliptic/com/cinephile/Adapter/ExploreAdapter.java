@@ -21,6 +21,8 @@ import aka_ecliptic.com.cinephile.Helper.MediaObjectHelper;
 import aka_ecliptic.com.cinephile.Model.Movie;
 import aka_ecliptic.com.cinephile.R;
 
+import static android.view.ViewGroup.LayoutParams;
+
 public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.ViewHolder>{
 
     class ViewHolder extends RecyclerView.ViewHolder{
@@ -76,6 +78,7 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.ViewHold
             view = mInflater.inflate(R.layout.recycler_item_movie_card, parent, false);
         }else{
             view = mInflater.inflate(R.layout.recycler_item_footer, parent, false);
+            view.getLayoutParams().height = LayoutParams.MATCH_PARENT ;
         }
 
         return new ViewHolder(view, viewType);

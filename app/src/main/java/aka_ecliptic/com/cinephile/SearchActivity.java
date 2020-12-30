@@ -132,7 +132,7 @@ public class SearchActivity extends AppCompatActivity {
 
                 movieList.addAll(online.stream().filter( m -> !movieList.contains(m)).collect(Collectors.toList()));
 
-                searchRequestListener.onItemsRequested(movieList, savedSet);
+                searchRequestListener.onItemsRequested(movieList, savedSet, queryString);
             });
         }
     }
@@ -142,6 +142,6 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     public interface RequestListener{
-        void onItemsRequested(List<Movie> movies, Set<Integer> savedSet);
+        void onItemsRequested(List<Movie> movies, Set<Integer> savedSet, String query);
     }
 }
