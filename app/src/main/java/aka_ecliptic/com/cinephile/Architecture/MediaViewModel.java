@@ -93,6 +93,10 @@ public class MediaViewModel extends AndroidViewModel {
 
     public int deleteItem(Movie movie) { return mediaRepository.removeItem(movie); }
 
+    public void deleteCollection(String collection) {
+        mediaRepository.deleteCollection(collection);
+    }
+
     public void addItem(Movie movie) { mediaRepository.addItem(movie); }
 
     public void toggleFavourite(int id, boolean favourite) {

@@ -129,8 +129,11 @@ class SQLiteDAO extends SQLiteOpenHelper {
     void deleteCollection(String name){
         SQLiteDatabase db = getWritableDatabase();
 
+        if(name.equals("Favourites"))
+            return;
+
         db.execSQL(MySQLiteHelper.DELETE_COLLECTION_LINK, new String[]{name});
-        db.delete(MySQLiteHelper.TABLE_NAMES.get("collections"), "Name = ?", new String[] {String.valueOf(name)});
+        db.delete(MySQLiteHelper.TABLE_NAMES.get("collections"), "Name = ?", new String[] {name});
 
         db.close();
     }
@@ -274,10 +277,6 @@ class SQLiteDAO extends SQLiteOpenHelper {
 
         c.close();
         db.close();
-
-        //TODO: Change/Remove limit as other media types are implemented.
-        int limit = 2;
-        names.removeIf(s -> names.indexOf(s) >= limit);
 
         return names;
     }

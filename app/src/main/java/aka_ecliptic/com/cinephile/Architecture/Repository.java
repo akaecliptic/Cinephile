@@ -165,9 +165,9 @@ public class Repository{
                 onlineList[1] = list1;
                 requestExploreItems(1, MovieApiDAO.MovieType.UPCOMING, (list2) -> {
                     onlineList[2] = list2;
-                    requestExploreItems(1, MovieApiDAO.MovieType.FAVOURITES, (list3) -> {
-                        onlineList[3] = list3;
-                    });
+                    requestExploreItems(1, MovieApiDAO.MovieType.FAVOURITES, (list3) ->
+                        onlineList[3] = list3
+                    );
                 });
             });
         });
@@ -219,6 +219,10 @@ public class Repository{
         }
 
         return index;
+    }
+
+    void deleteCollection(String collection) {
+        sqLiteDAO.deleteCollection(collection);
     }
 
     void cycleSort(){

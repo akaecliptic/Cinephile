@@ -13,11 +13,13 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -73,7 +75,7 @@ public class MovieProfileFragment extends Fragment {
     private ProgressBar ratingProgress;
     private TextView ratingText;
     private CheckBox seenCheck;
-    private ImageView addCollection;
+    private FrameLayout addCollection;
     private TextView genreText1;
     private TextView genreText2;
     private TextView genreText3;
@@ -339,10 +341,18 @@ public class MovieProfileFragment extends Fragment {
 
             confirm.setOnClickListener(vw -> {
                 EditText collection = newCollection.findViewById(R.id.new_collection_dialog_text_collection_title);
-                mediaViewModel.addCollection(collection.getText().toString());
-                listAdapter.add(collection.getText().toString());
-                listAdapter.notifyDataSetChanged();
-                newCollection.dismiss();
+                String toCreate = collection.getText().toString();
+
+                boolean allowed = !(mediaViewModel.getCollectionHeadings().contains(toCreate) || mediaViewModel.getCollectionNames().contains(toCreate));
+
+                if(allowed){
+                    mediaViewModel.addCollection(toCreate);
+                    listAdapter.add(toCreate);
+                    listAdapter.notifyDataSetChanged();
+                    newCollection.dismiss();
+                }else {
+                    Toast.makeText(requireContext(), "Collection name is already in use. Try another.", Toast.LENGTH_LONG).show();
+                }
             });
 
             cancel.setOnClickListener(vw -> newCollection.cancel());

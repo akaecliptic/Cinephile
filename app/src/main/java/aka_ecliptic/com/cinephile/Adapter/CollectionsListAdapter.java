@@ -17,7 +17,7 @@ import aka_ecliptic.com.cinephile.Model.Media;
 import aka_ecliptic.com.cinephile.Model.Movie;
 import aka_ecliptic.com.cinephile.R;
 
-public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ViewHolder> {
+public class CollectionsListAdapter extends RecyclerView.Adapter<CollectionsListAdapter.ViewHolder> {
 
     class ViewHolder extends RecyclerView.ViewHolder {
         TextView textYear;
@@ -48,7 +48,7 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ViewHolder
     private ItemClickListener checkedBox;
     private ItemLongClickListener longClick;
 
-    public MyListAdapter(Context context, List<Movie> list){
+    public CollectionsListAdapter(Context context, List<Movie> list){
         this.inflater = LayoutInflater.from(context);
         mediaList = list;
     }

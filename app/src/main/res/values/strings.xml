@@ -34,4 +34,6 @@
     <string name="option_new">new</string>
     <string name="new_collection_dialog_title">Name of collection</string>
     <string name="placeholder_collection_title">collection title</string>
+    <string name="ct_collection_image">Collection image</string>
+    <string name="no_collections">Looks like you have no collections.</string>
 </resources>
