@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:elevation="1dp"
     android:theme="@style/MyToolBar"
-    tools:menu="@menu/toolbar_menu">
+    tools:menu="@menu/toolbar">
 
     <TextView
         android:id="@+id/toolbar_title"

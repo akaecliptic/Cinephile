@@ -4,6 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/_45sdp"
     android:background="@android:color/black"
-    app:menu="@menu/bottom_menu"
+    app:menu="@menu/bottombar"
     app:itemIconSize="@dimen/_20sdp"
     android:animateLayoutChanges="true" />
