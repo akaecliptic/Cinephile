@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="aka_ecliptic.com.cinephile">
+    package="akaecliptic.dev.cinephile">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -15,8 +15,9 @@
         tools:ignore="GoogleAppIndexingWarning">
 
         <activity
-            android:name=".SearchActivity"
-            android:launchMode="singleTop">
+            android:name="akaecliptic.dev.cinephile.SearchActivity"
+            android:launchMode="singleTop"
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
@@ -25,8 +26,9 @@
                 android:resource="@xml/searchable" />
         </activity>
         <activity
-            android:name=".MainActivity"
-            android:windowSoftInputMode="adjustPan">
+            android:name="akaecliptic.dev.cinephile.MainActivity"
+            android:windowSoftInputMode="adjustPan"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
