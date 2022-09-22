@@ -14,7 +14,7 @@
         android:layout_marginTop="@dimen/_2sdp"
         android:drawableBottom="@drawable/line_divider"
         android:textSize="@dimen/_12ssp"
-        android:text="@string/trending" />
+        android:text="@string/explore_popular" />
 
     <TextView
         android:id="@+id/explore_recent_divider"
@@ -24,7 +24,7 @@
         android:layout_marginTop="@dimen/_2sdp"
         android:drawableBottom="@drawable/line_divider"
         android:textSize="@dimen/_12ssp"
-        android:text="@string/recent" />
+        android:text="@string/explore_playing" />
 
     <TextView
         android:id="@+id/explore_upcoming_divider"
@@ -34,7 +34,7 @@
         android:layout_marginTop="@dimen/_2sdp"
         android:drawableBottom="@drawable/line_divider"
         android:textSize="@dimen/_12ssp"
-        android:text="@string/upcoming" />
+        android:text="@string/explore_upcoming" />
 
     <TextView
         android:id="@+id/explore_favourites_divider"
@@ -44,7 +44,7 @@
         android:layout_marginTop="@dimen/_2sdp"
         android:drawableBottom="@drawable/line_divider"
         android:textSize="@dimen/_12ssp"
-        android:text="@string/favourites" />
+        android:text="@string/explore_rated" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/explore_recent_recycler"

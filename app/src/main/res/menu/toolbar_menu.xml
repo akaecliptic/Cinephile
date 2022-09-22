@@ -6,7 +6,7 @@
         android:visible="true"
         android:id="@+id/toolbar_search"
         android:icon="@drawable/ic_search"
-        android:title="@string/toolbar_search"
+        android:title="@string/button_search"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="ifRoom|collapseActionView"/>
 
@@ -14,14 +14,14 @@
         android:visible="false"
         android:id="@+id/toolbar_add"
         android:icon="@drawable/ic_add"
-        android:title="@string/add"
+        android:title="@string/button_add"
         app:showAsAction="always"/>
 
     <item
         android:visible="false"
         android:id="@+id/toolbar_favourite"
         android:checkable="true"
-        android:title="@string/favourite"
+        android:title="@string/button_favourite"
         app:showAsAction="ifRoom"/>
 
 </menu>

@@ -1,5 +1,6 @@
 <resources>
 
+    <!-- OLD STYLES - TO DEPRECATE -->
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -54,4 +55,7 @@
         <item name="android:textColor">@color/colorTextSecondary</item>
         <item name="textAllCaps">false</item>
     </style>
+
+    <!-- NEW STYLES - MIGRATING TO -->
+    <!-- TODO: Add As Needed -->
 </resources>

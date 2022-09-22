@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
-        android:text="@string/place_holder"
+        android:text="@string/placeholder"
         android:textAlignment="center"
         android:textSize="20sp" />
 
@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
             android:layout_gravity="center_horizontal"
-            android:text="@string/option_new"
+            android:text="@string/button_new"
             style="@style/MyDialogButtons"/>
 
         <Button
@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
             android:layout_gravity="center_horizontal"
-            android:text="@string/option_done"
+            android:text="@string/button_done"
             style="@style/MyDialogButtons"/>
     </LinearLayout>
 

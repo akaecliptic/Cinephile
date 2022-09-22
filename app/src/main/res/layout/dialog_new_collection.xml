@@ -13,7 +13,7 @@
 
         android:layout_marginBottom="10dp"
 
-        android:text="@string/new_collection_dialog_title"
+        android:text="@string/dialog_title_new_collection"
         android:textAlignment="center"
         android:textSize="20sp" />
 
@@ -40,7 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
-            android:text="@string/option_confirm"
+            android:text="@string/button_confirm"
             style="@style/MyDialogButtons"/>
 
         <Button
@@ -48,7 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
-            android:text="@string/option_cancel"
+            android:text="@string/button_cancel"
             style="@style/MyDialogButtons"/>
     </LinearLayout>
 </LinearLayout>

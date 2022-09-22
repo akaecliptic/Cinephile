@@ -12,7 +12,7 @@
         android:id="@+id/rci_movie_list_img_poster"
         android:layout_width="55dp"
         android:layout_height="84dp"
-        android:contentDescription="@string/content_description_movie_poster"
+        android:contentDescription="@string/description_movie_poster"
         app:srcCompat="@mipmap/ic_launcher" />
 
     <TextView

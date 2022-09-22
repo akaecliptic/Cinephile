@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="@dimen/_100sdp"
-        android:contentDescription="@string/content_description_movie_backdrop"
+        android:contentDescription="@string/description_movie_backdrop"
         android:src="@color/colorTextPrimary" />
 
     <ImageView
@@ -21,7 +21,7 @@
         android:layout_alignParentStart="true"
         android:layout_marginTop="-47dp"
         android:layout_marginStart="25dp"
-        android:contentDescription="@string/content_description_movie_poster"
+        android:contentDescription="@string/description_movie_poster"
         android:src="@android:drawable/ic_dialog_alert" />
 
     <LinearLayout
@@ -83,7 +83,7 @@
             android:background="@drawable/shape_circle">
 
             <ImageView
-                android:contentDescription="@string/add_to_collection"
+                android:contentDescription="@string/description_add_to_collection"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

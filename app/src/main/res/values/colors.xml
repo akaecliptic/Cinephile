@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- OLD COLOURS - TO DEPRECATE -->
     <!--Default-->
     <color name="DefaultColorPrimary">#008577</color>
     <color name="DefaultColorPrimaryDark">#00574B</color>
@@ -12,4 +13,33 @@
     <color name="colorTertiaryDark">#333333</color>
     <color name="colorTextPrimary">#EEEEEE</color>
     <color name="colorTextSecondary">#777777</color>
+
+    <!-- NEW COLOURS - MIGRATING TO -->
+    <!-- Application -->
+    <color name="application_background">#050505</color>
+    <color name="application_text">#E8E8E8</color>
+
+    <!-- Colours -->
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+
+    <!-- Card -->
+    <color name="card_background">#000000</color>
+    <color name="card_text">#E0E0E0</color>
+    <color name="card_text_flavour">#B8B8B8</color>
+    <color name="card_text_faint">#959595</color>
+    <color name="card_text_highlight">#FFFFFF</color>
+
+    <!-- Accents -->
+    <color name="accent">#A900A9</color>
+    <color name="accent_red">#CC3333</color>
+    <color name="accent_blue">#3333CC</color>
+    <color name="accent_amber">#DFAF20</color>
+    <color name="accent_green">#33CC33</color>
+    <color name="accent_violet">#7F00FF</color>
+    <color name="accent_magenta">#CC33CC</color>
+    <color name="accent_aquamarine">#7FFFD4</color>
+
+    <color name="accent_text_light">#FFFFFF</color>
+    <color name="accent_text_dark">#000000</color>
 </resources>
