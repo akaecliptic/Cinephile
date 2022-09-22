@@ -18,7 +18,7 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import java.util.ArrayList;
 import java.util.List;
 
-import akaecliptic.dev.cinephile.Architecture.MediaViewModel;
+import akaecliptic.dev.cinephile.Architecture.ViewModel;
 import akaecliptic.dev.cinephile.R;
 
 /**
@@ -65,7 +65,7 @@ public class MyListFragment extends Fragment {
     }
 
     private void getHeadingsFromViewModel() {
-        collectionHeadings = new ViewModelProvider(requireActivity()).get(MediaViewModel.class).getCollectionHeadings();
+        collectionHeadings = new ViewModelProvider(requireActivity()).get(ViewModel.class).getCollectionHeadings();
 
         //TODO: Change/Remove limit as other media types are implemented.
             collectionHeadings = new ArrayList<>(collectionHeadings);

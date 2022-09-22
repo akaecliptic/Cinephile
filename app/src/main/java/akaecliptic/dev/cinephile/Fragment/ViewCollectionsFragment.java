@@ -24,7 +24,7 @@ import java.util.Collections;
 import java.util.List;
 
 import akaecliptic.dev.cinephile.Adapter.ViewCollectionsAdapter;
-import akaecliptic.dev.cinephile.Architecture.MediaViewModel;
+import akaecliptic.dev.cinephile.Architecture.ViewModel;
 import akaecliptic.dev.cinephile.MainActivity;
 import akaecliptic.dev.cinephile.R;
 
@@ -33,7 +33,7 @@ import static akaecliptic.dev.cinephile.Fragment.CollectionsFragment.INSTANCE_NA
 public class ViewCollectionsFragment extends Fragment {
     private String fragName;
 
-    private MediaViewModel mediaViewModel;
+    private ViewModel viewModel;
     private List<String> fragList;
 
     private ViewCollectionsAdapter adapter;
@@ -60,7 +60,7 @@ public class ViewCollectionsFragment extends Fragment {
     }
 
     private void setUpViewModelLink() {
-        mediaViewModel = new ViewModelProvider(requireActivity()).get(MediaViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(ViewModel.class);
     }
 
     private void assignInstanceName() {
@@ -76,7 +76,7 @@ public class ViewCollectionsFragment extends Fragment {
     }
 
     private void setUpRecycler() {
-        fragList = mediaViewModel.getCollectionNames();
+        fragList = viewModel.getCollectionNames();
         Collections.reverse(fragList);
 
         GridView gridView = requireView().findViewById(R.id.view_collections_grid);
@@ -108,10 +108,10 @@ public class ViewCollectionsFragment extends Fragment {
             EditText collection = newCollection.findViewById(R.id.new_collection_dialog_text_collection_title);
             String toCreate = collection.getText().toString();
 
-            boolean allowed = !(mediaViewModel.getCollectionHeadings().contains(toCreate) || mediaViewModel.getCollectionNames().contains(toCreate));
+            boolean allowed = !(viewModel.getCollectionHeadings().contains(toCreate) || viewModel.getCollectionNames().contains(toCreate));
 
             if(allowed){
-                mediaViewModel.addCollection(toCreate);
+                viewModel.addCollection(toCreate);
                 fragList.add(toCreate);
                 adapter.notifyDataSetChanged();
                 newCollection.dismiss();
@@ -164,7 +164,7 @@ public class ViewCollectionsFragment extends Fragment {
         Button cancel = dialog.findViewById(R.id.delete_dialog_button_cancel);
 
         confirm.setOnClickListener(view -> {
-            mediaViewModel.deleteCollection(target);
+            viewModel.deleteCollection(target);
             fragList.remove(target);
             adapter.notifyDataSetChanged();
 

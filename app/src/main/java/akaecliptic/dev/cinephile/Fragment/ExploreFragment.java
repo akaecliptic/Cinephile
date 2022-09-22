@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Objects;
 
 import akaecliptic.dev.cinephile.Adapter.ExploreAdapter;
-import akaecliptic.dev.cinephile.Architecture.MediaViewModel;
+import akaecliptic.dev.cinephile.Architecture.ViewModel;
 import akaecliptic.dev.cinephile.Architecture.MovieApiDAO;
 import akaecliptic.dev.cinephile.Model.Movie;
 import akaecliptic.dev.cinephile.R;
@@ -35,12 +35,7 @@ import static akaecliptic.dev.cinephile.Fragment.MyListFragment.SELECTED_TYPE;
  */
 public class ExploreFragment extends Fragment {
 
-    private MediaViewModel mediaViewModel;
-
-    private RecyclerView trendingRecycler;
-    private RecyclerView recentRecycler;
-    private RecyclerView upcomingRecycler;
-    private RecyclerView favouritesRecycler;
+    private ViewModel viewModel;
 
     public ExploreFragment() {
         // Required empty public constructor
@@ -60,17 +55,17 @@ public class ExploreFragment extends Fragment {
     }
 
     private void setUpViewModelLink() {
-        mediaViewModel = new ViewModelProvider(requireActivity()).get(MediaViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(ViewModel.class);
     }
 
     private void setUpRecycler() {
 
-        trendingRecycler = requireActivity().findViewById(R.id.explore_trending_recycler);
-        recentRecycler = requireActivity().findViewById(R.id.explore_recent_recycler);
-        upcomingRecycler = requireActivity().findViewById(R.id.explore_upcoming_recycler);
-        favouritesRecycler = requireActivity().findViewById(R.id.explore_favourites_recycler);
+        RecyclerView trendingRecycler = requireActivity().findViewById(R.id.explore_trending_recycler);
+        RecyclerView recentRecycler = requireActivity().findViewById(R.id.explore_recent_recycler);
+        RecyclerView upcomingRecycler = requireActivity().findViewById(R.id.explore_upcoming_recycler);
+        RecyclerView favouritesRecycler = requireActivity().findViewById(R.id.explore_favourites_recycler);
 
-        String imageConfig = mediaViewModel.getImageConfig(MovieApiDAO.ImageType.PROFILE);
+        String imageConfig = viewModel.getImageConfig(MovieApiDAO.ImageType.PROFILE);
 
         ExploreAdapter trendingAdapter = new ExploreAdapter(requireContext(), null, imageConfig, MovieApiDAO.MovieType.TRENDING);
         ExploreAdapter recentAdapter = new ExploreAdapter(requireContext(), null, imageConfig, MovieApiDAO.MovieType.RECENT);
@@ -79,7 +74,7 @@ public class ExploreFragment extends Fragment {
 
         setUpAdapterClicks(trendingAdapter, recentAdapter, upcomingAdapter, favouritesAdapter);
 
-        setUpAdapterList(mediaViewModel.requestMovies(), trendingAdapter, recentAdapter, upcomingAdapter, favouritesAdapter);
+        setUpAdapterList(viewModel.requestMovies(), trendingAdapter, recentAdapter, upcomingAdapter, favouritesAdapter);
 
         trendingRecycler.setAdapter(trendingAdapter);
         recentRecycler.setAdapter(recentAdapter);
@@ -91,7 +86,7 @@ public class ExploreFragment extends Fragment {
     private void setUpAdapterClicks(ExploreAdapter... adapters) {
         ExploreAdapter.ItemClickListener itemClickListener = (view, movie) -> {
             Bundle bundle = new Bundle();
-            boolean haveMovie = mediaViewModel.getItems().stream().anyMatch(m -> m.getId() == movie.getId());
+            boolean haveMovie = viewModel.getItems().stream().anyMatch(m -> m.getId() == movie.getId());
 
             bundle.putSerializable(SELECTED_MOVIE, movie);
             bundle.putBoolean(SELECTED_SAVED, haveMovie);

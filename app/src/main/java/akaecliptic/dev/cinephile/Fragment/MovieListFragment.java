@@ -23,7 +23,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import akaecliptic.dev.cinephile.Adapter.MovieListAdapter;
-import akaecliptic.dev.cinephile.Architecture.MediaViewModel;
+import akaecliptic.dev.cinephile.Architecture.ViewModel;
 import akaecliptic.dev.cinephile.Architecture.MovieApiDAO;
 import akaecliptic.dev.cinephile.Architecture.MovieApiDAO.MovieType;
 import akaecliptic.dev.cinephile.MainActivity;
@@ -42,7 +42,7 @@ import static akaecliptic.dev.cinephile.Fragment.MyListFragment.SELECTED_TYPE;
  */
 public class MovieListFragment extends Fragment {
 
-    private MediaViewModel mediaViewModel;
+    private ViewModel viewModel;
     private ArrayList<Movie> cachedMovies;
     private boolean lockPagination = false;
     private MovieType movieType;
@@ -76,17 +76,17 @@ public class MovieListFragment extends Fragment {
     }
 
     private void setUpViewModelLink() {
-        mediaViewModel = new ViewModelProvider(requireActivity()).get(MediaViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(ViewModel.class);
     }
 
     private void setUpRecyclerSearch() {
         SearchActivity.setRequestListener((movies, ids, query) -> {
-            String imageConfig = mediaViewModel.getImageConfig(MovieApiDAO.ImageType.PROFILE);
+            String imageConfig = viewModel.getImageConfig(MovieApiDAO.ImageType.PROFILE);
             if (pageCount == 1){
                 cachedMovies = new ArrayList<>(movies);
             }else {
                 List<String> movieTitles = cachedMovies.stream().map(Media::getTitle).collect(Collectors.toList());
-                ids = new HashSet<>(mediaViewModel.getItemsLike(movieTitles));
+                ids = new HashSet<>(viewModel.getItemsLike(movieTitles));
             }
 
             searchQuery = query;
@@ -98,7 +98,7 @@ public class MovieListFragment extends Fragment {
                 Bundle bundle = new Bundle();
 
                 bundle.putSerializable(SELECTED_MOVIE, m);
-                bundle.putBoolean(SELECTED_SAVED, mediaViewModel.isMoviePresent(m.getId()));
+                bundle.putBoolean(SELECTED_SAVED, viewModel.isMoviePresent(m.getId()));
 
                 scrollPosition = cachedMovies.indexOf(m);
 
@@ -113,7 +113,7 @@ public class MovieListFragment extends Fragment {
             });
 
             adapter.setAddClickListener((v, m) -> {
-                mediaViewModel.addItem(m);
+                viewModel.addItem(m);
 
                 adapter.updateItem(m);
 
@@ -139,11 +139,11 @@ public class MovieListFragment extends Fragment {
     private void setUpPaginationSearch(MovieListAdapter adapter){
         adapter.setPaginateContent(() -> {
             pageCount++;
-            mediaViewModel.requestMoviesLike(searchQuery, pageCount, movies -> {
+            viewModel.requestMoviesLike(searchQuery, pageCount, movies -> {
                 List<Movie> online = Arrays.asList(movies);
                 List<String> movieTitles = online.stream().map(Media::getTitle).collect(Collectors.toList());
-                List<Movie> movieList = new ArrayList<>(mediaViewModel.getItemsLike(searchQuery));
-                Set<Integer> savedSet = new HashSet<>(mediaViewModel.getItemsLike(movieTitles));
+                List<Movie> movieList = new ArrayList<>(viewModel.getItemsLike(searchQuery));
+                Set<Integer> savedSet = new HashSet<>(viewModel.getItemsLike(movieTitles));
 
                 movieList.addAll(online.stream().filter( m -> !movieList.contains(m)).collect(Collectors.toList()));
 
@@ -160,10 +160,10 @@ public class MovieListFragment extends Fragment {
     }
 
     private void setUpRecyclerMain() {
-        String imageConfig = mediaViewModel.getImageConfig(MovieApiDAO.ImageType.PROFILE);
+        String imageConfig = viewModel.getImageConfig(MovieApiDAO.ImageType.PROFILE);
 
-        mediaViewModel.requestMoviesType(movieType, pageCount, movies -> {
-            Set<Integer> savedSet = Arrays.stream(movies).filter(mediaViewModel.getItems()::contains).map(Media::getId).collect(Collectors.toSet());
+        viewModel.requestMoviesType(movieType, pageCount, movies -> {
+            Set<Integer> savedSet = Arrays.stream(movies).filter(viewModel.getItems()::contains).map(Media::getId).collect(Collectors.toSet());
             if(pageCount == 1)
                 cachedMovies = new ArrayList<>(Arrays.asList(movies));
 
@@ -174,7 +174,7 @@ public class MovieListFragment extends Fragment {
                 Bundle bundle = new Bundle();
 
                 bundle.putSerializable(SELECTED_MOVIE, m);
-                bundle.putBoolean(SELECTED_SAVED, mediaViewModel.isMoviePresent(m.getId()));
+                bundle.putBoolean(SELECTED_SAVED, viewModel.isMoviePresent(m.getId()));
 
                 scrollPosition = cachedMovies.indexOf(m);
 
@@ -189,7 +189,7 @@ public class MovieListFragment extends Fragment {
             });
 
             adapter.setAddClickListener((v, m) -> {
-                mediaViewModel.addItem(m);
+                viewModel.addItem(m);
 
                 adapter.updateItem(m);
 
@@ -215,8 +215,8 @@ public class MovieListFragment extends Fragment {
     private void setUpPaginationMain(MovieListAdapter adapter){
         adapter.setPaginateContent(() -> {
             pageCount++;
-            mediaViewModel.requestMoviesType(movieType, pageCount, movies -> {
-                Set<Integer> savedSet = Arrays.stream(movies).filter(mediaViewModel.getItems()::contains).map(Media::getId).collect(Collectors.toSet());
+            viewModel.requestMoviesType(movieType, pageCount, movies -> {
+                Set<Integer> savedSet = Arrays.stream(movies).filter(viewModel.getItems()::contains).map(Media::getId).collect(Collectors.toSet());
 
                 lockPagination = (pageCount == 5 || movies.length < 20);
                 adapter.appendContent(Arrays.asList(movies), savedSet, lockPagination);

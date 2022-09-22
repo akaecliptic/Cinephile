@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import akaecliptic.dev.cinephile.Adapter.CollectionsArrayAdapter;
-import akaecliptic.dev.cinephile.Architecture.MediaViewModel;
+import akaecliptic.dev.cinephile.Architecture.ViewModel;
 import akaecliptic.dev.cinephile.Architecture.MovieApiDAO;
 import akaecliptic.dev.cinephile.Helper.MediaObjectHelper;
 import akaecliptic.dev.cinephile.Model.Movie;
@@ -63,7 +63,7 @@ public class MovieProfileFragment extends Fragment {
     private Movie selected = null;
     private boolean isSelectedSaved;
     private boolean isSelectedFavourited;
-    private MediaViewModel mediaViewModel;
+    private ViewModel viewModel;
     private OnFavourite onFavourite;
 
     private BottomNavigationView bottomNavigationView;
@@ -142,7 +142,7 @@ public class MovieProfileFragment extends Fragment {
     }
 
     private void addMovie(Movie movie) {
-        mediaViewModel.addItem(movie);
+        viewModel.addItem(movie);
 
         seenCheck.setClickable(isSelectedSaved);
         addViewListeners();
@@ -155,7 +155,7 @@ public class MovieProfileFragment extends Fragment {
     }
 
     private void favouriteMovie(Movie movie, boolean favourited) {
-        mediaViewModel.toggleFavourite(movie.getId(), favourited);
+        viewModel.toggleFavourite(movie.getId(), favourited);
 
         String message = (favourited) ?
                 "You have favourited this movie." : "You have un-favourited this movie.";
@@ -228,7 +228,7 @@ public class MovieProfileFragment extends Fragment {
     private void addViewListeners() {
         seenCheck.setOnClickListener(view -> {
             selected.setSeen(((CheckBox)view).isChecked());
-            mediaViewModel.updateItem(selected);
+            viewModel.updateItem(selected);
         });
 
         ratingProgress.setOnLongClickListener(this::createRatingDialog);
@@ -237,9 +237,9 @@ public class MovieProfileFragment extends Fragment {
     }
 
     private void setUpViewModelLink() {
-        mediaViewModel = new ViewModelProvider(requireActivity()).get(MediaViewModel.class);
-        configPoster = mediaViewModel.getImageConfig(MovieApiDAO.ImageType.POSTER);
-        configBackdrop = mediaViewModel.getImageConfig(MovieApiDAO.ImageType.BACKDROP);
+        viewModel = new ViewModelProvider(requireActivity()).get(ViewModel.class);
+        configPoster = viewModel.getImageConfig(MovieApiDAO.ImageType.POSTER);
+        configBackdrop = viewModel.getImageConfig(MovieApiDAO.ImageType.BACKDROP);
     }
 
     private void attachAnimator() {
@@ -259,7 +259,7 @@ public class MovieProfileFragment extends Fragment {
         if(getArguments() != null) {
             selected = (Movie) getArguments().getSerializable(SELECTED_MOVIE);
             isSelectedSaved = getArguments().getBoolean(SELECTED_SAVED);
-            isSelectedFavourited = mediaViewModel.isFavourited(selected.getId());
+            isSelectedFavourited = viewModel.isFavourited(selected.getId());
         }
     }
 
@@ -285,7 +285,7 @@ public class MovieProfileFragment extends Fragment {
 
         confirm.setOnClickListener(v -> {
             selected.setRating((int) spinner.getSelectedItem());
-            mediaViewModel.updateItem(selected);
+            viewModel.updateItem(selected);
 
             ratingProgress.setProgress(selected.getRating() * 10);
             String rating = selected.getRating() + "/10";
@@ -311,16 +311,16 @@ public class MovieProfileFragment extends Fragment {
         title.setText(R.string.dialog_title_add_collection);
 
         ListView list = dialog.findViewById(R.id.add_collection_dialog_list_collections);
-        List<String> collections = mediaViewModel.getCollectionNames();
+        List<String> collections = viewModel.getCollectionNames();
         Collections.reverse(collections);
         CollectionsArrayAdapter<String> listAdapter = new CollectionsArrayAdapter<>(requireContext(),
                 R.layout.list_item_collection,
                 R.id.list_collection_text_title,
                 collections,
-                mediaViewModel.getCollectionsIn(selected));
+                viewModel.getCollectionsIn(selected));
 
         listAdapter.setOnCollectionSelected((pos, set) -> {
-            mediaViewModel.toggleCollection(collections.get(pos), selected.getId(), set);
+            viewModel.toggleCollection(collections.get(pos), selected.getId(), set);
             if(collections.get(pos).equals("Favourites"))
                 onFavourite.toggle(set);
         });
@@ -343,10 +343,10 @@ public class MovieProfileFragment extends Fragment {
                 EditText collection = newCollection.findViewById(R.id.new_collection_dialog_text_collection_title);
                 String toCreate = collection.getText().toString();
 
-                boolean allowed = !(mediaViewModel.getCollectionHeadings().contains(toCreate) || mediaViewModel.getCollectionNames().contains(toCreate));
+                boolean allowed = !(viewModel.getCollectionHeadings().contains(toCreate) || viewModel.getCollectionNames().contains(toCreate));
 
                 if(allowed){
-                    mediaViewModel.addCollection(toCreate);
+                    viewModel.addCollection(toCreate);
                     listAdapter.add(toCreate);
                     listAdapter.notifyDataSetChanged();
                     newCollection.dismiss();

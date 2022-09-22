@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import akaecliptic.dev.cinephile.Adapter.CollectionsListAdapter;
-import akaecliptic.dev.cinephile.Architecture.MediaViewModel;
+import akaecliptic.dev.cinephile.Architecture.ViewModel;
 import akaecliptic.dev.cinephile.Architecture.Repository;
 import akaecliptic.dev.cinephile.MainActivity;
 import akaecliptic.dev.cinephile.Model.Movie;
@@ -38,7 +38,7 @@ public class CollectionsFragment extends Fragment {
 
     private String fragName;
 
-    private MediaViewModel mediaViewModel;
+    private ViewModel viewModel;
     private Repository.Sort currentSort = Repository.Sort.DEFAULT;
     private List<Movie> fragList;
 
@@ -61,8 +61,8 @@ public class CollectionsFragment extends Fragment {
     @Override
     public void onResume() {
         MainActivity.setSortClickListener(() -> {
-            currentSort = mediaViewModel.cycleSort(currentSort);
-            fragList = mediaViewModel.sortList(fragList, currentSort);
+            currentSort = viewModel.cycleSort(currentSort);
+            fragList = viewModel.sortList(fragList, currentSort);
 
             Toast.makeText(requireActivity(), currentSort.getSortType(), Toast.LENGTH_SHORT).show();
 
@@ -73,7 +73,7 @@ public class CollectionsFragment extends Fragment {
     }
 
     private void setUpViewModelLink() {
-        mediaViewModel = new ViewModelProvider(requireActivity()).get(MediaViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(ViewModel.class);
     }
 
     private void assignInstanceName() {
@@ -90,9 +90,9 @@ public class CollectionsFragment extends Fragment {
 
     private void setUpRecycler() {
         if(fragName.equals("All")){
-            fragList = new ArrayList<>(mediaViewModel.reCacheItems());
+            fragList = new ArrayList<>(viewModel.reCacheItems());
         }else {
-            fragList = mediaViewModel.getItemsInCollection(fragName);
+            fragList = viewModel.getItemsInCollection(fragName);
         }
 
         RecyclerView recyclerView = requireView().findViewById(R.id.collections_recycler);
@@ -105,16 +105,16 @@ public class CollectionsFragment extends Fragment {
 
         MyListFragment.addSubscriber(() -> {
             if(fragName.equals("All")){
-                fragList = new ArrayList<>(mediaViewModel.reCacheItems());
+                fragList = new ArrayList<>(viewModel.reCacheItems());
             }else {
-                fragList = mediaViewModel.getItemsInCollection(fragName);
+                fragList = viewModel.getItemsInCollection(fragName);
             }
 
             adapter.setItems(fragList);
             checkPrompt();
         });
 
-        mediaViewModel.addSubscriber((update, destructive) -> {
+        viewModel.addSubscriber((update, destructive) -> {
             int index = fragList.indexOf(update);
             if(index >= 0){
                 if(destructive){
@@ -161,8 +161,8 @@ public class CollectionsFragment extends Fragment {
         adapter.setCheckBoxListener((v, p) -> {
             Movie m = adapter.getItem(p);
             m.setSeen(!m.isSeen());
-            mediaViewModel.updateItem(m);
-            mediaViewModel.notifyClones(m, false);
+            viewModel.updateItem(m);
+            viewModel.notifyClones(m, false);
         });
 
         adapter.setOnLongClickListener((v, p) -> {
@@ -185,10 +185,10 @@ public class CollectionsFragment extends Fragment {
             Button cancel = dialog.findViewById(R.id.delete_dialog_button_cancel);
 
             confirm.setOnClickListener(view -> {
-                mediaViewModel.deleteItem(m);
+                viewModel.deleteItem(m);
                 fragList.remove(m);
                 adapter.notifyItemRemoved(p);
-                mediaViewModel.notifyClones(m, true);
+                viewModel.notifyClones(m, true);
 
                 dialog.dismiss();
             });

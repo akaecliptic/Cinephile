@@ -13,12 +13,12 @@ import akaecliptic.dev.cinephile.Model.Movie;
 
 import static akaecliptic.dev.cinephile.Architecture.Repository.Sort;
 
-public class MediaViewModel extends AndroidViewModel {
+public class ViewModel extends AndroidViewModel {
 
     private Repository mediaRepository;
     private List<OnNotifyClones> subscribers = new ArrayList<>();
 
-    public MediaViewModel(@NonNull Application application) {
+    public ViewModel(@NonNull Application application) {
         super(application);
         mediaRepository = new Repository(application);
     }

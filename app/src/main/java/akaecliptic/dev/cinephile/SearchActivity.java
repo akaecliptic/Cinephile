@@ -26,14 +26,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import akaecliptic.dev.cinephile.Architecture.MediaViewModel;
+import akaecliptic.dev.cinephile.Architecture.ViewModel;
 import akaecliptic.dev.cinephile.Fragment.MyListFragment;
 import akaecliptic.dev.cinephile.Model.Media;
 import akaecliptic.dev.cinephile.Model.Movie;
 
 public class SearchActivity extends AppCompatActivity {
 
-    private MediaViewModel mediaViewModel;
+    private ViewModel viewModel;
     public static RequestListener searchRequestListener;
     private static String queryString;
     private NavController navController;
@@ -117,18 +117,18 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void setUpViewModelLink() {
-        mediaViewModel = new ViewModelProvider(this).get(MediaViewModel.class);
+        viewModel = new ViewModelProvider(this).get(ViewModel.class);
     }
 
     private void makeQueries(@Nullable String search){
         Intent intent = getIntent();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             queryString = (search == null) ? intent.getStringExtra(SearchManager.QUERY) : search;
-            mediaViewModel.requestMoviesLike(queryString, 1, movies -> {
+            viewModel.requestMoviesLike(queryString, 1, movies -> {
                 List<Movie> online = Arrays.asList(movies);
                 List<String> movieTitles = online.stream().map(Media::getTitle).collect(Collectors.toList());
-                List<Movie> movieList = new ArrayList<>(mediaViewModel.getItemsLike(queryString));
-                Set<Integer> savedSet = new HashSet<>(mediaViewModel.getItemsLike(movieTitles));
+                List<Movie> movieList = new ArrayList<>(viewModel.getItemsLike(queryString));
+                Set<Integer> savedSet = new HashSet<>(viewModel.getItemsLike(movieTitles));
 
                 movieList.addAll(online.stream().filter( m -> !movieList.contains(m)).collect(Collectors.toList()));
 
