@@ -56,7 +56,7 @@ public class SearchActivity extends AppCompatActivity {
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
             if (getSupportActionBar() != null) {
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back);
+                getSupportActionBar().setHomeAsUpIndicator(R.drawable.icon_arrow_back);
                 if(destination.getId() == R.id.movie_list_fragment){
                     makeQueries(queryString);
                 }

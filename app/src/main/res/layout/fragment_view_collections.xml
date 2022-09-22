@@ -26,7 +26,7 @@
         android:horizontalSpacing="@dimen/_1sdp"
         android:numColumns="3"
         android:verticalSpacing="@dimen/_7sdp"
-        tools:listitem="@layout/grid_item_collection_card" />
+        tools:listitem="@layout/list_item_collection_card" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/view_collections_button_add"
@@ -39,6 +39,6 @@
         android:layout_marginEnd="@dimen/_20sdp"
         android:layout_marginBottom="@dimen/_20sdp"
         app:backgroundTint="@color/colorPrimaryDark"
-        android:src="@drawable/ic_add" />
+        android:src="@drawable/icon_add" />
 
 </RelativeLayout>

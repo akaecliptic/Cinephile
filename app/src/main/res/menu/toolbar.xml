@@ -5,7 +5,7 @@
     <item
         android:visible="true"
         android:id="@+id/toolbar_search"
-        android:icon="@drawable/ic_search"
+        android:icon="@drawable/icon_search"
         android:title="@string/button_search"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="ifRoom|collapseActionView"/>
@@ -13,7 +13,7 @@
     <item
         android:visible="false"
         android:id="@+id/toolbar_add"
-        android:icon="@drawable/ic_add"
+        android:icon="@drawable/icon_add"
         android:title="@string/button_add"
         app:showAsAction="always"/>
 

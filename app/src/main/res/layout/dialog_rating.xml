@@ -23,7 +23,7 @@
         android:layout_width="50dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="@drawable/spinner_background"
+        android:background="@drawable/background_spinner"
         tools:listitem="@layout/underline_spinner_item" />
 
     <LinearLayout

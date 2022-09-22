@@ -55,9 +55,9 @@ public class MainActivity extends AppCompatActivity {
             if (getSupportActionBar() != null) {
                 if(destination.getId() == R.id.mylist_fragment){
                     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                    getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_sort);
+                    getSupportActionBar().setHomeAsUpIndicator(R.drawable.icon_sort);
                 }else {
-                    getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back);
+                    getSupportActionBar().setHomeAsUpIndicator(R.drawable.icon_arrow_back);
                 }
             }
         });

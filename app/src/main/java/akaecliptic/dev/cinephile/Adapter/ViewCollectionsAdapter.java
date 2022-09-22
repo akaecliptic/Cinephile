@@ -28,7 +28,7 @@ public class ViewCollectionsAdapter extends BaseAdapter {
         View gridItem = view;
 
         if(gridItem == null)
-            gridItem = LayoutInflater.from(context).inflate(R.layout.grid_item_collection_card, parent, false);
+            gridItem = LayoutInflater.from(context).inflate(R.layout.list_item_collection_card, parent, false);
 
         TextView title = gridItem.findViewById(R.id.rci_collection_title);
         title.setText(collections.get(position));

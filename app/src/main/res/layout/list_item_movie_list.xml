@@ -62,7 +62,7 @@
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
 
-        android:src="@drawable/ic_add"
+        android:src="@drawable/icon_add"
         android:tint="@color/colorTextPrimary"
         android:background="@android:color/transparent"/>
 

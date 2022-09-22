@@ -27,14 +27,14 @@
 
         <include
             android:id="@+id/toolbar"
-            layout="@layout/toolbar"
+            layout="@layout/nav_toolbar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_30sdp"
             android:layout_alignParentStart="true" />
 
         <include
             android:id="@+id/bottom_nav_bar"
-            layout="@layout/bottom_nav"
+            layout="@layout/nav_bottombar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_45sdp"
             android:layout_alignParentBottom="true" />

@@ -85,9 +85,9 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.View
         View view;
 
         if(viewType == VIEW_TYPE_CELL){
-            view = mInflater.inflate(R.layout.recycler_item_movie_list, parent, false);
+            view = mInflater.inflate(R.layout.list_item_movie_list, parent, false);
         }else{
-            view = mInflater.inflate(R.layout.recycler_item_footer, parent, false);
+            view = mInflater.inflate(R.layout.list_item_footer, parent, false);
             view.getLayoutParams().width = LayoutParams.MATCH_PARENT;
         }
 

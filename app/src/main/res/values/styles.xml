@@ -11,13 +11,13 @@
     </style>
 
     <style name="MyCheckboxStyle" parent="AppTheme">
-        <item name="android:button">@drawable/button_checkbox</item>
+        <item name="android:button">@drawable/background_checkbox</item>
         <item name="android:background">@color/colorSecondaryDark</item>
     </style>
 
     <style name="MyCheckboxSeen" parent="AppTheme">
-        <item name="android:button">@drawable/ic_seen</item>
-        <item name="android:buttonTint">@drawable/tint_menu</item>
+        <item name="android:button">@drawable/icon_seen</item>
+        <item name="android:buttonTint">@drawable/select_tint</item>
         <item name="android:outlineProvider">none</item>
     </style>
 
