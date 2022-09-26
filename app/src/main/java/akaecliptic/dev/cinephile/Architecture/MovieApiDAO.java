@@ -12,6 +12,10 @@ import org.json.JSONObject;
 
 import akaecliptic.dev.cinephile.BuildConfig;
 
+/**
+ * Old Version of TMDB API caller. Deprecating for newer version.
+ */
+@Deprecated
 public class MovieApiDAO {
 
     private static final String TAG = "MovieApiDAO";
