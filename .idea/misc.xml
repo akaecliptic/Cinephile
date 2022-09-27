@@ -5,6 +5,49 @@
       <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
     </configurations>
   </component>
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/drawable/button_checkbox.xml" value="0.351" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/drawable/button_checkbox_favourite.xml" value="0.299" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/drawable/ic_add.xml" value="0.299" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/drawable/ic_seen.xml" value="0.3515" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/drawable/ic_sort.xml" value="0.3515" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/drawable/line_divider.xml" value="0.3515" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/drawable/progress_bar_circle.xml" value="0.3515" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/drawable/shape_circle.xml" value="0.3515" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/drawable/spinner_background.xml" value="0.351" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/drawable/tint_menu.xml" value="0.3515" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/font/archivo_narrow.xml" value="0.2921875" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/font/archivo_narrow_bold.xml" value="0.2921875" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/font/cousine.xml" value="0.2921875" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/activity_main.xml" value="0.301953125" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/activity_search.xml" value="0.26953125" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/bottom_nav.xml" value="0.301953125" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/dialog_add_collection.xml" value="0.301953125" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/dialog_delete.xml" value="0.23515625" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/dialog_new_collection.xml" value="0.23515625" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/dialog_rating.xml" value="0.23515625" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/fragment_collections.xml" value="0.23515625" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/fragment_explore.xml" value="0.23515625" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/fragment_movie_profile.xml" value="0.23515625" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/fragment_mylist.xml" value="0.26953125" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/fragment_view_collections.xml" value="0.23515625" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/grid_item_collection_card.xml" value="0.23515625" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/list_item_collection.xml" value="0.23515625" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/recycler_item_footer.xml" value="0.301953125" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/recycler_item_movie_card.xml" value="0.301953125" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/recycler_item_movie_list.xml" value="0.301953125" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/recycler_item_my_list.xml" value="0.26953125" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/toolbar.xml" value="0.26953125" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/underline_spinner_item.xml" value="0.301953125" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/menu/bottom_menu.xml" value="0.23515625" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/menu/toolbar_menu.xml" value="0.23515625" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.299" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.299" />
+      </map>
+    </option>
+  </component>
   <component name="NullableNotNullManager">
     <option name="myDefaultNullable" value="android.support.annotation.Nullable" />
     <option name="myDefaultNotNull" value="android.support.annotation.NonNull" />
