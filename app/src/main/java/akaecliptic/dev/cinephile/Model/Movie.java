@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
 
+@Deprecated
 public class Movie extends Media {
     @SerializedName("sub_genre") private Genre subGenre;
     @SerializedName("min_genre") private Genre minGenre;

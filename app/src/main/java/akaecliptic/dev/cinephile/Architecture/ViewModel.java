@@ -13,6 +13,7 @@ import akaecliptic.dev.cinephile.Model.Movie;
 
 import static akaecliptic.dev.cinephile.Architecture.Repository.Sort;
 
+@Deprecated
 public class ViewModel extends AndroidViewModel {
 
     private Repository mediaRepository;

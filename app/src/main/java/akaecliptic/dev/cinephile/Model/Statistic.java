@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
 //Rename class to appropriately reflect functionality.
+@Deprecated
 public class Statistic implements Serializable {
     @SerializedName("description") private String description; //The description of media Object, as provided by API
     @SerializedName("site_rating") private int siteRating; //The rating given on API website

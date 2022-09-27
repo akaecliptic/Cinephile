@@ -3,6 +3,7 @@ package akaecliptic.dev.cinephile.Model;
 import java.io.Serializable;
 import com.google.gson.annotations.SerializedName;
 
+@Deprecated
 public class ImageData implements Serializable {
     @SerializedName("poster_path") private String posterImagePath; //The image path for movie poster
     @SerializedName("backdrop_path") private String backdropImagePath; //The image path for movie backdrop

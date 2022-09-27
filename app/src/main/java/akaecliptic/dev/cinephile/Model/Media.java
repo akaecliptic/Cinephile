@@ -8,6 +8,7 @@ import com.google.gson.annotations.SerializedName;
 
 import akaecliptic.dev.cinephile.Helper.MediaObjectHelper;
 
+@Deprecated
 public abstract class Media implements Comparable<Media>, Serializable {
     @SerializedName("id") protected int id;
     @SerializedName("seen") private boolean seen;
