@@ -1,22 +1,38 @@
 package akaecliptic.dev.cinephile.Architecture.Accessors;
 
 import static akaecliptic.dev.cinephile.Auxiliary.Database.Functions.doesTableExist;
+import static akaecliptic.dev.cinephile.Auxiliary.Database.Functions.formatBoolean;
+import static akaecliptic.dev.cinephile.Auxiliary.Database.Functions.formatList;
+import static akaecliptic.dev.cinephile.Auxiliary.Database.Functions.getBool;
+import static akaecliptic.dev.cinephile.Auxiliary.Database.Functions.getInt;
+import static akaecliptic.dev.cinephile.Auxiliary.Database.Functions.getLocalDate;
+import static akaecliptic.dev.cinephile.Auxiliary.Database.Functions.getString;
+import static akaecliptic.dev.cinephile.Auxiliary.Database.Functions.getIntList;
 import static akaecliptic.dev.cinephile.Auxiliary.Database.Migration.migrateMovieInformation;
 import static akaecliptic.dev.cinephile.Auxiliary.Database.Migration.migrateMovies;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.util.Pair;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import akaecliptic.dev.cinephile.Auxiliary.Database.Statements;
 import akaecliptic.dev.cinephile.Auxiliary.Database.Tables;
+import dev.akaecliptic.models.Information;
+import dev.akaecliptic.models.Movie;
 
 // TEST: Migration - need to test migration cases, using old and new DAO.
 public class SQLite extends SQLiteOpenHelper {
@@ -149,56 +165,250 @@ public class SQLite extends SQLiteOpenHelper {
     /*          DATA ACCESS          */
 
     //INSERT
-    void insertMovie() {}
-    void insertInformation() {}
+    void insertMovie(Movie movie) {
+        Log.i(TAG, "Inserting new row in 'movies' table.");
 
-    //SELECT
-    void selectAll() {
-        Cursor cursor = database.rawQuery(Statements.SELECT_ALL_MOVIE_DATA, null);
+        ContentValues values = new ContentValues();
 
-        cursor.moveToFirst();
-        //Processing
+        values.put("_id", movie.getId());
+        values.put("title", movie.getTitle());
+        values.put("seen", formatBoolean(movie.isSeen()));
+        values.put("description", movie.getDescription());
+        values.put("user_rating", movie.getUserRating());
+        values.put("native_rating", movie.getNativeRating());
+        values.put("release", movie.getRelease().toString());
 
-        cursor.close();
-        //Return
+        Log.i(TAG, "Inserting row with _id = " + movie.getId() + ".");
+        database.insert(Tables.MOVIES.toString(), null, values);
+        insertInformation(new Pair<>(movie.getId(), movie.getInfo()));
     }
 
-    void selectMovie(int id) {
+    void insertInformation(Pair<Integer, Information> pair) {
+        Log.i(TAG, "Inserting new row in 'movie_information' table.");
+
+        ContentValues values = new ContentValues();
+
+        values.put("movie_id", pair.first);
+        values.put("poster", pair.second.getPoster());
+        values.put("backdrop", pair.second.getBackdrop());
+        values.put("runtime", pair.second.getRuntime());
+        values.put("tagline", pair.second.getTagline());
+        values.put("genres", formatList(pair.second.getGenres()));
+
+        Log.i(TAG, "Inserting row with movie_id = " + pair.first + ".");
+        database.insert(Tables.MOVIES.toString(), null, values);
+    }
+
+    //SELECT
+    List<Movie> selectAll() {
+        Log.i(TAG, "Selecting all rows in 'movie_data' view.");
+
+        Cursor cursor = database.rawQuery(Statements.SELECT_ALL_MOVIE_DATA, null);
+        List<Movie> movies = new ArrayList<>();
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            int id = getInt(cursor, "_id");
+            String title = getString(cursor, "title");
+            boolean seen = getBool(cursor, "seen");
+            String description = getString(cursor, "description");
+            int userRating = getInt(cursor, "user_rating");
+            int nativeRating = getInt(cursor, "native_rating");
+            LocalDate release = getLocalDate(cursor, "release");
+
+            Movie movie = new Movie(id, seen, title, description, userRating, nativeRating, release);
+
+            String poster = getString(cursor, "poster");
+            String backdrop = getString(cursor, "backdrop");
+            int runtime = getInt(cursor, "runtime");
+            String tagline = getString(cursor, "tagline");
+            List<Integer> genres = getIntList(cursor, "genres");
+
+            Information information = new Information(poster, backdrop, runtime, tagline, genres);
+
+            movie.setInfo(information);
+            movies.add(movie);
+
+            cursor.moveToNext();
+        }
+        cursor.close();
+
+        return movies;
+    }
+
+    Movie selectMovie(int id) {
+        Log.i(TAG, "Selecting single row in 'movie_data' view.");
+
         String[] arguments = { Integer.toString(id) };
         Cursor cursor = database.rawQuery(Statements.SELECT_MOVIE, arguments);
 
         cursor.moveToFirst();
-        //Processing
+
+        int _id = getInt(cursor, "_id");
+        String title = getString(cursor, "title");
+        boolean seen = getBool(cursor, "seen");
+        String description = getString(cursor, "description");
+        int userRating = getInt(cursor, "user_rating");
+        int nativeRating = getInt(cursor, "native_rating");
+        LocalDate release = getLocalDate(cursor, "release");
+
+        Movie movie = new Movie(_id, seen, title, description, userRating, nativeRating, release);
+
+        String poster = getString(cursor, "poster");
+        String backdrop = getString(cursor, "backdrop");
+        int runtime = getInt(cursor, "runtime");
+        String tagline = getString(cursor, "tagline");
+        List<Integer> genres = getIntList(cursor, "genres");
+
+        Information information = new Information(poster, backdrop, runtime, tagline, genres);
+
+        movie.setInfo(information);
 
         cursor.close();
-        //Return
+
+        return movie;
     }
 
-    void selectInformation(int id) {
+    Information selectInformation(int id) {
+        Log.i(TAG, "Selecting single row in 'movie_information' table.");
+
         String[] arguments = { Integer.toString(id) };
         Cursor cursor = database.rawQuery(Statements.SELECT_INFORMATION, arguments);
 
         cursor.moveToFirst();
-        //Processing
+
+        String poster = getString(cursor, "poster");
+        String backdrop = getString(cursor, "backdrop");
+        int runtime = getInt(cursor, "runtime");
+        String tagline = getString(cursor, "tagline");
+        List<Integer> genres = getIntList(cursor, "genres");
+
+        Information information = new Information(poster, backdrop, runtime, tagline, genres);
 
         cursor.close();
-        //Return
+
+        return information;
     }
 
     //UPDATE
-    void updateMovie() {}
-    void updateInformation() {}
+    void updateMovie(Movie... movies) {
+        Log.i(TAG, "Beginning transaction to update rows in 'movies' table.");
+
+        database.beginTransaction();
+        try {
+            for (Movie movie : movies) {
+                ContentValues values = new ContentValues();
+
+                values.put("title", movie.getTitle());
+                values.put("seen", formatBoolean(movie.isSeen()));
+                values.put("description", movie.getDescription());
+                values.put("user_rating", movie.getUserRating());
+                values.put("native_rating", movie.getNativeRating());
+                values.put("release", movie.getRelease().toString());
+
+                String[] argument = { Integer.toString(movie.getId()) };
+                String clause = "_id = ?";
+
+                Log.i(TAG, "Updating row with _id = " + movie.getId() + ".");
+                database.update(Tables.MOVIES.toString(), values, clause, argument);
+                updateInformation(new Pair<>(movie.getId(), movie.getInfo()));
+            }
+
+            Log.i(TAG, "Committing transaction.");
+            database.setTransactionSuccessful();
+        } catch (SQLException e) {
+            Log.w(TAG, "Could not update values in 'movies' table.");
+            Log.e(TAG, "Exception '" + e.getMessage() + "' found.");
+            throw new RuntimeException(e);
+        } finally {
+            Log.i(TAG, "Ending transaction.");
+            database.endTransaction();
+        }
+
+        Log.i(TAG, "Transaction complete.");
+    }
+
+    void updateInformation(Map<Integer, Information> map) {
+        Log.i(TAG, "Beginning transaction to update rows in 'movie_information' table.");
+
+        database.beginTransaction();
+        try {
+            for (Map.Entry<Integer, Information> entry : map.entrySet()) {
+                ContentValues values = new ContentValues();
+
+                values.put("poster", entry.getValue().getPoster());
+                values.put("backdrop", entry.getValue().getBackdrop());
+                values.put("runtime", entry.getValue().getRuntime());
+                values.put("tagline", entry.getValue().getTagline());
+                values.put("genres", formatList(entry.getValue().getGenres()));
+
+                String[] argument = { Integer.toString(entry.getKey()) };
+                String clause = "movie_id = ?";
+
+                Log.i(TAG, "Updating row with _id = " + entry.getKey() + ".");
+                database.update(Tables.MOVIES.toString(), values, clause, argument);
+            }
+
+            Log.i(TAG, "Committing transaction.");
+            database.setTransactionSuccessful();
+        } catch (SQLException e) {
+            Log.w(TAG, "Could not update values in 'movie_information' table.");
+            Log.e(TAG, "Exception '" + e.getMessage() + "' found.");
+            throw new RuntimeException(e);
+        } finally {
+            Log.i(TAG, "Ending transaction.");
+            database.endTransaction();
+        }
+
+        Log.i(TAG, "Transaction complete.");
+    }
+
+    void updateInformation(Pair<Integer, Information> pair) {
+        Log.i(TAG, "Updating single row in 'movie_information' table.");
+
+        try {
+            ContentValues values = new ContentValues();
+
+            values.put("poster", pair.second.getPoster());
+            values.put("backdrop", pair.second.getBackdrop());
+            values.put("runtime", pair.second.getRuntime());
+            values.put("tagline", pair.second.getTagline());
+            values.put("genres", formatList(pair.second.getGenres()));
+
+            String[] argument = { Integer.toString(pair.first) };
+            String clause = "movie_id = ?";
+
+            Log.i(TAG, "Updating row with _id = " + pair.first + ".");
+            database.update(Tables.MOVIES.toString(), values, clause, argument);
+        } catch (SQLException e) {
+            Log.w(TAG, "Could not update values in 'movie_information' table.");
+            Log.e(TAG, "Exception '" + e.getMessage() + "' found.");
+            throw new RuntimeException(e);
+        }
+
+        Log.i(TAG, "Update complete.");
+    }
 
     //DELETE
     void deleteMovie(int id) {
+        Log.i(TAG, "Deleting single row in 'movies' table.");
+
         String[] arguments = { Integer.toString(id) };
         String clause = "_id = ?";
         database.delete(Tables.MOVIES.toString(), clause, arguments);
+
+        Log.i(TAG, "Deleted movie with _id = " + id + " and associated movie information.");
     }
 
     void deleteInformation(int id) {
+        Log.i(TAG, "Deleting single row in 'movie_information' table.");
+
         String[] arguments = { Integer.toString(id) };
         String clause = "movie_id = ?";
         database.delete(Tables.INFORMATION.toString(), clause, arguments);
+
+        Log.i(TAG, "Deleted movie information with movie_id = " + id + ".");
     }
+
+    //SPECIFIC
 }

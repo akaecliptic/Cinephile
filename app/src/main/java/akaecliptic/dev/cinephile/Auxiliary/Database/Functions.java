@@ -3,6 +3,12 @@ package akaecliptic.dev.cinephile.Auxiliary.Database;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 abstract public class Functions {
 
     private static final String TAG = Functions.class.getSimpleName();
@@ -27,5 +33,121 @@ abstract public class Functions {
         c.close();
 
         return count > 0;
+    }
+
+    /**
+     * Helper function to create a map for getting data from cursor position.
+     * Maps column names to their index.
+     *
+     * @param cursor - The cursor from query to get column information from.
+     * @return Map of column names to their index.
+     */
+    public static Map<String, Integer> nameIndexMap(Cursor cursor) {
+        String[] names = cursor.getColumnNames();
+        Map<String, Integer> map = new HashMap<>();
+
+        for (String name : names) {
+            map.put(name, cursor.getColumnIndex(name));
+        }
+
+        return map;
+    }
+
+    /**
+     * Helper function to format lists for database persistence.
+     *
+     * @param list - The list of int to format.
+     * @return String value of list in comma separated values, null if list is empty.
+     */
+    public static String formatList(List<Integer> list) {
+        if(list.isEmpty()) return null;
+
+        String temp = list.toString();
+        return temp.substring(1, temp.length() - 1);
+    }
+
+    /**
+     * Helper function to format booleans for database persistence.
+     *
+     * @param value - The boolean value to format.
+     * @return Int value of boolean, true = 1 and false = 0.
+     */
+    public static int formatBoolean(boolean value) {
+        return (value) ? 1 : 0;
+    }
+
+    //CURSOR ACCESS
+    /*
+        These functions are used as an alternative to only being able to get data by index from a cursor.
+        The column name passed is used to get an index. The index is checked for null value, and parsed.
+     */
+
+    /**
+     * Helper function to get int at cursor position for specified column.
+     *
+     * @param cursor - The cursor from the query to get data.
+     * @param column - The column to get data.
+     * @return Integer value of the data, -1 if null.
+     */
+    public static int getInt(Cursor cursor, String column) {
+        int index = cursor.getColumnIndexOrThrow(column);
+        return (cursor.isNull(index)) ? -1 : cursor.getInt(index);
+    }
+
+    /**
+     * Helper function to get String at cursor position for specified column.
+     *
+     * @param cursor - The cursor from the query to get data.
+     * @param column - The column to get data.
+     * @return String value of the data, null if null.
+     */
+    public static String getString(Cursor cursor, String column) {
+        int index = cursor.getColumnIndexOrThrow(column);
+        return (cursor.isNull(index)) ? null : cursor.getString(index);
+    }
+
+    /**
+     * Helper function to get boolean at cursor position for specified column.
+     *
+     * @param cursor - The cursor from the query to get data.
+     * @param column - The column to get data.
+     * @return Boolean value of the data, false if null.
+     */
+    public static boolean getBool(Cursor cursor, String column) {
+        int index = cursor.getColumnIndexOrThrow(column);
+        return !cursor.isNull(index) && (cursor.getInt(index) == 1);
+    }
+
+    /**
+     * Helper function to get LocalDate at cursor position for specified column.
+     *
+     * @param cursor - The cursor from the query to get data.
+     * @param column - The column to get data.
+     * @return LocalDate value of the data, null if null.
+     */
+    public static LocalDate getLocalDate(Cursor cursor, String column) {
+        int index = cursor.getColumnIndexOrThrow(column);
+        return (cursor.isNull(index)) ? null : LocalDate.parse(cursor.getString(index));
+    }
+
+    /**
+     * Helper function to get IntegerList at cursor position for specified column.
+     *
+     * @param cursor - The cursor from the query to get data.
+     * @param column - The column to get data.
+     * @return IntegerList value of the data, null if null.
+     */
+    public static List<Integer> getIntList(Cursor cursor, String column) {
+        int index = cursor.getColumnIndexOrThrow(column);
+        if(cursor.isNull(index)) return null;
+
+        List<Integer> list = new ArrayList<>();
+        String[] array = cursor.getString(index).split(",");
+
+        for (String data : array) {
+            list.add(Integer.parseInt(data.trim()));
+        }
+
+        return list;
     }
 }

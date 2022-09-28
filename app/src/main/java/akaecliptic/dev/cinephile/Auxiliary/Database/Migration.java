@@ -68,6 +68,9 @@ abstract public class Migration {
 
             Log.i(TAG, "Inserting old data into correct fields.");
             database.execSQL(INSERT_MOVIES);
+
+            Log.i(TAG, "Committing transaction.");
+            database.setTransactionSuccessful();
         } catch (SQLException e) {
             Log.w(TAG, "Could not migrate tables.");
             Log.e(TAG, "Exception '" + e.getMessage() + "' found.");
@@ -101,6 +104,9 @@ abstract public class Migration {
 
             Log.i(TAG, "Inserting old data into correct fields.");
             database.execSQL(INSERT_INFORMATION);
+
+            Log.i(TAG, "Committing transaction.");
+            database.setTransactionSuccessful();
         } catch (SQLException e) {
             Log.w(TAG, "Could not migrate tables.");
             Log.e(TAG, "Exception '" + e.getMessage() + "' found.");
