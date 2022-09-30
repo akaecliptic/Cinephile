@@ -23,7 +23,7 @@ import akaecliptic.dev.cinephile.Model.Movie;
  * Old Version of Repository. Deprecating for newer version.
  */
 @Deprecated
-public class Repository{
+public class MovieRepository {
 
     private static final String TAG = "Repository";
     private SQLiteDAO sqLiteDAO;
@@ -33,7 +33,7 @@ public class Repository{
     private List<String> collectionHeadings;
     private Sort sortType = Sort.DEFAULT;
 
-    Repository(Context context){
+    MovieRepository(Context context){
         sqLiteDAO = SQLiteDAO.getInstance(context);
         movieDAO = MovieApiDAO.getInstance(context);
         if(onlineList[0][0] == null)

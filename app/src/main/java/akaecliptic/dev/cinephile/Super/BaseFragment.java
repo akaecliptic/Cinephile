@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import akaecliptic.dev.cinephile.Architecture.ViewModel;
+import akaecliptic.dev.cinephile.Architecture.MovieViewModel;
 
 /**
  * A personal implementation of Base class extending {@link Fragment} class.
@@ -20,7 +20,7 @@ import akaecliptic.dev.cinephile.Architecture.ViewModel;
 public abstract class BaseFragment extends Fragment {
 
     protected final String TAG = getClass().getSimpleName();
-    protected ViewModel viewModel;
+    protected MovieViewModel viewModel;
     @LayoutRes protected int resource;
 
     @Override
@@ -36,7 +36,7 @@ public abstract class BaseFragment extends Fragment {
     }
 
     private void initViewModel() {
-        viewModel = new ViewModelProvider(requireActivity()).get(ViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(MovieViewModel.class);
     }
 
     public abstract void initAdapter();

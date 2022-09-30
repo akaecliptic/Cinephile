@@ -24,8 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import akaecliptic.dev.cinephile.Adapter.CollectionsListAdapter;
-import akaecliptic.dev.cinephile.Architecture.ViewModel;
-import akaecliptic.dev.cinephile.Architecture.Repository;
+import akaecliptic.dev.cinephile.Architecture.MovieViewModel;
+import akaecliptic.dev.cinephile.Architecture.MovieRepository;
 import akaecliptic.dev.cinephile.MainActivity;
 import akaecliptic.dev.cinephile.Model.Movie;
 import akaecliptic.dev.cinephile.R;
@@ -38,8 +38,8 @@ public class CollectionsFragment extends Fragment {
 
     private String fragName;
 
-    private ViewModel viewModel;
-    private Repository.Sort currentSort = Repository.Sort.DEFAULT;
+    private MovieViewModel viewModel;
+    private MovieRepository.Sort currentSort = MovieRepository.Sort.DEFAULT;
     private List<Movie> fragList;
 
     private CollectionsListAdapter adapter;
@@ -73,7 +73,7 @@ public class CollectionsFragment extends Fragment {
     }
 
     private void setUpViewModelLink() {
-        viewModel = new ViewModelProvider(requireActivity()).get(ViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(MovieViewModel.class);
     }
 
     private void assignInstanceName() {

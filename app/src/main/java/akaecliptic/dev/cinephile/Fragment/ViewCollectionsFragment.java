@@ -24,7 +24,7 @@ import java.util.Collections;
 import java.util.List;
 
 import akaecliptic.dev.cinephile.Adapter.ViewCollectionsAdapter;
-import akaecliptic.dev.cinephile.Architecture.ViewModel;
+import akaecliptic.dev.cinephile.Architecture.MovieViewModel;
 import akaecliptic.dev.cinephile.MainActivity;
 import akaecliptic.dev.cinephile.R;
 
@@ -33,7 +33,7 @@ import static akaecliptic.dev.cinephile.Fragment.CollectionsFragment.INSTANCE_NA
 public class ViewCollectionsFragment extends Fragment {
     private String fragName;
 
-    private ViewModel viewModel;
+    private MovieViewModel viewModel;
     private List<String> fragList;
 
     private ViewCollectionsAdapter adapter;
@@ -60,7 +60,7 @@ public class ViewCollectionsFragment extends Fragment {
     }
 
     private void setUpViewModelLink() {
-        viewModel = new ViewModelProvider(requireActivity()).get(ViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(MovieViewModel.class);
     }
 
     private void assignInstanceName() {

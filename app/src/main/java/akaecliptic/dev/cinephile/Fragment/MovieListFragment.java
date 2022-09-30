@@ -23,7 +23,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import akaecliptic.dev.cinephile.Adapter.MovieListAdapter;
-import akaecliptic.dev.cinephile.Architecture.ViewModel;
+import akaecliptic.dev.cinephile.Architecture.MovieViewModel;
 import akaecliptic.dev.cinephile.Architecture.MovieApiDAO;
 import akaecliptic.dev.cinephile.Architecture.MovieApiDAO.MovieType;
 import akaecliptic.dev.cinephile.MainActivity;
@@ -42,7 +42,7 @@ import static akaecliptic.dev.cinephile.Fragment.MyListFragment.SELECTED_TYPE;
  */
 public class MovieListFragment extends Fragment {
 
-    private ViewModel viewModel;
+    private MovieViewModel viewModel;
     private ArrayList<Movie> cachedMovies;
     private boolean lockPagination = false;
     private MovieType movieType;
@@ -76,7 +76,7 @@ public class MovieListFragment extends Fragment {
     }
 
     private void setUpViewModelLink() {
-        viewModel = new ViewModelProvider(requireActivity()).get(ViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(MovieViewModel.class);
     }
 
     private void setUpRecyclerSearch() {

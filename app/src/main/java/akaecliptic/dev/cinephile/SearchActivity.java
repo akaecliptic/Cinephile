@@ -26,14 +26,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import akaecliptic.dev.cinephile.Architecture.ViewModel;
+import akaecliptic.dev.cinephile.Architecture.MovieViewModel;
 import akaecliptic.dev.cinephile.Fragment.MyListFragment;
 import akaecliptic.dev.cinephile.Model.Media;
 import akaecliptic.dev.cinephile.Model.Movie;
 
 public class SearchActivity extends AppCompatActivity {
 
-    private ViewModel viewModel;
+    private MovieViewModel viewModel;
     public static RequestListener searchRequestListener;
     private static String queryString;
     private NavController navController;
@@ -117,7 +117,7 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void setUpViewModelLink() {
-        viewModel = new ViewModelProvider(this).get(ViewModel.class);
+        viewModel = new ViewModelProvider(this).get(MovieViewModel.class);
     }
 
     private void makeQueries(@Nullable String search){

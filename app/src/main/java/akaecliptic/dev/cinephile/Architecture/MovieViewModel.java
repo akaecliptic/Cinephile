@@ -11,17 +11,17 @@ import java.util.List;
 import akaecliptic.dev.cinephile.Fragment.ExploreFragment;
 import akaecliptic.dev.cinephile.Model.Movie;
 
-import static akaecliptic.dev.cinephile.Architecture.Repository.Sort;
+import static akaecliptic.dev.cinephile.Architecture.MovieRepository.Sort;
 
 @Deprecated
-public class ViewModel extends AndroidViewModel {
+public class MovieViewModel extends AndroidViewModel {
 
-    private Repository mediaRepository;
+    private MovieRepository mediaRepository;
     private List<OnNotifyClones> subscribers = new ArrayList<>();
 
-    public ViewModel(@NonNull Application application) {
+    public MovieViewModel(@NonNull Application application) {
         super(application);
-        mediaRepository = new Repository(application);
+        mediaRepository = new MovieRepository(application);
     }
 
     public List<Movie> reCacheItems(){

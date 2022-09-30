@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Objects;
 
 import akaecliptic.dev.cinephile.Adapter.ExploreAdapter;
-import akaecliptic.dev.cinephile.Architecture.ViewModel;
+import akaecliptic.dev.cinephile.Architecture.MovieViewModel;
 import akaecliptic.dev.cinephile.Architecture.MovieApiDAO;
 import akaecliptic.dev.cinephile.Model.Movie;
 import akaecliptic.dev.cinephile.R;
@@ -35,7 +35,7 @@ import static akaecliptic.dev.cinephile.Fragment.MyListFragment.SELECTED_TYPE;
  */
 public class ExploreFragment extends Fragment {
 
-    private ViewModel viewModel;
+    private MovieViewModel viewModel;
 
     public ExploreFragment() {
         // Required empty public constructor
@@ -55,7 +55,7 @@ public class ExploreFragment extends Fragment {
     }
 
     private void setUpViewModelLink() {
-        viewModel = new ViewModelProvider(requireActivity()).get(ViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(MovieViewModel.class);
     }
 
     private void setUpRecycler() {

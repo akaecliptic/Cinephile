@@ -181,7 +181,7 @@ public class SQLite extends SQLiteOpenHelper {
     /*          DATA ACCESS          */
 
     //INSERT
-    void insertMovie(Movie movie) {
+    public void insertMovie(Movie movie) {
         Log.i(TAG, "Inserting new row in 'movies' table.");
 
         ContentValues values = new ContentValues();
@@ -199,7 +199,7 @@ public class SQLite extends SQLiteOpenHelper {
         insertInformation(new Pair<>(movie.getId(), movie.getInfo()));
     }
 
-    void insertInformation(Pair<Integer, Information> pair) {
+    public void insertInformation(Pair<Integer, Information> pair) {
         Log.i(TAG, "Inserting new row in 'movie_information' table.");
 
         ContentValues values = new ContentValues();
@@ -216,7 +216,7 @@ public class SQLite extends SQLiteOpenHelper {
     }
 
     //SELECT
-    List<Movie> selectAll() {
+    public List<Movie> selectAll() {
         Log.i(TAG, "Selecting all rows in 'movie_data' view.");
 
         Cursor cursor = database.rawQuery(Statements.SELECT_ALL_MOVIE_DATA, null);
@@ -252,7 +252,7 @@ public class SQLite extends SQLiteOpenHelper {
         return movies;
     }
 
-    Movie selectMovie(int id) {
+    public Movie selectMovie(int id) {
         Log.i(TAG, "Selecting single row in 'movie_data' view.");
 
         String[] arguments = { Integer.toString(id) };
@@ -285,7 +285,7 @@ public class SQLite extends SQLiteOpenHelper {
         return movie;
     }
 
-    Information selectInformation(int id) {
+    public Information selectInformation(int id) {
         Log.i(TAG, "Selecting single row in 'movie_information' table.");
 
         String[] arguments = { Integer.toString(id) };
@@ -307,7 +307,7 @@ public class SQLite extends SQLiteOpenHelper {
     }
 
     //UPDATE
-    void updateMovie(Movie... movies) {
+    public void updateMovie(Movie... movies) {
         Log.i(TAG, "Beginning transaction to update rows in 'movies' table.");
 
         database.beginTransaction();
@@ -344,7 +344,7 @@ public class SQLite extends SQLiteOpenHelper {
         Log.i(TAG, "Transaction complete.");
     }
 
-    void updateInformation(Map<Integer, Information> map) {
+    public void updateInformation(Map<Integer, Information> map) {
         Log.i(TAG, "Beginning transaction to update rows in 'movie_information' table.");
 
         database.beginTransaction();
@@ -379,7 +379,7 @@ public class SQLite extends SQLiteOpenHelper {
         Log.i(TAG, "Transaction complete.");
     }
 
-    void updateInformation(Pair<Integer, Information> pair) {
+    public void updateInformation(Pair<Integer, Information> pair) {
         Log.i(TAG, "Updating single row in 'movie_information' table.");
 
         try {
@@ -406,7 +406,7 @@ public class SQLite extends SQLiteOpenHelper {
     }
 
     //DELETE
-    void deleteMovie(int id) {
+    public void deleteMovie(int id) {
         Log.i(TAG, "Deleting single row in 'movies' table.");
 
         String[] arguments = { Integer.toString(id) };
@@ -416,7 +416,7 @@ public class SQLite extends SQLiteOpenHelper {
         Log.i(TAG, "Deleted movie with _id = " + id + " and associated movie information.");
     }
 
-    void deleteInformation(int id) {
+    public void deleteInformation(int id) {
         Log.i(TAG, "Deleting single row in 'movie_information' table.");
 
         String[] arguments = { Integer.toString(id) };

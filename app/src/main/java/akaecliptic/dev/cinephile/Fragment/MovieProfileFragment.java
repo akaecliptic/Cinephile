@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import akaecliptic.dev.cinephile.Adapter.CollectionsArrayAdapter;
-import akaecliptic.dev.cinephile.Architecture.ViewModel;
+import akaecliptic.dev.cinephile.Architecture.MovieViewModel;
 import akaecliptic.dev.cinephile.Architecture.MovieApiDAO;
 import akaecliptic.dev.cinephile.Helper.MediaObjectHelper;
 import akaecliptic.dev.cinephile.Model.Movie;
@@ -63,7 +63,7 @@ public class MovieProfileFragment extends Fragment {
     private Movie selected = null;
     private boolean isSelectedSaved;
     private boolean isSelectedFavourited;
-    private ViewModel viewModel;
+    private MovieViewModel viewModel;
     private OnFavourite onFavourite;
 
     private BottomNavigationView bottomNavigationView;
@@ -237,7 +237,7 @@ public class MovieProfileFragment extends Fragment {
     }
 
     private void setUpViewModelLink() {
-        viewModel = new ViewModelProvider(requireActivity()).get(ViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(MovieViewModel.class);
         configPoster = viewModel.getImageConfig(MovieApiDAO.ImageType.POSTER);
         configBackdrop = viewModel.getImageConfig(MovieApiDAO.ImageType.BACKDROP);
     }
