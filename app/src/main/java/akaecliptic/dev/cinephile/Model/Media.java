@@ -1,10 +1,11 @@
 package akaecliptic.dev.cinephile.Model;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
+
+import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.Date;
-import com.google.gson.annotations.SerializedName;
 
 import akaecliptic.dev.cinephile.Helper.MediaObjectHelper;
 

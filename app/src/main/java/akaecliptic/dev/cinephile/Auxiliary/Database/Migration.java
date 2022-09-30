@@ -46,10 +46,10 @@ abstract public class Migration {
      * Used for migrating database tables from version 2 -> 3.
      * Migrating movies table to new schema and preserving existing data.
      *
-     * @param database - The database to preform the migration on.
-     * @return - True if the transaction finishes successfully, false otherwise.
+     * <p>Throws a RuntimeException if any of the individual statements fail.</p>
      *
-     * Throws a RuntimeException if any of the individual statements fail.
+     * @param database The database to preform the migration on.
+     * @return True if the transaction finishes successfully, false otherwise.
      */
     public static boolean migrateMovies(SQLiteDatabase database) {
 
@@ -89,10 +89,10 @@ abstract public class Migration {
      * Using new 'movie_information' table to persist additional data on movies,
      * preserving existing data.
      *
-     * @param database - The database to preform the migration on.
-     * @return - True if the transaction finishes successfully, false otherwise.
+     * <p>Throws a RuntimeException if any of the individual statements fail.</p>
      *
-     * Throws a RuntimeException if any of the individual statements fail.
+     * @param database The database to preform the migration on.
+     * @return True if the transaction finishes successfully, false otherwise.
      */
     public static boolean migrateMovieInformation(SQLiteDatabase database) {
 

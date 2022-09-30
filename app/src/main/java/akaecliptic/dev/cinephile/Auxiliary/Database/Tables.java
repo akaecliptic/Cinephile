@@ -1,6 +1,6 @@
 package akaecliptic.dev.cinephile.Auxiliary.Database;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 public enum Tables {
     MOVIES("movies"),

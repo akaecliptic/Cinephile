@@ -18,10 +18,10 @@ abstract public class Functions {
      * Done by querying master table to check if the given table name exists with type table,
      * then checking the count of the answer.
      *
-     * Anything greater than 0 returns true - the table exists.
+     * <p>Anything greater than 0 returns true - the table exists.</p>
      *
-     * @param database - The database to check.
-     * @param table - The table to check existence.
+     * @param database The database to check.
+     * @param table The table to check existence.
      * @return True if the table exists, false otherwise.
      */
     public static boolean doesTableExist(SQLiteDatabase database, String table) {
@@ -39,7 +39,7 @@ abstract public class Functions {
      * Helper function to create a map for getting data from cursor position.
      * Maps column names to their index.
      *
-     * @param cursor - The cursor from query to get column information from.
+     * @param cursor The cursor from query to get column information from.
      * @return Map of column names to their index.
      */
     public static Map<String, Integer> nameIndexMap(Cursor cursor) {
@@ -56,7 +56,7 @@ abstract public class Functions {
     /**
      * Helper function to format lists for database persistence.
      *
-     * @param list - The list of int to format.
+     * @param list The list of int to format.
      * @return String value of list in comma separated values, null if list is empty.
      */
     public static String formatList(List<Integer> list) {
@@ -69,7 +69,7 @@ abstract public class Functions {
     /**
      * Helper function to format booleans for database persistence.
      *
-     * @param value - The boolean value to format.
+     * @param value The boolean value to format.
      * @return Int value of boolean, true = 1 and false = 0.
      */
     public static int formatBoolean(boolean value) {
@@ -85,8 +85,8 @@ abstract public class Functions {
     /**
      * Helper function to get int at cursor position for specified column.
      *
-     * @param cursor - The cursor from the query to get data.
-     * @param column - The column to get data.
+     * @param cursor The cursor from the query to get data.
+     * @param column The column to get data.
      * @return Integer value of the data, -1 if null.
      */
     public static int getInt(Cursor cursor, String column) {
@@ -97,8 +97,8 @@ abstract public class Functions {
     /**
      * Helper function to get String at cursor position for specified column.
      *
-     * @param cursor - The cursor from the query to get data.
-     * @param column - The column to get data.
+     * @param cursor The cursor from the query to get data.
+     * @param column The column to get data.
      * @return String value of the data, null if null.
      */
     public static String getString(Cursor cursor, String column) {
@@ -109,8 +109,8 @@ abstract public class Functions {
     /**
      * Helper function to get boolean at cursor position for specified column.
      *
-     * @param cursor - The cursor from the query to get data.
-     * @param column - The column to get data.
+     * @param cursor The cursor from the query to get data.
+     * @param column The column to get data.
      * @return Boolean value of the data, false if null.
      */
     public static boolean getBool(Cursor cursor, String column) {
@@ -121,8 +121,8 @@ abstract public class Functions {
     /**
      * Helper function to get LocalDate at cursor position for specified column.
      *
-     * @param cursor - The cursor from the query to get data.
-     * @param column - The column to get data.
+     * @param cursor The cursor from the query to get data.
+     * @param column The column to get data.
      * @return LocalDate value of the data, null if null.
      */
     public static LocalDate getLocalDate(Cursor cursor, String column) {
@@ -133,8 +133,8 @@ abstract public class Functions {
     /**
      * Helper function to get IntegerList at cursor position for specified column.
      *
-     * @param cursor - The cursor from the query to get data.
-     * @param column - The column to get data.
+     * @param cursor The cursor from the query to get data.
+     * @param column The column to get data.
      * @return IntegerList value of the data, null if null.
      */
     public static List<Integer> getIntList(Cursor cursor, String column) {

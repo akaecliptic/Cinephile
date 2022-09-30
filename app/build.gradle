@@ -22,8 +22,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = 11
-        targetCompatibility = 11
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
 }
 
@@ -51,9 +51,19 @@ dependencies {
     //Material
     implementation 'com.google.android.material:material:1.6.1'
 
-    //Third parties
+    /*
+        The OkHTTP built into android clashes with the custom library made.
+        The quick fix for now is deleting OkHTTP related files from .jar manually,
+        then adding a dependency of the same version used in the .jar here.
+
+        Will look for better solution.
+     */
+    //TODO: Revisit, see comment above.
+    //OkHTTP
+    implementation 'com.squareup.okhttp3:okhttp:4.10.0'
+
+    //DEPRECATED - TO BE DELETED
     implementation 'com.android.volley:volley:1.2.1'
-//    implementation 'com.google.code.gson:gson:2.9.1'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.intuit.sdp:sdp-android:1.1.0'
     implementation 'com.intuit.ssp:ssp-android:1.1.0'

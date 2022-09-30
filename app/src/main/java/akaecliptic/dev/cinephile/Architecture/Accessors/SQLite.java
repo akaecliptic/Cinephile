@@ -34,6 +34,22 @@ import akaecliptic.dev.cinephile.Auxiliary.Database.Tables;
 import dev.akaecliptic.models.Information;
 import dev.akaecliptic.models.Movie;
 
+/**
+ * This class is responsible for managing all SQLite related areas of the application, including:
+ * <ul>
+ *     <li>Creating Database</li>
+ *     <li>Persisting Data</li>
+ *     <li>Data CRUD Operations</li>
+ * </ul>
+ *
+ * <p>A newer implementation of {@link akaecliptic.dev.cinephile.Architecture.SQLiteDAO} (now deprecated).</p>
+ *
+ * <p>
+ *     All CRUD operations are synchronous and single threaded. For now the decision is to leave the responsibility
+ *     of off-loading work off the UI thread to the repository class. This may change in a later version,
+ *     but as of now (09/2022), this is the favoured approach.
+ * </p>
+ */
 // TEST: Migration - need to test migration cases, using old and new DAO.
 public class SQLite extends SQLiteOpenHelper {
 
@@ -216,7 +232,7 @@ public class SQLite extends SQLiteOpenHelper {
             int nativeRating = getInt(cursor, "native_rating");
             LocalDate release = getLocalDate(cursor, "release");
 
-            Movie movie = new Movie(id, seen, title, description, userRating, nativeRating, release);
+            Movie movie = new Movie(id, title, seen, description, userRating, nativeRating, release);
 
             String poster = getString(cursor, "poster");
             String backdrop = getString(cursor, "backdrop");
@@ -252,7 +268,7 @@ public class SQLite extends SQLiteOpenHelper {
         int nativeRating = getInt(cursor, "native_rating");
         LocalDate release = getLocalDate(cursor, "release");
 
-        Movie movie = new Movie(_id, seen, title, description, userRating, nativeRating, release);
+        Movie movie = new Movie(_id, title, seen, description, userRating, nativeRating, release);
 
         String poster = getString(cursor, "poster");
         String backdrop = getString(cursor, "backdrop");
