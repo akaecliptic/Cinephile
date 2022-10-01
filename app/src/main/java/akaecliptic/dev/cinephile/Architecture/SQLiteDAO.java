@@ -20,7 +20,7 @@ import akaecliptic.dev.cinephile.Model.Movie;
  * Old Version of Database DAO. Deprecating for newer version.
  */
 @Deprecated
-class SQLiteDAO extends SQLiteOpenHelper {
+public class SQLiteDAO extends SQLiteOpenHelper {
 
     private static String TAG = "SQLDataBase";
     private static String DB_NAME = "Cinephile.db";

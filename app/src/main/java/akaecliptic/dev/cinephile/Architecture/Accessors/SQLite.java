@@ -82,13 +82,13 @@ public class SQLite extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqliteDatabase) {
         database = sqliteDatabase;
 
-        if(DATABASE_VERSION == 3) checkOldDatabase();
-        initialiseTables();
+        if(DATABASE_VERSION == 3) checkOldDatabase(database);
+        initialiseTables(database);
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
-        if (newVersion == DATABASE_VERSION) initialiseTables();
+    public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
+        if (newVersion == DATABASE_VERSION) initialiseTables(database);
     }
 
     @Override
@@ -102,8 +102,10 @@ public class SQLite extends SQLiteOpenHelper {
     /**
      * Checking for previous implementation of DAO, copying the database and creating backup.
      * Planning to delete old database in future versions, keeping for redundancy.
+     *
+     * @param database The current working database.
      */
-    private void checkOldDatabase() {
+    private void checkOldDatabase(SQLiteDatabase database) {
         Log.i(TAG, "Checking for old database '" + OLD_DATABASE_NAME + "'");
 
         String newPath = database.getPath();
@@ -140,10 +142,12 @@ public class SQLite extends SQLiteOpenHelper {
 
     /**
      * Initialises tables in the database.
+     *
+     * @param database The current working database.
      */
-    private void initialiseTables() {
+    private void initialiseTables(SQLiteDatabase database) {
         if(DATABASE_VERSION == 3 && updateDatabase) {
-            migrateTables();
+            migrateTables(database);
         }
 
         database.execSQL(Statements.PRAGMA_FOREIGN_KEY); //So, foreign keys are not on by default...
@@ -154,12 +158,18 @@ public class SQLite extends SQLiteOpenHelper {
 
     /**
      * Migrates old data to new table schema preserving data where possible.
+     *
+     * @param database The current working database to migrate to.
      */
-    private void migrateTables() {
+    // TODO: 2022-09-30 Needs more testing.
+    private void migrateTables(SQLiteDatabase database) {
 
         boolean hasOldMovies = doesTableExist(database, "old_movies");
         boolean hasMovies = doesTableExist(database, "movies");
+
         boolean hasInformation = doesTableExist(database, "movie_information");
+        boolean hasImages = doesTableExist(database, "movie_images");
+        boolean hasStatistics = doesTableExist(database, "movie_statistics");
 
         //Has new tables and backup
         if(hasOldMovies && hasMovies && hasInformation) return;
@@ -175,7 +185,7 @@ public class SQLite extends SQLiteOpenHelper {
         if(!hasOldMovies && hasMovies) migrateMovies(database);
 
         //No information table
-        if(!hasInformation) migrateMovieInformation(database);
+        if(!hasInformation && (hasImages && hasStatistics)) migrateMovieInformation(database);
     }
 
     /*          DATA ACCESS          */
@@ -379,7 +389,7 @@ public class SQLite extends SQLiteOpenHelper {
         Log.i(TAG, "Transaction complete.");
     }
 
-    public void updateInformation(Pair<Integer, Information> pair) {
+    private void updateInformation(Pair<Integer, Information> pair) {
         Log.i(TAG, "Updating single row in 'movie_information' table.");
 
         try {
@@ -426,5 +436,4 @@ public class SQLite extends SQLiteOpenHelper {
         Log.i(TAG, "Deleted movie information with movie_id = " + id + ".");
     }
 
-    //SPECIFIC
 }

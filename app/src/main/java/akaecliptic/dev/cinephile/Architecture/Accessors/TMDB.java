@@ -71,7 +71,7 @@ public class TMDB {
      * @param page The page of results to get.
      * @return Array of {@link Movie} representing the query.
      */
-    public Movie[] upcoming(int page){
+    public Movie[] upcoming(int page) {
         JsonElement element = null;
 
         try {
@@ -95,7 +95,7 @@ public class TMDB {
      * @param page The page of results to get.
      * @return Array of {@link Movie} representing the query.
      */
-    public Movie[] rated(int page){
+    public Movie[] rated(int page) {
         JsonElement element = null;
 
         try {
@@ -119,7 +119,7 @@ public class TMDB {
      * @param page The page of results to get.
      * @return Array of {@link Movie} representing the query.
      */
-    public Movie[] popular(int page){
+    public Movie[] popular(int page) {
         JsonElement element = null;
 
         try {
@@ -143,7 +143,7 @@ public class TMDB {
      * @param page The page of results to get.
      * @return Array of {@link Movie} representing the query.
      */
-    public Movie[] playing(int page){
+    public Movie[] playing(int page) {
         JsonElement element = null;
 
         try {
