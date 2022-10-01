@@ -11,8 +11,6 @@ import java.util.Map;
 
 abstract public class Functions {
 
-    private static final String TAG = Functions.class.getSimpleName();
-
     /**
      * Helper function to check if a given table exists in a given database.
      * Done by querying master table to check if the given table name exists with type table,

@@ -3,6 +3,7 @@ package akaecliptic.dev.cinephile.Architecture.Repository;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Pair;
 
 import java.util.List;
 import java.util.Map;
@@ -29,8 +30,6 @@ import dev.akaecliptic.models.Movie;
  * <p>A newer implementation of {@link MovieRepository} (now deprecated).</p>
  */
 public class Repository {
-
-    private final String TAG = getClass().getSimpleName();
 
     private static final int THREAD_POOL = 2;
 
@@ -135,6 +134,14 @@ public class Repository {
     }
 
     /*          SQLITE INTERFACE          */
+
+    public void insert(Movie movie) {
+        executor.execute(() -> this.sqlite.insertMovie(movie));
+    }
+
+    public void insert(Pair<Integer, Information> information) {
+        executor.execute(() -> this.sqlite.insertInformation(information));
+    }
 
     public Movie movie(int id) {
         return this.sqlite.selectMovie(id);
