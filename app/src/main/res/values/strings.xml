@@ -9,7 +9,7 @@
     <string name="placeholder">Hello World</string>
     <string name="placeholder_year">2020</string>
     <string name="placeholder_movie_title">Movie Title</string>
-    <string name="placeholder_rating">7/10</string>
+    <string name="placeholder_rating">90</string>
     <string name="placeholder_year_vert">2\n0\n2\n0</string>
     <string name="placeholder_description">description</string>
     <string name="placeholder_collection_title">collection title</string> <!-- TO DEPRECATE -->
@@ -19,6 +19,7 @@
     <string name="button_add">ADD</string>
     <string name="button_done">DONE</string>
     <string name="button_more">MORE</string>
+    <string name="button_filter">FILTER</string>
     <string name="button_search">SEARCH</string>
     <string name="button_confirm">CONFIRM</string>
     <string name="button_favourite">FAVOURITES</string>
@@ -36,6 +37,10 @@
     <string name="description_collection_image">Collection image</string>
     <string name="description_add_to_collection">Add to collection</string>
     <string name="description_added_to_collection">Added to collection</string>
+    <string name="description_movie_card_poster">Image of movie poster for card</string>
+    <string name="description_movie_card_button">Movie options</string>
+    <string name="description_movie_seen">Movie has been seen</string>
+    <string name="description_movie_hearted">Movie has been hearted</string>
 
     <!-- Prompts -->
     <string name="hint_search">Movie Title</string>

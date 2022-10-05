@@ -1,26 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android"
     android:enterFadeDuration="@android:integer/config_shortAnimTime">
-<item android:state_checked="false">
-    <shape android:shape="rectangle">
-        <stroke android:width="2dp" android:color="@color/colorTextPrimary" />
-        <size android:width="22dp" android:height="22dp" />
-
-    </shape>
-</item>
-<item android:state_checked="true">
-    <layer-list>
-        <item>
-            <shape android:shape="rectangle">
-                <solid android:color="@color/colorPrimary" />
-                <size android:width="22dp" android:height="22dp" />
-            </shape>
-        </item>
-        <item>
-            <shape android:shape="line">
-                <stroke android:width="5dp" android:color="@color/colorSecondaryDark"/>
-            </shape>
-        </item>
-    </layer-list>
-</item>
+    <item android:state_checked="false">
+        <shape android:shape="rectangle">
+            <stroke android:width="3dp" android:color="@color/white" />
+            <size android:width="30dp" android:height="30dp" />
+            <corners android:radius="5dp" />
+        </shape>
+    </item>
+    <item android:state_checked="true">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/accent" />
+            <size android:width="30dp" android:height="30dp" />
+            <corners android:radius="5dp" />
+        </shape>
+    </item>
 </selector>

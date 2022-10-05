@@ -27,7 +27,7 @@
     </style>
 
     <style name="TextFont" parent="android:Widget.TextView">
-        <item name="fontFamily">@font/cousine</item>
+        <!--        <item name="fontFamily">@font/cousine</item>-->
     </style>
 
     <style name="MyRecyclerItems" parent="AppTheme">
@@ -58,4 +58,53 @@
 
     <!-- NEW STYLES - MIGRATING TO -->
     <!-- TODO: Add As Needed -->
+    <style name="card_background">
+        <item name="android:background">@drawable/background_card</item>
+        <item name="android:padding">5dp</item>
+    </style>
+
+    <style name="card_image_overlay_rounded">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">5dp</item>
+    </style>
+
+    <style name="card_image_overlay_rounded_large">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">10dp</item>
+    </style>
+
+    <style name="card_text_title">
+        <item name="android:textFontWeight">600</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:fontFamily">@font/archivo</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textColor">@color/card_text</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="card_text_year">
+        <item name="android:textFontWeight">400</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:fontFamily">@font/archivo</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textColor">@color/card_text_flavour</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="list_item_movie">
+        <item name="android:textColor">@color/card_text</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:fontFamily">@font/archivo</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:fontWeight">700</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:letterSpacing">0.05</item>
+    </style>
+
+    <style name="toolbar">
+        <item name="android:background">@color/colorPrimaryDark</item>
+        <item name="android:textSize">20sp</item>
+    </style>
 </resources>

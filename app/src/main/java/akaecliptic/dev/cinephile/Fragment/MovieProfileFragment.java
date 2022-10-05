@@ -136,7 +136,7 @@ public class MovieProfileFragment extends Fragment {
 
 
     private void setFavouriteIcon(MenuItem item, boolean checked){
-        int drawableResId = (checked) ? R.drawable.icon_favorite : R.drawable.icon_favorite_border;
+        int drawableResId = (checked) ? R.drawable.icon_heart : R.drawable.icon_heart_border;
         item.setIcon(drawableResId);
         item.setChecked(checked);
     }

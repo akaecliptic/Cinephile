@@ -44,7 +44,7 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.ViewHold
 
                 itemView.setOnClickListener((view) -> itemClick.onItemClick(view, getItem(getAdapterPosition())));
             } else {
-                btnFooter = itemView.findViewById(R.id.rci_footer_btn);
+                btnFooter = itemView.findViewById(R.id.footer_button);
                 btnFooter.setOnClickListener((view) -> buttonClick.onItemClick(view, movieType));
             }
 
@@ -75,9 +75,9 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.ViewHold
         View view;
 
         if(viewType == VIEW_TYPE_CELL){
-            view = mInflater.inflate(R.layout.list_item_movie_card, parent, false);
+            view = mInflater.inflate(R.layout.list_item_movie_card_old, parent, false);
         }else{
-            view = mInflater.inflate(R.layout.list_item_footer, parent, false);
+            view = mInflater.inflate(R.layout.list_item_footer_more, parent, false);
             view.getLayoutParams().height = LayoutParams.MATCH_PARENT ;
         }
 

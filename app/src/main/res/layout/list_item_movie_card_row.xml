@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/card_background"
+    android:layout_width="match_parent"
+    android:layout_height="90dp">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/movie_card_row_image"
+        android:layout_width="51dp"
+        android:layout_height="75dp"
+        android:layout_centerVertical="true"
+
+        android:contentDescription="@string/description_movie_card_poster"
+        android:src="@drawable/sample_poster"
+        app:shapeAppearanceOverlay="@style/card_image_overlay_rounded" />
+
+    <include
+        layout="@layout/component_icons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="10dp"
+        android:layout_toEndOf="@+id/movie_card_row_image" />
+
+    <LinearLayout
+        android:id="@+id/movie_card_row_container_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_alignParentBottom="true"
+        android:layout_marginHorizontal="10dp"
+        android:layout_toStartOf="@+id/movie_card_row_button_more"
+        android:layout_toEndOf="@+id/movie_card_row_image"
+
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/movie_card_row_text_year"
+            style="@style/card_text_year"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="@string/placeholder_year"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/movie_card_row_text_title"
+            style="@style/card_text_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="@string/placeholder"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/movie_card_row_button_more"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center"
+
+        android:contentDescription="@string/description_movie_card_button"
+        android:src="@drawable/icon_more_horizontal" />
+</RelativeLayout>

@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/rci_footer"
+    android:id="@+id/footer_more"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:paddingVertical="@dimen/_5sdp"
+
     android:layout_centerInParent="true"
     android:layout_gravity="center">
 
     <Button
-        android:id="@+id/rci_footer_btn"
-        android:layout_width="60dp"
-        android:layout_height="30dp"
+        android:id="@+id/footer_button"
+        style="@style/card_background"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
         android:layout_centerInParent="true"
-        android:background="@color/colorSecondaryDark"
         android:text="@string/button_more"
-        android:theme="@style/MyRecyclerItems"
-        android:textSize="15sp"/>
+        android:textSize="25sp" />
 
 </RelativeLayout>
