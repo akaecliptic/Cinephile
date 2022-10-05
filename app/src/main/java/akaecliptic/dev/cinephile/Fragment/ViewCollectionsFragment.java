@@ -25,7 +25,6 @@ import java.util.List;
 
 import akaecliptic.dev.cinephile.Adapter.ViewCollectionsAdapter;
 import akaecliptic.dev.cinephile.Architecture.MovieViewModel;
-import akaecliptic.dev.cinephile.MainActivity;
 import akaecliptic.dev.cinephile.R;
 
 import static akaecliptic.dev.cinephile.Fragment.CollectionsFragment.INSTANCE_NAME;

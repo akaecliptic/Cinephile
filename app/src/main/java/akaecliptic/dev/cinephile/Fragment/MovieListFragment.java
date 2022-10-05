@@ -26,11 +26,11 @@ import akaecliptic.dev.cinephile.Adapter.MovieListAdapter;
 import akaecliptic.dev.cinephile.Architecture.MovieViewModel;
 import akaecliptic.dev.cinephile.Architecture.MovieApiDAO;
 import akaecliptic.dev.cinephile.Architecture.MovieApiDAO.MovieType;
-import akaecliptic.dev.cinephile.MainActivity;
+import akaecliptic.dev.cinephile.Activity.MainActivity;
 import akaecliptic.dev.cinephile.Model.Media;
 import akaecliptic.dev.cinephile.Model.Movie;
 import akaecliptic.dev.cinephile.R;
-import akaecliptic.dev.cinephile.SearchActivity;
+import akaecliptic.dev.cinephile.Activity.SearchActivity;
 
 import static akaecliptic.dev.cinephile.Fragment.WatchListFragment.SELECTED_MOVIE;
 import static akaecliptic.dev.cinephile.Fragment.WatchListFragment.SELECTED_SAVED;

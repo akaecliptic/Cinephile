@@ -1,4 +1,4 @@
-package akaecliptic.dev.cinephile;
+package akaecliptic.dev.cinephile.Activity;
 
 import android.app.SearchManager;
 import android.content.ComponentName;
@@ -12,17 +12,14 @@ import androidx.appcompat.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import akaecliptic.dev.cinephile.Architecture.MovieViewModel;
-import akaecliptic.dev.cinephile.Architecture.ViewModel;
+import akaecliptic.dev.cinephile.R;
 
 public class MainActivity extends AppCompatActivity {
 

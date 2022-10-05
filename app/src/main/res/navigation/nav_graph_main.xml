@@ -7,7 +7,7 @@
 
     <activity
         android:id="@+id/mainActivity"
-        android:name="akaecliptic.dev.cinephile.MainActivity"
+        android:name="akaecliptic.dev.cinephile.Activity.MainActivity"
         android:label="MainActivity" />
 
     <fragment

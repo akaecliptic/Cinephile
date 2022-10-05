@@ -11,11 +11,10 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
 
         <activity
-            android:name="akaecliptic.dev.cinephile.SearchActivity"
+            android:name="akaecliptic.dev.cinephile.Activity.SearchActivity"
             android:launchMode="singleTop"
             android:exported="false">
             <intent-filter>
@@ -26,7 +25,7 @@
                 android:resource="@xml/searchable" />
         </activity>
         <activity
-            android:name="akaecliptic.dev.cinephile.MainActivity"
+            android:name="akaecliptic.dev.cinephile.Activity.MainActivity"
             android:windowSoftInputMode="adjustPan"
             android:exported="true">
             <intent-filter>

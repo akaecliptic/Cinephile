@@ -1,4 +1,4 @@
-package akaecliptic.dev.cinephile;
+package akaecliptic.dev.cinephile.Activity;
 
 import android.app.SearchManager;
 import android.content.ComponentName;
@@ -27,9 +27,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import akaecliptic.dev.cinephile.Architecture.MovieViewModel;
-import akaecliptic.dev.cinephile.Fragment.WatchListFragment;
 import akaecliptic.dev.cinephile.Model.Media;
 import akaecliptic.dev.cinephile.Model.Movie;
+import akaecliptic.dev.cinephile.R;
 
 public class SearchActivity extends AppCompatActivity {
 
