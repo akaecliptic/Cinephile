@@ -28,7 +28,7 @@
         android:text="@string/placeholder_year" />
 
     <TextView
-        android:id="@+id/movie_card_slim_tv_title"
+        android:id="@+id/movie_card_slim_text_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 

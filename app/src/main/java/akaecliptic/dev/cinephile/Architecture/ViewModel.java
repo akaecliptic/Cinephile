@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import akaecliptic.dev.cinephile.Architecture.Repository.Repository;
-import akaecliptic.dev.cinephile.Callback.TMDBCallback;
+import akaecliptic.dev.cinephile.Interface.TMDBCallback;
 import dev.akaecliptic.models.Information;
 import dev.akaecliptic.models.Movie;
 
@@ -51,8 +51,8 @@ public class ViewModel extends AndroidViewModel {
         return this.repository.genres();
     }
 
-    public List<Movie> myList() {
-        return this.repository.myList();
+    public List<Movie> watchList() {
+        return this.repository.watchList();
     }
 
     public void movie(int id, TMDBCallback<Movie> callback) {

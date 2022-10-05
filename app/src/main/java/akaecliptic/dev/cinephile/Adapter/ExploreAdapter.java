@@ -23,6 +23,7 @@ import akaecliptic.dev.cinephile.R;
 
 import static android.view.ViewGroup.LayoutParams;
 
+@Deprecated
 public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.ViewHolder>{
 
     class ViewHolder extends RecyclerView.ViewHolder{

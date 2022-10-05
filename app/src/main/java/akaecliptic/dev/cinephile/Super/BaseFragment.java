@@ -24,6 +24,12 @@ public abstract class BaseFragment extends Fragment {
     @LayoutRes protected int resource;
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initViewModel();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setResource();
         return inflater.inflate(resource, container, false);
@@ -32,7 +38,6 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initViewModel();
         initAdapter(view);
     }
 

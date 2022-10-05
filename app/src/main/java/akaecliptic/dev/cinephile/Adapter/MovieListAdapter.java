@@ -25,6 +25,7 @@ import akaecliptic.dev.cinephile.R;
 
 import static android.view.ViewGroup.LayoutParams;
 
+@Deprecated
 public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.ViewHolder> {
 
     class ViewHolder extends RecyclerView.ViewHolder{

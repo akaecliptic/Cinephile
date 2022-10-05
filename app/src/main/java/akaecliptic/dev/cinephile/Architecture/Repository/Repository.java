@@ -13,7 +13,7 @@ import java.util.concurrent.Executors;
 import akaecliptic.dev.cinephile.Architecture.Accessors.SQLite;
 import akaecliptic.dev.cinephile.Architecture.Accessors.TMDB;
 import akaecliptic.dev.cinephile.Architecture.MovieRepository;
-import akaecliptic.dev.cinephile.Callback.TMDBCallback;
+import akaecliptic.dev.cinephile.Interface.TMDBCallback;
 import dev.akaecliptic.models.Information;
 import dev.akaecliptic.models.Movie;
 
@@ -46,7 +46,7 @@ public class Repository {
 
     private Map<Integer, String> genres;
 
-    private List<Movie> myList;
+    private List<Movie> list;
 
     public Repository(Context context) {
         this.sqlite = SQLite.getInstance(context);
@@ -55,7 +55,7 @@ public class Repository {
     }
 
     private void initialise() {
-        executor.execute(() -> this.myList = this.sqlite.selectAll());
+        executor.execute(() -> this.list = this.sqlite.selectAll());
         executor.execute(() -> this.upcoming = this.tmdb.upcoming(1));
         executor.execute(() -> this.rated = this.tmdb.rated(1));
         executor.execute(() -> this.popular = this.tmdb.popular(1));
@@ -85,8 +85,8 @@ public class Repository {
         return this.genres;
     }
 
-    public List<Movie> myList() {
-        return this.myList;
+    public List<Movie> watchList() {
+        return this.list;
     }
 
     /*          TMDB INTERFACE          */
