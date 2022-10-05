@@ -436,4 +436,18 @@ public class SQLite extends SQLiteOpenHelper {
         Log.i(TAG, "Deleted movie information with movie_id = " + id + ".");
     }
 
+    //OTHER CASES
+    public void updateSeen(Movie movie) {
+        Log.i(TAG, "Updating single row's seen value in 'movies' table.");
+
+        ContentValues values = new ContentValues();
+        values.put("seen", formatBoolean(movie.isSeen()));
+
+        String[] argument = { Integer.toString(movie.getId()) };
+        String clause = "_id = ?";
+
+        database.update(Tables.MOVIES.toString(), values, clause, argument);
+
+        Log.i(TAG, "Updated movie's seen value for movie_id = " + movie.getId() + ".");
+    }
 }

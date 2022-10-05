@@ -113,4 +113,7 @@ public class ViewModel extends AndroidViewModel {
         this.repository.deleteInformation(id);
     }
 
+    public void updateSeen(Movie movie) {
+        this.repository.updateSeen(movie);
+    }
 }

@@ -167,4 +167,7 @@ public class Repository {
         executor.execute(() -> this.sqlite.deleteInformation(id));
     }
 
+    public void updateSeen(Movie movie) {
+        executor.execute(() -> this.sqlite.updateSeen(movie));
+    }
 }
