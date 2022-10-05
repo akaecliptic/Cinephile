@@ -25,9 +25,9 @@ import akaecliptic.dev.cinephile.Architecture.MovieApiDAO;
 import akaecliptic.dev.cinephile.Model.Movie;
 import akaecliptic.dev.cinephile.R;
 
-import static akaecliptic.dev.cinephile.Fragment.MyListFragment.SELECTED_MOVIE;
-import static akaecliptic.dev.cinephile.Fragment.MyListFragment.SELECTED_SAVED;
-import static akaecliptic.dev.cinephile.Fragment.MyListFragment.SELECTED_TYPE;
+import static akaecliptic.dev.cinephile.Fragment.WatchListFragment.SELECTED_MOVIE;
+import static akaecliptic.dev.cinephile.Fragment.WatchListFragment.SELECTED_SAVED;
+import static akaecliptic.dev.cinephile.Fragment.WatchListFragment.SELECTED_TYPE;
 
 
 /**

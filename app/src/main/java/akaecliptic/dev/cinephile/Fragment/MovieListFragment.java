@@ -32,9 +32,9 @@ import akaecliptic.dev.cinephile.Model.Movie;
 import akaecliptic.dev.cinephile.R;
 import akaecliptic.dev.cinephile.SearchActivity;
 
-import static akaecliptic.dev.cinephile.Fragment.MyListFragment.SELECTED_MOVIE;
-import static akaecliptic.dev.cinephile.Fragment.MyListFragment.SELECTED_SAVED;
-import static akaecliptic.dev.cinephile.Fragment.MyListFragment.SELECTED_TYPE;
+import static akaecliptic.dev.cinephile.Fragment.WatchListFragment.SELECTED_MOVIE;
+import static akaecliptic.dev.cinephile.Fragment.WatchListFragment.SELECTED_SAVED;
+import static akaecliptic.dev.cinephile.Fragment.WatchListFragment.SELECTED_TYPE;
 
 
 /**

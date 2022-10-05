@@ -12,67 +12,43 @@ import androidx.appcompat.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import akaecliptic.dev.cinephile.Architecture.MovieViewModel;
+import akaecliptic.dev.cinephile.Architecture.ViewModel;
+
 public class MainActivity extends AppCompatActivity {
 
-    private static SortClickListener sortListener;
+    private NavController navigationController;
 
-    /**
-     * Creates activity, initialises bottom navigation bar, and then adds entry fragment
-     * to fragment container.
-     *
-     * @param savedInstanceState
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        setSupportActionBar(findViewById(R.id.toolbar));
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        BottomNavigationView bottombar = findViewById(R.id.bottombar);
+        NavHostFragment navigationHostFragment =
+                (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_host_fragment);
 
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
-        BottomNavigationView bottomNav = findViewById(R.id.bottom_nav_bar);
+        if(navigationHostFragment != null)
+            navigationController = navigationHostFragment.getNavController();
 
-        NavigationUI.setupWithNavController(findViewById(R.id.toolbar), navController, appBarConfiguration);
-        NavigationUI.setupWithNavController(bottomNav, navController);
+        setSupportActionBar(toolbar);
 
-        ((Toolbar)findViewById(R.id.toolbar)).setNavigationOnClickListener(v -> {
-            if(navController.getCurrentDestination() != null){
-                if(navController.getCurrentDestination().getId() == R.id.mylist_fragment)
-                    sortListener.onSort();
-                navController.navigateUp();
-            }
-        });
+        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(navigationController.getGraph()).build();
 
-        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-            if (getSupportActionBar() != null) {
-                if(destination.getId() == R.id.mylist_fragment){
-                    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                    getSupportActionBar().setHomeAsUpIndicator(R.drawable.icon_sort);
-                }else {
-                    getSupportActionBar().setHomeAsUpIndicator(R.drawable.icon_arrow_back);
-                }
-            }
-        });
-
-        bottomNav.setOnNavigationItemReselectedListener(menuItem -> {
-
-        });
+        NavigationUI.setupWithNavController(toolbar, navigationController, appBarConfiguration);
+        NavigationUI.setupWithNavController(bottombar, navigationController);
     }
 
-    /**
-     * Inflates menu with custom options.
-     *
-     * @param menu
-     * @return
-     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar, menu);
@@ -89,16 +65,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        return NavigationUI.onNavDestinationSelected(item, navController)
+        return NavigationUI.onNavDestinationSelected(item, navigationController)
                 || super.onOptionsItemSelected(item);
-    }
-
-    public static void setSortClickListener(SortClickListener sortClickListener){
-        sortListener = sortClickListener;
-    }
-
-    public interface SortClickListener{
-        void onSort();
     }
 }

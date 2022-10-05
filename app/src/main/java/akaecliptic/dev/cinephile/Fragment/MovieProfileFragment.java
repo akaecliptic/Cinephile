@@ -44,8 +44,8 @@ import akaecliptic.dev.cinephile.Model.Movie;
 import akaecliptic.dev.cinephile.R;
 import akaecliptic.dev.cinephile.SearchActivity;
 
-import static akaecliptic.dev.cinephile.Fragment.MyListFragment.SELECTED_MOVIE;
-import static akaecliptic.dev.cinephile.Fragment.MyListFragment.SELECTED_SAVED;
+import static akaecliptic.dev.cinephile.Fragment.WatchListFragment.SELECTED_MOVIE;
+import static akaecliptic.dev.cinephile.Fragment.WatchListFragment.SELECTED_SAVED;
 
 
 /**
@@ -244,8 +244,8 @@ public class MovieProfileFragment extends Fragment {
 
     private void attachAnimator() {
         if(requireActivity().getClass() != SearchActivity.class){
-            bottomNavigationView = requireActivity().findViewById(R.id.bottom_nav_bar);
-            Navigation.findNavController(requireActivity().findViewById(R.id.nav_host_fragment))
+            bottomNavigationView = requireActivity().findViewById(R.id.bottombar);
+            Navigation.findNavController(requireActivity().findViewById(R.id.navigation_host_fragment))
                     .addOnDestinationChangedListener((controller, destination, arguments) -> {
                         int direction = (destination.getId() == R.id.movie_profile_fragment) ? ANIM_OUT : ANIM_IN;
 

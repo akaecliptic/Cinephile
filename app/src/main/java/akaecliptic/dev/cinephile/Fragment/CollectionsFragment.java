@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,12 +25,11 @@ import java.util.List;
 import akaecliptic.dev.cinephile.Adapter.CollectionsListAdapter;
 import akaecliptic.dev.cinephile.Architecture.MovieViewModel;
 import akaecliptic.dev.cinephile.Architecture.MovieRepository;
-import akaecliptic.dev.cinephile.MainActivity;
 import akaecliptic.dev.cinephile.Model.Movie;
 import akaecliptic.dev.cinephile.R;
 
-import static akaecliptic.dev.cinephile.Fragment.MyListFragment.SELECTED_MOVIE;
-import static akaecliptic.dev.cinephile.Fragment.MyListFragment.SELECTED_SAVED;
+import static akaecliptic.dev.cinephile.Fragment.WatchListFragment.SELECTED_MOVIE;
+import static akaecliptic.dev.cinephile.Fragment.WatchListFragment.SELECTED_SAVED;
 
 public class CollectionsFragment extends Fragment {
     static final String INSTANCE_NAME = "INSTANCE";
@@ -60,14 +58,14 @@ public class CollectionsFragment extends Fragment {
 
     @Override
     public void onResume() {
-        MainActivity.setSortClickListener(() -> {
-            currentSort = viewModel.cycleSort(currentSort);
-            fragList = viewModel.sortList(fragList, currentSort);
-
-            Toast.makeText(requireActivity(), currentSort.getSortType(), Toast.LENGTH_SHORT).show();
-
-            adapter.setItems(fragList);
-        });
+//        MainActivity.setSortClickListener(() -> {
+//            currentSort = viewModel.cycleSort(currentSort);
+//            fragList = viewModel.sortList(fragList, currentSort);
+//
+//            Toast.makeText(requireActivity(), currentSort.getSortType(), Toast.LENGTH_SHORT).show();
+//
+//            adapter.setItems(fragList);
+//        });
 
         super.onResume();
     }
@@ -103,16 +101,16 @@ public class CollectionsFragment extends Fragment {
 
         setUpAdapterListeners();
 
-        MyListFragment.addSubscriber(() -> {
-            if(fragName.equals("All")){
-                fragList = new ArrayList<>(viewModel.reCacheItems());
-            }else {
-                fragList = viewModel.getItemsInCollection(fragName);
-            }
-
-            adapter.setItems(fragList);
-            checkPrompt();
-        });
+//        WatchListFragment.addSubscriber(() -> {
+//            if(fragName.equals("All")){
+//                fragList = new ArrayList<>(viewModel.reCacheItems());
+//            }else {
+//                fragList = viewModel.getItemsInCollection(fragName);
+//            }
+//
+//            adapter.setItems(fragList);
+//            checkPrompt();
+//        });
 
         viewModel.addSubscriber((update, destructive) -> {
             int index = fragList.indexOf(update);
@@ -143,7 +141,7 @@ public class CollectionsFragment extends Fragment {
 
             int origin = (navController.getCurrentBackStackEntry() != null) ?
                     navController.getCurrentBackStackEntry().getDestination().getId() :
-                    R.id.mylist_fragment;
+                    R.id.watch_list_fragment;
 
             if(origin == R.id.collections_fragment){
                 navController.navigate(R.id.action_collections_fragment_to_movie_profile_fragment, bundle);

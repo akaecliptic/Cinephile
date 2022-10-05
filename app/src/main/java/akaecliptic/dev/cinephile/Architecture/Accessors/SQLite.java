@@ -72,7 +72,7 @@ public class SQLite extends SQLiteOpenHelper {
 
     public static synchronized SQLite getInstance(Context context){
         if (sqlite == null) sqlite = new SQLite(context);
-        sqlite.getWritableDatabase();
+        database = sqlite.getWritableDatabase(); // TODO: 2022-10-05 Keep an eye on this.
         return sqlite;
     }
 

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/mylist_fragment">
+    app:startDestination="@id/watch_list_fragment">
 
     <activity
         android:id="@+id/mainActivity"
@@ -30,10 +30,10 @@
         tools:layout="@layout/fragment_movie_profile" />
 
     <fragment
-        android:id="@+id/mylist_fragment"
-        android:name="akaecliptic.dev.cinephile.Fragment.MyListFragment"
-        android:label="fragment_mylist"
-        tools:layout="@layout/fragment_mylist">
+        android:id="@+id/watch_list_fragment"
+        android:name="akaecliptic.dev.cinephile.Fragment.WatchListFragment"
+        android:label="fragment_watch_list"
+        tools:layout="@layout/fragment_watch_list">
         <action
             android:id="@+id/action_mylist_fragment_to_movie_profile_fragment"
             app:destination="@id/movie_profile_fragment" />

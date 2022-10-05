@@ -27,7 +27,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import akaecliptic.dev.cinephile.Architecture.MovieViewModel;
-import akaecliptic.dev.cinephile.Fragment.MyListFragment;
+import akaecliptic.dev.cinephile.Fragment.WatchListFragment;
 import akaecliptic.dev.cinephile.Model.Media;
 import akaecliptic.dev.cinephile.Model.Movie;
 
@@ -48,7 +48,7 @@ public class SearchActivity extends AppCompatActivity {
         setUpViewModelLink();
         setSupportActionBar(findViewById(R.id.toolbar));
 
-        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        navController = Navigation.findNavController(this, R.id.navigation_host_fragment);
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
 
         NavigationUI.setupWithNavController(findViewById(R.id.toolbar), navController, appBarConfiguration);
@@ -67,7 +67,7 @@ public class SearchActivity extends AppCompatActivity {
             if(navController.getCurrentDestination() != null){
                 if(navController.getCurrentDestination().getId() == R.id.movie_list_fragment){
                     finish();
-                    MyListFragment.updateCacheMyList();
+//                    WatchListFragment.updateCacheMyList();
                 }
                 navController.navigateUp();
             }
@@ -102,17 +102,17 @@ public class SearchActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        NavController navController = Navigation.findNavController(this, R.id.navigation_host_fragment);
         return NavigationUI.onNavDestinationSelected(item, navController)
                 || super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onBackPressed() {
-        if(navController.getCurrentDestination() != null){
-            if(navController.getCurrentDestination().getId() == R.id.movie_list_fragment)
-                MyListFragment.updateCacheMyList();
-        }
+//        if(navController.getCurrentDestination() != null){
+//            if(navController.getCurrentDestination().getId() == R.id.movie_list_fragment)
+//                WatchListFragment.updateCacheMyList();
+//        }
         super.onBackPressed();
     }
 

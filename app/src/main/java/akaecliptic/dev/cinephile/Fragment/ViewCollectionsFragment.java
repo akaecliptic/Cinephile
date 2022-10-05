@@ -30,6 +30,7 @@ import akaecliptic.dev.cinephile.R;
 
 import static akaecliptic.dev.cinephile.Fragment.CollectionsFragment.INSTANCE_NAME;
 
+@Deprecated
 public class ViewCollectionsFragment extends Fragment {
     private String fragName;
 
@@ -49,7 +50,7 @@ public class ViewCollectionsFragment extends Fragment {
 
     @Override
     public void onResume() {
-        MainActivity.setSortClickListener(() -> { });
+//        MainActivity.setSortClickListener(() -> { });
 
         super.onResume();
     }
