@@ -17,6 +17,7 @@ import akaecliptic.dev.cinephile.Model.Media;
 import akaecliptic.dev.cinephile.Model.Movie;
 import akaecliptic.dev.cinephile.R;
 
+@Deprecated
 public class CollectionsListAdapter extends RecyclerView.Adapter<CollectionsListAdapter.ViewHolder> {
 
     class ViewHolder extends RecyclerView.ViewHolder {

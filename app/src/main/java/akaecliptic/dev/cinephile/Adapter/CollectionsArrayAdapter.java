@@ -16,6 +16,7 @@ import java.util.List;
 
 import akaecliptic.dev.cinephile.R;
 
+@Deprecated
 public class CollectionsArrayAdapter<T extends String> extends ArrayAdapter<T> {
 
     private Context context;

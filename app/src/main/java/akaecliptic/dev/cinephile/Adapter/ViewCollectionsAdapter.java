@@ -11,6 +11,7 @@ import java.util.List;
 
 import akaecliptic.dev.cinephile.R;
 
+@Deprecated
 public class ViewCollectionsAdapter extends BaseAdapter {
 
     private List<String> collections;
