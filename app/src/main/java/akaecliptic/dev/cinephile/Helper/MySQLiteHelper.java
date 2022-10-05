@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+@Deprecated
 public class MySQLiteHelper {
 
     public static final Map<String, String> TABLE_NAMES;

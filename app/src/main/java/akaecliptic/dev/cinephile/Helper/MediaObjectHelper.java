@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
+@Deprecated
 public class MediaObjectHelper {
 
     private static final SimpleDateFormat format =

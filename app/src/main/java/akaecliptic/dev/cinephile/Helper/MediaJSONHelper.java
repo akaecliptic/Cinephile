@@ -19,6 +19,7 @@ import akaecliptic.dev.cinephile.Model.ImageData;
 import akaecliptic.dev.cinephile.Model.Movie;
 import akaecliptic.dev.cinephile.Model.Statistic;
 
+@Deprecated
 public class MediaJSONHelper {
 
     public static Gson getGson(){
