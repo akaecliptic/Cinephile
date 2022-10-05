@@ -20,6 +20,6 @@
         android:id="@+id/collections_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/list_item_my_list_old" />
+        tools:listitem="@layout/old_list_item_my_list" />
 
 </RelativeLayout>

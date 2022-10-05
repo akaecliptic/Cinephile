@@ -64,6 +64,11 @@
         <item name="android:background">@color/application_background</item>
     </style>
 
+    <style name="application_theme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:textColor">@color/application_text</item>
+        <item name="android:statusBarColor">@color/accent</item>
+    </style>
+
     <style name="card_background">
         <item name="android:background">@drawable/background_card</item>
         <item name="android:padding">5dp</item>

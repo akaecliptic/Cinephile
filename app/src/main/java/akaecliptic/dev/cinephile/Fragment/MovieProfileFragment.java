@@ -91,7 +91,7 @@ public class MovieProfileFragment extends Fragment {
         attachAnimator();
         getBundle();
         setHasOptionsMenu(true);
-        return inflater.inflate(R.layout.fragment_movie_profile, container, false);
+        return inflater.inflate(R.layout.old_fragment_movie_profile, container, false);
     }
 
     @Override

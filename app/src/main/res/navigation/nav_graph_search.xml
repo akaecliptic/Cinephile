@@ -9,7 +9,7 @@
         android:id="@+id/movie_profile_fragment"
         android:name="akaecliptic.dev.cinephile.Fragment.MovieProfileFragment"
         android:label="fragment_movie_profile"
-        tools:layout="@layout/fragment_movie_profile" />
+        tools:layout="@layout/old_fragment_movie_profile" />
 
     <fragment
         android:id="@+id/movie_list_fragment"

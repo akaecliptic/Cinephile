@@ -76,7 +76,7 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.ViewHold
         View view;
 
         if(viewType == VIEW_TYPE_CELL){
-            view = mInflater.inflate(R.layout.list_item_movie_card_old, parent, false);
+            view = mInflater.inflate(R.layout.old_list_item_movie_card, parent, false);
         }else{
             view = mInflater.inflate(R.layout.list_item_footer_more, parent, false);
             view.getLayoutParams().height = LayoutParams.MATCH_PARENT ;

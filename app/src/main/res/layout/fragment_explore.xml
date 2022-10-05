@@ -55,7 +55,7 @@
         android:minHeight="115dp"
         android:orientation="horizontal"
         app:layoutManager="LinearLayoutManager"
-        tools:listitem="@layout/list_item_movie_card_old" />
+        tools:listitem="@layout/old_list_item_movie_card" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/explore_trending_recycler"
@@ -66,7 +66,7 @@
         android:minHeight="115dp"
         android:orientation="horizontal"
         app:layoutManager="LinearLayoutManager"
-        tools:listitem="@layout/list_item_movie_card_old" />
+        tools:listitem="@layout/old_list_item_movie_card" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/explore_upcoming_recycler"
@@ -77,7 +77,7 @@
         android:minHeight="115dp"
         android:orientation="horizontal"
         app:layoutManager="LinearLayoutManager"
-        tools:listitem="@layout/list_item_movie_card_old" />
+        tools:listitem="@layout/old_list_item_movie_card" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/explore_favourites_recycler"
@@ -88,6 +88,6 @@
         android:minHeight="115dp"
         android:orientation="horizontal"
         app:layoutManager="LinearLayoutManager"
-        tools:listitem="@layout/list_item_movie_card_old" />
+        tools:listitem="@layout/old_list_item_movie_card" />
 
 </RelativeLayout>

@@ -57,7 +57,7 @@ public class CollectionsListAdapter extends RecyclerView.Adapter<CollectionsList
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.list_item_my_list_old, parent, false);
+        View view = inflater.inflate(R.layout.old_list_item_my_list, parent, false);
         return new ViewHolder(view);
     }
 
