@@ -32,8 +32,8 @@
     <string name="explore_rated">Top Rated</string>
 
     <!-- Content Description -->
-    <string name="description_movie_poster">movie poster</string>
-    <string name="description_movie_backdrop">movie backdrop</string>
+    <string name="description_movie_poster">Movie poster</string>
+    <string name="description_movie_backdrop">Movie backdrop</string>
     <string name="description_collection_image">Collection image</string>
     <string name="description_add_to_collection">Add to collection</string>
     <string name="description_added_to_collection">Added to collection</string>

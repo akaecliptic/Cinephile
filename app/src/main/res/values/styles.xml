@@ -118,4 +118,10 @@
         <item name="android:background">@color/colorPrimaryDark</item>
         <item name="android:textSize">20sp</item>
     </style>
+
+    <style name="checkbox_seen">
+        <item name="android:button">@drawable/icon_seen</item>
+        <item name="android:buttonTint">@drawable/select_tint</item>
+        <item name="android:outlineProvider">none</item>
+    </style>
 </resources>
