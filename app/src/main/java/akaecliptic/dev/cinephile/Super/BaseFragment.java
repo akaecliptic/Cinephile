@@ -32,19 +32,24 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setResource();
+        beforeViews();
         return inflater.inflate(resource, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initAdapter(view);
+        initViews(view);
+        afterViews(view);
     }
 
     private void initViewModel() {
         viewModel = new ViewModelProvider(requireActivity()).get(ViewModel.class);
     }
 
-    public abstract void initAdapter(View view);
-    public abstract void setResource();
+    protected void beforeViews() { }
+    protected void afterViews(View view) { }
+
+    protected abstract void initViews(View view);
+    protected abstract void setResource();
 }

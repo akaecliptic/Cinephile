@@ -43,7 +43,7 @@
     </fragment>
     <fragment
         android:id="@+id/movie_list_fragment"
-        android:name="akaecliptic.dev.cinephile.Fragment.MovieListFragment"
+        android:name="akaecliptic.dev.cinephile.Fragment.MovieRowFragment"
         android:label="fragment_movie_list"
         tools:layout="@layout/fragment_movie_list">
         <action

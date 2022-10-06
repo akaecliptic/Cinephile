@@ -124,4 +124,11 @@
         <item name="android:buttonTint">@drawable/select_tint</item>
         <item name="android:outlineProvider">none</item>
     </style>
+
+    <style name="checkbox_heart">
+        <item name="android:button">@null</item>
+        <item name="android:background">@drawable/background_checkbox_heart</item>
+        <item name="android:backgroundTint">@drawable/select_tint_accent</item>
+        <item name="android:outlineProvider">none</item>
+    </style>
 </resources>

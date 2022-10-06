@@ -7,7 +7,7 @@
     android:orientation="horizontal">
 
     <FrameLayout
-        android:id="@+id/movie_profile_selection_more"
+        android:id="@+id/movie_profile_button_collection"
         android:layout_width="55dp"
         android:layout_height="55dp"
         android:background="@drawable/background_circle">
@@ -48,7 +48,7 @@
             android:layout_gravity="center"
 
             android:indeterminateOnly="false"
-            android:progressDrawable="@drawable/select_progress_bar_circle"
+            android:progressDrawable="@drawable/background_progress_bar_circle"
 
             android:scaleX="1.2"
             android:scaleY="1.2"

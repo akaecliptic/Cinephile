@@ -32,15 +32,16 @@
             android:src="@drawable/sample_poster"
             app:shapeAppearanceOverlay="@style/card_image_overlay_rounded" />
 
-        <ImageView
+        <CheckBox
+            android:id="@+id/movie_profile_button_heart"
+            style="@style/checkbox_heart"
             android:layout_width="35dp"
             android:layout_height="35dp"
 
             android:layout_alignParentEnd="true"
             android:layout_margin="10dp"
 
-            android:contentDescription="@string/description_movie_hearted"
-            android:src="@drawable/icon_heart_border" />
+            android:contentDescription="@string/description_movie_hearted" />
 
         <include
             layout="@layout/component_profile_buttonbar"
@@ -84,7 +85,6 @@
         android:textFontWeight="600"
         android:textSize="20sp" />
 
-    <!-- This will be dynamically populated -->
     <LinearLayout
         android:id="@+id/movie_profile_container_genre"
         android:layout_width="match_parent"
@@ -94,6 +94,7 @@
         android:layout_marginVertical="10dp"
         android:gravity="center"
         android:orientation="horizontal">
+        <!-- This will be dynamically populated -->
     </LinearLayout>
 
     <ScrollView

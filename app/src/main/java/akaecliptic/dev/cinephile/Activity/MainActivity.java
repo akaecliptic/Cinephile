@@ -24,14 +24,16 @@ import akaecliptic.dev.cinephile.R;
 public class MainActivity extends AppCompatActivity {
 
     private NavController navigationController;
+    private Toolbar toolbar;
+    private BottomNavigationView bottombar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        BottomNavigationView bottombar = findViewById(R.id.bottombar);
+        toolbar = findViewById(R.id.toolbar);
+        bottombar = findViewById(R.id.bottombar);
         NavHostFragment navigationHostFragment =
                 (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_host_fragment);
 
@@ -64,5 +66,17 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         return NavigationUI.onNavDestinationSelected(item, navigationController)
                 || super.onOptionsItemSelected(item);
+    }
+
+    public NavController getNavigationController() {
+        return this.navigationController;
+    }
+
+    public Toolbar getToolbar() {
+        return this.toolbar;
+    }
+
+    public BottomNavigationView getBottombar() {
+        return this.bottombar;
     }
 }

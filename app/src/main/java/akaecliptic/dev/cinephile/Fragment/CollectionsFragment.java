@@ -31,6 +31,7 @@ import akaecliptic.dev.cinephile.R;
 import static akaecliptic.dev.cinephile.Fragment.WatchListFragment.SELECTED_MOVIE;
 import static akaecliptic.dev.cinephile.Fragment.WatchListFragment.SELECTED_SAVED;
 
+@Deprecated
 public class CollectionsFragment extends Fragment {
     static final String INSTANCE_NAME = "INSTANCE";
 

@@ -40,7 +40,7 @@ import static akaecliptic.dev.cinephile.Fragment.WatchListFragment.SELECTED_TYPE
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MovieListFragment extends Fragment {
+public class MovieRowFragment extends Fragment {
 
     private MovieViewModel viewModel;
     private ArrayList<Movie> cachedMovies;
@@ -50,7 +50,7 @@ public class MovieListFragment extends Fragment {
     private int scrollPosition = 0;
     private String searchQuery;
 
-    public MovieListFragment() {
+    public MovieRowFragment() {
         // Required empty public constructor
     }
 

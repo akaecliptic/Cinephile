@@ -54,7 +54,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:indeterminateOnly="false"
-                android:progressDrawable="@drawable/select_progress_bar_circle"
+                android:progressDrawable="@drawable/background_progress_bar_circle"
                 android:scaleX="1.2"
                 android:scaleY="1.2"
                 tools:progress="70" />
