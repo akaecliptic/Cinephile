@@ -12,6 +12,7 @@ import java.util.Map;
 import akaecliptic.dev.cinephile.Architecture.Repository.Repository;
 import akaecliptic.dev.cinephile.Interface.InitialisationCallback;
 import akaecliptic.dev.cinephile.Interface.TMDBCallback;
+import dev.akaecliptic.models.Configuration;
 import dev.akaecliptic.models.Information;
 import dev.akaecliptic.models.Movie;
 
@@ -92,6 +93,10 @@ public class ViewModel extends AndroidViewModel {
 
     public void search(String param, int page, TMDBCallback<Movie[]> callback) {
         this.repository.search(param, page, callback);
+    }
+
+    public Configuration config() {
+        return this.repository.config();
     }
 
     public String image(String size, String path) {

@@ -222,7 +222,7 @@ public class SQLite extends SQLiteOpenHelper {
         values.put("genres", formatList(pair.second.getGenres()));
 
         Log.i(TAG, "Inserting row with movie_id = " + pair.first + ".");
-        database.insert(Tables.MOVIES.toString(), null, values);
+        database.insert(Tables.INFORMATION.toString(), null, values);
     }
 
     //SELECT
@@ -372,7 +372,7 @@ public class SQLite extends SQLiteOpenHelper {
                 String clause = "movie_id = ?";
 
                 Log.i(TAG, "Updating row with _id = " + entry.getKey() + ".");
-                database.update(Tables.MOVIES.toString(), values, clause, argument);
+                database.update(Tables.INFORMATION.toString(), values, clause, argument);
             }
 
             Log.i(TAG, "Committing transaction.");
@@ -405,7 +405,7 @@ public class SQLite extends SQLiteOpenHelper {
             String clause = "movie_id = ?";
 
             Log.i(TAG, "Updating row with _id = " + pair.first + ".");
-            database.update(Tables.MOVIES.toString(), values, clause, argument);
+            database.update(Tables.INFORMATION.toString(), values, clause, argument);
         } catch (SQLException e) {
             Log.w(TAG, "Could not update values in 'movie_information' table.");
             Log.e(TAG, "Exception '" + e.getMessage() + "' found.");
