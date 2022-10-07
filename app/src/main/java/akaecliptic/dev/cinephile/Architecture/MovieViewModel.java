@@ -1,5 +1,7 @@
 package akaecliptic.dev.cinephile.Architecture;
 
+import static akaecliptic.dev.cinephile.Architecture.MovieRepository.Sort;
+
 import android.app.Application;
 
 import androidx.annotation.NonNull;
@@ -7,11 +9,9 @@ import androidx.lifecycle.AndroidViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
-import akaecliptic.dev.cinephile.Fragment.ExploreFragment;
 import akaecliptic.dev.cinephile.Model.Movie;
-
-import static akaecliptic.dev.cinephile.Architecture.MovieRepository.Sort;
 
 @Deprecated
 public class MovieViewModel extends AndroidViewModel {
@@ -78,11 +78,11 @@ public class MovieViewModel extends AndroidViewModel {
         return mediaRepository.getOnlineList();
     }
 
-    public void requestMoviesType(MovieApiDAO.MovieType movieType, int page, ExploreFragment.RequestResult requestResult){
+    public void requestMoviesType(MovieApiDAO.MovieType movieType, int page, Consumer<Movie[]> requestResult){
         mediaRepository.requestMoviesType(movieType, page, requestResult);
     }
 
-    public void requestMoviesLike(String query, int page, ExploreFragment.RequestResult requestResult) {
+    public void requestMoviesLike(String query, int page, Consumer<Movie[]> requestResult) {
         mediaRepository.requestOnlineListLike(query, page, requestResult);
     }
 

@@ -13,8 +13,8 @@ import org.json.JSONObject;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
 
-import akaecliptic.dev.cinephile.Fragment.ExploreFragment;
 import akaecliptic.dev.cinephile.Helper.MediaJSONHelper;
 import akaecliptic.dev.cinephile.Model.Movie;
 
@@ -103,7 +103,7 @@ public class MovieRepository {
         return this.onlineList;
     }
 
-    void requestMoviesType(MovieApiDAO.MovieType movieType, int page, ExploreFragment.RequestResult requestResult) {
+    void requestMoviesType(MovieApiDAO.MovieType movieType, int page, Consumer<Movie[]> requestResult) {
         movieDAO.getMovies(page, movieType, (result) -> {
             Movie[] toReturn = {};
             try {
@@ -119,11 +119,11 @@ public class MovieRepository {
             }catch (Exception e){
                 Log.d(TAG,"Error "+ e + "found making an API request at " + TAG);
             }
-            requestResult.onResolved(toReturn);
+            requestResult.accept(toReturn);
         });
     }
 
-    void requestOnlineListLike(String query, int page, ExploreFragment.RequestResult requestResult) {
+    void requestOnlineListLike(String query, int page, Consumer<Movie[]> requestResult) {
         movieDAO.queryMovie(query, page, (result) -> {
             Movie[] toReturn = {};
             try {
@@ -139,11 +139,11 @@ public class MovieRepository {
             }catch (Exception e){
                 Log.d(TAG,"Error "+ e + "found making an API request at " + TAG);
             }
-            requestResult.onResolved(toReturn);
+            requestResult.accept(toReturn);
         });
     }
 
-    private void requestExploreItems(int page, MovieApiDAO.MovieType movieType, ExploreFragment.RequestResult requestResult) {
+    private void requestExploreItems(int page, MovieApiDAO.MovieType movieType, Consumer<Movie[]> requestResult) {
         movieDAO.getMovies(page, movieType, (result) -> {
             Movie[] toReturn = new Movie[9];
             try {
@@ -158,7 +158,7 @@ public class MovieRepository {
             }catch (Exception e){
                 Log.d(TAG,"Error "+ e + "found making an API request at " + TAG);
             }
-            requestResult.onResolved(toReturn);
+            requestResult.accept(toReturn);
         });
     }
 
