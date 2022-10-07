@@ -12,6 +12,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.imageview.ShapeableImageView;
@@ -117,14 +118,15 @@ public class MovieProfileFragment extends BaseFragment {
 
         // TODO: 2022-10-07 Implement functionality.
         frameAdd.setOnClickListener(v -> {
-            System.out.println("Adding");
+            boolean present = viewModel.watchList().contains(working);
+            if(present) return;
+
+            viewModel.insert(working);
+            String prompt = String.format("Added '%s' to Watchlist", working.getTitle());
+            Toast.makeText(requireContext(), prompt, Toast.LENGTH_SHORT).show();
         });
-        frameSeen.setOnClickListener(v -> {
-            System.out.println(seen.isChecked());
-        });
-        frameProgress.setOnClickListener(v -> {
-            System.out.println(ratingText.getText());
-        });
+        frameSeen.setOnClickListener(v -> seen.setChecked(!working.isSeen()));
+        frameProgress.setOnClickListener(v -> System.out.println(ratingText.getText()));
 
         seen.setOnCheckedChangeListener((checkbox, value) -> {
             working.setSeen(value);
