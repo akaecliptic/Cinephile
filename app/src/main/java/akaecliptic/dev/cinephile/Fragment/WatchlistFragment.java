@@ -10,7 +10,7 @@ import akaecliptic.dev.cinephile.Adapter.List.CardSlimAdapter;
 import akaecliptic.dev.cinephile.R;
 import akaecliptic.dev.cinephile.Super.BaseFragment;
 
-public class WatchListFragment extends BaseFragment {
+public class WatchlistFragment extends BaseFragment {
 
     static final String SELECTED_MOVIE = "SELECTED_MOVIE";
     static final String SELECTED_SAVED = "SELECTED_SAVED";
@@ -18,14 +18,14 @@ public class WatchListFragment extends BaseFragment {
 
     @Override
     public void setResource() {
-        this.resource = R.layout.fragment_watch_list;
+        this.resource = R.layout.fragment_watchlist;
     }
 
     @Override
     protected void initViews(View view) {
         this.viewModel.subscribe(0, () -> {
-            RecyclerView recyclerView = view.findViewById(R.id.watch_list_recycler);
-            CardSlimAdapter adapter = new CardSlimAdapter(requireContext(), this.viewModel.watchList());
+            RecyclerView recyclerView = view.findViewById(R.id.watchlist_recycler);
+            CardSlimAdapter adapter = new CardSlimAdapter(requireContext(), this.viewModel.watchlist());
 
             adapter.setOnClickCheckbox((m, p) -> System.out.println("checking: " + m.isSeen()));
             adapter.setOnClickItem((m, p) -> {

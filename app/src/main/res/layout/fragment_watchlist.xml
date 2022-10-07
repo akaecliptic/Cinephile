@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragment.WatchListFragment">
+    tools:context=".Fragment.WatchlistFragment">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/watch_list_recycler"
+        android:id="@+id/watchlist_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
 

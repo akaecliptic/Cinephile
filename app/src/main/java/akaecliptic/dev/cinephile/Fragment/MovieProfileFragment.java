@@ -1,6 +1,6 @@
 package akaecliptic.dev.cinephile.Fragment;
 
-import static akaecliptic.dev.cinephile.Fragment.WatchListFragment.SELECTED_MOVIE;
+import static akaecliptic.dev.cinephile.Fragment.WatchlistFragment.SELECTED_MOVIE;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -118,7 +118,7 @@ public class MovieProfileFragment extends BaseFragment {
 
         // TODO: 2022-10-07 Implement functionality.
         frameAdd.setOnClickListener(v -> {
-            boolean present = viewModel.watchList().contains(working);
+            boolean present = viewModel.watchlist().contains(working);
             if(present) return;
 
             viewModel.insert(working);

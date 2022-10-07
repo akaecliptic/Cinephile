@@ -28,8 +28,8 @@ import akaecliptic.dev.cinephile.Architecture.MovieRepository;
 import akaecliptic.dev.cinephile.Model.Movie;
 import akaecliptic.dev.cinephile.R;
 
-import static akaecliptic.dev.cinephile.Fragment.WatchListFragment.SELECTED_MOVIE;
-import static akaecliptic.dev.cinephile.Fragment.WatchListFragment.SELECTED_SAVED;
+import static akaecliptic.dev.cinephile.Fragment.WatchlistFragment.SELECTED_MOVIE;
+import static akaecliptic.dev.cinephile.Fragment.WatchlistFragment.SELECTED_SAVED;
 
 @Deprecated
 public class CollectionsFragment extends Fragment {
@@ -142,7 +142,7 @@ public class CollectionsFragment extends Fragment {
 
             int origin = (navController.getCurrentBackStackEntry() != null) ?
                     navController.getCurrentBackStackEntry().getDestination().getId() :
-                    R.id.watch_list_fragment;
+                    R.id.watchlist_fragment;
 
             if(origin == R.id.collections_fragment){
                 navController.navigate(R.id.action_collections_fragment_to_movie_profile_fragment, bundle);

@@ -51,7 +51,7 @@ public class Repository {
     private Map<Integer, String> genres;
     private Configuration configuration;
 
-    private List<Movie> list;
+    private List<Movie> watchlist;
 
     /*
         Hmm, I like the idea of hooking into the initialisation process through a pseudo broadcaster system.
@@ -73,7 +73,7 @@ public class Repository {
     private void setup() {
         channels = new HashMap<>();
         /*
-            Should probably use enums here, but I want to keep this simple as it might get torn out.
+            Should probably use enums here, but I want to keep this simple as this might get torn out.
             The other channels will most likely not see much use, just 0 if any.
          */
         channels.put(0, new LinkedList<>());
@@ -83,7 +83,7 @@ public class Repository {
 
     private void init() {
         executor.execute(() -> {
-            this.list = this.sqlite.selectAll();
+            this.watchlist = this.sqlite.selectAll();
 
             handler.post(() -> broadcast(0));
         });
@@ -147,8 +147,8 @@ public class Repository {
         return this.configuration;
     }
 
-    public List<Movie> watchList() {
-        return this.list;
+    public List<Movie> watchlist() {
+        return this.watchlist;
     }
 
     /*          TMDB INTERFACE          */
@@ -200,7 +200,7 @@ public class Repository {
     public void insert(Movie movie) {
         executor.execute(() -> {
             this.sqlite.insertMovie(movie);
-            this.list.add(movie);
+            this.watchlist.add(movie);
         });
     }
 

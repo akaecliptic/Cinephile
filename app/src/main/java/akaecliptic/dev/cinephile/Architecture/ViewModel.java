@@ -66,8 +66,8 @@ public class ViewModel extends AndroidViewModel {
         return this.repository.config().posters();
     }
 
-    public List<Movie> watchList() {
-        return this.repository.watchList();
+    public List<Movie> watchlist() {
+        return this.repository.watchlist();
     }
 
     public void movie(int id, TMDBCallback<Movie> callback) {
