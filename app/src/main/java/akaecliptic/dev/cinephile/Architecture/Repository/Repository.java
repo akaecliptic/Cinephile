@@ -14,6 +14,7 @@ import akaecliptic.dev.cinephile.Architecture.Accessors.SQLite;
 import akaecliptic.dev.cinephile.Architecture.Accessors.TMDB;
 import akaecliptic.dev.cinephile.Architecture.MovieRepository;
 import akaecliptic.dev.cinephile.Interface.TMDBCallback;
+import dev.akaecliptic.models.Configuration;
 import dev.akaecliptic.models.Information;
 import dev.akaecliptic.models.Movie;
 
@@ -45,6 +46,7 @@ public class Repository {
     private Movie[] playing;
 
     private Map<Integer, String> genres;
+    private Configuration configuration;
 
     private List<Movie> list;
 
@@ -61,6 +63,7 @@ public class Repository {
         executor.execute(() -> this.popular = this.tmdb.popular(1));
         executor.execute(() -> this.playing = this.tmdb.playing(1));
         executor.execute(() -> this.genres = this.tmdb.genre());
+        executor.execute(() -> this.configuration = this.tmdb.config());
     }
 
     /*          MEMBER VARIABLE GETTERS          */
@@ -83,6 +86,10 @@ public class Repository {
 
     public Map<Integer, String> genres() {
         return this.genres;
+    }
+
+    public Configuration config() {
+        return this.configuration;
     }
 
     public List<Movie> watchList() {

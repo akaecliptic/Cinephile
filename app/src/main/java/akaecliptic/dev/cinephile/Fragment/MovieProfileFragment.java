@@ -8,11 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.imageview.ShapeableImageView;
+import com.squareup.picasso.Picasso;
 
 import akaecliptic.dev.cinephile.Activity.MainActivity;
 import akaecliptic.dev.cinephile.Activity.SearchActivity;
@@ -27,9 +30,12 @@ public class MovieProfileFragment extends BaseFragment {
 
     private Movie working = null;
 
+    private String backdropSize;
+    private String posterSize;
+
     private BottomNavigationView bottombar;
 
-    private ImageView poster;
+    private ShapeableImageView poster;
     private ImageView backdrop;
 
     private TextView title;
@@ -53,6 +59,7 @@ public class MovieProfileFragment extends BaseFragment {
     @Override
     protected void beforeViews() {
         attachAnimator();
+        setImageSizes();
         getBundle();
     }
 
@@ -75,6 +82,18 @@ public class MovieProfileFragment extends BaseFragment {
 
     @Override
     protected void afterViews(View view) {
+        //ASSIGNING DEFAULT VALUES
+        Picasso.get()
+                .load(viewModel.image(backdropSize, working.getInfo().getBackdrop()))
+                .fit()
+                .centerCrop()
+                .into(backdrop);
+        Picasso.get()
+                .load(viewModel.image(posterSize, working.getInfo().getPoster()))
+                .fit()
+                .centerCrop()
+                .into(poster);
+
         title.setText(working.getTitle());
         year.setText(String.valueOf(working.getRelease().getYear()));
         information.setText(working.getInfo().toStringPretty());
@@ -90,6 +109,29 @@ public class MovieProfileFragment extends BaseFragment {
             pill.setText(viewModel.genres().get(genre));
             genreContainer.addView(pill);
         });
+
+        //ADDING LISTENERS
+        FrameLayout frameAdd = view.findViewById(R.id.movie_profile_frame_add);
+        FrameLayout frameSeen = view.findViewById(R.id.movie_profile_frame_seen);
+        FrameLayout frameProgress = view.findViewById(R.id.movie_profile_frame_progress);
+
+        // TODO: 2022-10-07 Implement functionality.
+        frameAdd.setOnClickListener(v -> {
+            System.out.println("Adding");
+        });
+        frameSeen.setOnClickListener(v -> {
+            System.out.println(seen.isChecked());
+        });
+        frameProgress.setOnClickListener(v -> {
+            System.out.println(ratingText.getText());
+        });
+
+        seen.setOnCheckedChangeListener((checkbox, value) -> {
+            working.setSeen(value);
+            viewModel.updateSeen(working);
+        });
+        // TODO: 2022-10-07 Reintroduce feature.
+        heart.setOnCheckedChangeListener((checkbox, value) -> System.out.println(value) /* For later implementation */);
     }
 
     /*          INSTANCE METHODS          */
@@ -108,6 +150,14 @@ public class MovieProfileFragment extends BaseFragment {
                         animateBottombar(direction);
                     });
         }
+    }
+
+    private void setImageSizes() {
+        String[] backdrops = viewModel.backdrops();
+        String[] posters = viewModel.posters();
+
+        backdropSize = backdrops[1];
+        posterSize = posters[1];
     }
 
     private void getBundle() {

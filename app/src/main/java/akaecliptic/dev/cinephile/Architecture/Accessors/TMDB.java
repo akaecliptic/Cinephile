@@ -11,6 +11,7 @@ import dev.akaecliptic.TMDBCaller;
 import dev.akaecliptic.core.MovieFactory;
 import dev.akaecliptic.core.RequestException;
 import dev.akaecliptic.core.TMDBContext;
+import dev.akaecliptic.models.Configuration;
 import dev.akaecliptic.models.Movie;
 
 /**
@@ -205,5 +206,26 @@ public class TMDB {
         if(element == null || element.isJsonNull()) return null;
 
         return MovieFactory.createGenreMap(element);
+    }
+
+    /**
+     * Query GET <i>/configuration</i>
+     *
+     * @return Representation ({@link Configuration}) of relevant TMDB configuration data.
+     */
+    public Configuration config() {
+        JsonElement element = null;
+
+        try {
+            element = caller.config();
+        } catch (RequestException e) {
+            Log.w(TAG, "Could not request configuration data");
+            Log.e(TAG, "Exception '" + e.getMessage() + "' found.");
+            e.printStackTrace();
+        }
+
+        if(element == null || element.isJsonNull()) return null;
+
+        return MovieFactory.createConfig(element);
     }
 }

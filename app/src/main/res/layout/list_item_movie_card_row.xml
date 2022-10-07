@@ -13,7 +13,8 @@
 
         android:contentDescription="@string/description_movie_card_poster"
         android:src="@drawable/sample_poster"
-        app:shapeAppearanceOverlay="@style/card_image_overlay_rounded" />
+        app:shapeAppearanceOverlay="@style/card_image_overlay_rounded"
+        app:strokeColor="@null" />
 
     <include
         layout="@layout/component_icons"

@@ -51,6 +51,14 @@ public class ViewModel extends AndroidViewModel {
         return this.repository.genres();
     }
 
+    public String[] backdrops() {
+        return this.repository.config().backdrops();
+    }
+
+    public String[] posters() {
+        return this.repository.config().posters();
+    }
+
     public List<Movie> watchList() {
         return this.repository.watchList();
     }
@@ -77,6 +85,10 @@ public class ViewModel extends AndroidViewModel {
 
     public void search(String param, int page, TMDBCallback<Movie[]> callback) {
         this.repository.search(param, page, callback);
+    }
+
+    public String image(String size, String path) {
+        return this.repository.config().image(size, path);
     }
 
     /*          SQLITE INTERFACE          */

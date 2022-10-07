@@ -7,7 +7,7 @@
     android:orientation="horizontal">
 
     <FrameLayout
-        android:id="@+id/movie_profile_button_collection"
+        android:id="@+id/movie_profile_frame_add"
         android:layout_width="55dp"
         android:layout_height="55dp"
         android:background="@drawable/background_circle">
@@ -22,6 +22,7 @@
     </FrameLayout>
 
     <FrameLayout
+        android:id="@+id/movie_profile_frame_seen"
         android:layout_width="55dp"
         android:layout_height="55dp"
 
@@ -38,6 +39,7 @@
     </FrameLayout>
 
     <FrameLayout
+        android:id="@+id/movie_profile_frame_progress"
         android:layout_width="55dp"
         android:layout_height="55dp">
 

@@ -9,11 +9,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
 
-        android:foreground="@drawable/foreground_image_gradient_rounded"
-
         android:contentDescription="@string/description_movie_card_poster"
+
+        android:foreground="@drawable/foreground_image_gradient_rounded"
         android:src="@drawable/sample_poster"
-        app:shapeAppearanceOverlay="@style/card_image_overlay_rounded_large" />
+        app:shapeAppearanceOverlay="@style/card_image_overlay_rounded_large"
+        app:strokeColor="@null" />
 
     <include
         layout="@layout/component_icons"
