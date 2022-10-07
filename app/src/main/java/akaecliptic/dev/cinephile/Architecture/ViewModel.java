@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import akaecliptic.dev.cinephile.Architecture.Repository.Repository;
+import akaecliptic.dev.cinephile.Interface.InitialisationCallback;
 import akaecliptic.dev.cinephile.Interface.TMDBCallback;
 import dev.akaecliptic.models.Information;
 import dev.akaecliptic.models.Movie;
@@ -27,6 +28,12 @@ public class ViewModel extends AndroidViewModel {
     public ViewModel(@NonNull Application application) {
         super(application);
         this.repository = new Repository(application);
+    }
+
+    /*          PUB / SUB          */
+
+    public void subscribe(int channel, InitialisationCallback callback) {
+        this.repository.subscribe(channel, callback);
     }
 
     /*          TMDB INTERFACE          */

@@ -5,6 +5,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Pair;
 
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -13,6 +15,7 @@ import java.util.concurrent.Executors;
 import akaecliptic.dev.cinephile.Architecture.Accessors.SQLite;
 import akaecliptic.dev.cinephile.Architecture.Accessors.TMDB;
 import akaecliptic.dev.cinephile.Architecture.MovieRepository;
+import akaecliptic.dev.cinephile.Interface.InitialisationCallback;
 import akaecliptic.dev.cinephile.Interface.TMDBCallback;
 import dev.akaecliptic.models.Configuration;
 import dev.akaecliptic.models.Information;
@@ -50,20 +53,72 @@ public class Repository {
 
     private List<Movie> list;
 
+    /*
+        Hmm, I like the idea of hooking into the initialisation process through a pseudo broadcaster system.
+        However, this seems unnecessary and convoluted. There are other approaches but, really not a fan of them.
+        Will look into this some more, but will keep this for now, or at least until the possible issues occur.
+
+        Kind of trolling, but I like it.
+        2022-10-07
+     */
+    private Map<Integer, List<InitialisationCallback>> channels;
+
     public Repository(Context context) {
         this.sqlite = SQLite.getInstance(context);
         this.tmdb = new TMDB();
-        initialise();
+        setup();
+        init();
     }
 
-    private void initialise() {
-        executor.execute(() -> this.list = this.sqlite.selectAll());
-        executor.execute(() -> this.upcoming = this.tmdb.upcoming(1));
-        executor.execute(() -> this.rated = this.tmdb.rated(1));
-        executor.execute(() -> this.popular = this.tmdb.popular(1));
-        executor.execute(() -> this.playing = this.tmdb.playing(1));
-        executor.execute(() -> this.genres = this.tmdb.genre());
-        executor.execute(() -> this.configuration = this.tmdb.config());
+    private void setup() {
+        channels = new HashMap<>();
+        /*
+            Should probably use enums here, but I want to keep this simple as it might get torn out.
+            The other channels will most likely not see much use, just 0 if any.
+         */
+        channels.put(0, new LinkedList<>());
+        channels.put(1, new LinkedList<>());
+        channels.put(2, new LinkedList<>());
+    }
+
+    private void init() {
+        executor.execute(() -> {
+            this.list = this.sqlite.selectAll();
+
+            handler.post(() -> broadcast(0));
+        });
+
+        executor.execute(() -> {
+            this.upcoming = this.tmdb.upcoming(1);
+            this.rated = this.tmdb.rated(1);
+            this.popular = this.tmdb.popular(1);
+            this.playing = this.tmdb.playing(1);
+
+            handler.post(() -> broadcast(1));
+        });
+
+        executor.execute(() -> {
+            this.genres = this.tmdb.genre();
+            this.configuration = this.tmdb.config();
+
+            handler.post(() -> broadcast(2));
+        });
+    }
+
+    /*          PUB / SUB          */
+
+    public void subscribe(int channel, InitialisationCallback callback) {
+        List<InitialisationCallback> subscribers = channels.get(channel);
+        if (subscribers == null) return;
+
+        subscribers.add(callback);
+    }
+
+    private void broadcast(int channel) {
+        List<InitialisationCallback> subscribers = channels.get(channel);
+        if (subscribers == null) return;
+
+        subscribers.forEach(InitialisationCallback::onInit);
     }
 
     /*          MEMBER VARIABLE GETTERS          */
@@ -143,7 +198,10 @@ public class Repository {
     /*          SQLITE INTERFACE          */
 
     public void insert(Movie movie) {
-        executor.execute(() -> this.sqlite.insertMovie(movie));
+        executor.execute(() -> {
+            this.sqlite.insertMovie(movie);
+            this.list.add(movie);
+        });
     }
 
     public void insert(Pair<Integer, Information> information) {

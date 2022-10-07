@@ -5,8 +5,6 @@ import android.view.View;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.Arrays;
-
 import akaecliptic.dev.cinephile.Activity.MainActivity;
 import akaecliptic.dev.cinephile.Adapter.List.CardSlimAdapter;
 import akaecliptic.dev.cinephile.R;
@@ -25,9 +23,9 @@ public class WatchListFragment extends BaseFragment {
 
     @Override
     protected void initViews(View view) {
-        this.viewModel.popular(1, movies -> {
+        this.viewModel.subscribe(0, () -> {
             RecyclerView recyclerView = view.findViewById(R.id.watch_list_recycler);
-            CardSlimAdapter adapter = new CardSlimAdapter(requireContext(), Arrays.asList(movies));
+            CardSlimAdapter adapter = new CardSlimAdapter(requireContext(), this.viewModel.watchList());
 
             adapter.setOnClickCheckbox((m, p) -> System.out.println("checking: " + m.isSeen()));
             adapter.setOnClickItem((m, p) -> {
