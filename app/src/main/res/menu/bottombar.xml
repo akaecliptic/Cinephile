@@ -1,11 +1,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:id="@+id/watchlist_fragment"
-        android:title="@string/screen_myList"
-        android:icon="@drawable/icon_bookmark" />
+        android:title="@string/screen_watchlist"
+        android:icon="@drawable/icon_watchlist" />
 
     <item android:id="@+id/explore_fragment"
         android:title="@string/screen_explore"
-        android:icon="@drawable/icon_globe" />
+        android:icon="@drawable/icon_explore" />
 
 </menu>

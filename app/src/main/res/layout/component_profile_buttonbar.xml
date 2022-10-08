@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="@drawable/icon_watch_list_add"
+            android:background="@drawable/icon_watchlist_add"
             android:contentDescription="@string/description_add_to_collection"
             android:elevation="5dp" />
     </FrameLayout>

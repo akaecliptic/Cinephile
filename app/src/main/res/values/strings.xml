@@ -2,7 +2,7 @@
     <string name="app_name">Cinephile</string>
 
     <!-- Bottom Bar -->
-    <string name="screen_myList">MyList</string>
+    <string name="screen_watchlist">Watchlist</string>
     <string name="screen_explore">Explore</string>
 
     <!-- Placeholders -->
