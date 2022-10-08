@@ -119,7 +119,10 @@ public class MovieProfileFragment extends BaseFragment {
         // TODO: 2022-10-07 Implement functionality.
         frameAdd.setOnClickListener(v -> {
             boolean present = viewModel.watchlist().contains(working);
-            if(present) return;
+            if(present) {
+                Toast.makeText(requireContext(), "Movie already in watchlist, collections coming soon", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
             viewModel.insert(working);
             String prompt = String.format("Added '%s' to Watchlist", working.getTitle());

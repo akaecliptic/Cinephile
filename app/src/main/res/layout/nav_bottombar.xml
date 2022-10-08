@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="@dimen/_45sdp"
+    android:animateLayoutChanges="true"
     android:background="@android:color/black"
-    app:menu="@menu/bottombar"
     app:itemIconSize="@dimen/_20sdp"
-    android:animateLayoutChanges="true" />
+    app:itemIconTint="@drawable/select_tint_bottombar_icon"
+    app:itemTextColor="@drawable/select_tint_bottombar_text"
+    app:menu="@menu/bottombar" />
