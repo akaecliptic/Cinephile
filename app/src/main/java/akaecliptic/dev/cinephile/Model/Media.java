@@ -107,7 +107,6 @@ public abstract class Media implements Comparable<Media>, Serializable {
         return Integer.compare(this.id, mediaObj.id);
     }
 
-    //TODO revise equals methods
     @Override
     public boolean equals(Object o) {
         if (o instanceof Media) {

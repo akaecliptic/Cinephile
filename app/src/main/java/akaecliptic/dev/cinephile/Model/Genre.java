@@ -1,6 +1,5 @@
 package akaecliptic.dev.cinephile.Model;
 
-// TODO: 23/09/2020 CONSIDER DELETION AND INSTEAD QUERY GENRE TYPES.
 @Deprecated
 public enum Genre{
     ACTION(28), ADVENTURE(12), ANIMATION(16), COMEDY(35), CRIME(80), DOCUMENTARY(99), DRAMA(18),

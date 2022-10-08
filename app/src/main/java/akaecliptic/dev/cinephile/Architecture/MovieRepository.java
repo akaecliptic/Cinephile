@@ -18,7 +18,6 @@ import java.util.function.Consumer;
 import akaecliptic.dev.cinephile.Helper.MediaJSONHelper;
 import akaecliptic.dev.cinephile.Model.Movie;
 
-// TODO: 22/09/2020 CONSIDER A MORE VIABLE APPROACH TO MAKING THIS GENERIC.
 /**
  * Old Version of Repository. Deprecating for newer version.
  */

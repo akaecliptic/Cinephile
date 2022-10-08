@@ -45,7 +45,6 @@ public class Movie extends Media {
 
     @Override
     public MovieStatistic getStatistic() {
-        //TODO: Reconsider.
         return (this.statistic instanceof MovieStatistic) ? (MovieStatistic) this.statistic : new MovieStatistic(this.statistic.getDescription(), this.statistic.getSiteRating(), -1);
     }
 
