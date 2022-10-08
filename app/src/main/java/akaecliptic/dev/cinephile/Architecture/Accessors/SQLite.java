@@ -242,7 +242,7 @@ public class SQLite extends SQLiteOpenHelper {
             int nativeRating = getInt(cursor, "native_rating");
             LocalDate release = getLocalDate(cursor, "release");
 
-            Movie movie = new Movie(id, title, seen, description, userRating, nativeRating, release);
+            Movie movie = new Movie(id, title, seen, description, nativeRating, userRating, release);
 
             String poster = getString(cursor, "poster");
             String backdrop = getString(cursor, "backdrop");
@@ -278,7 +278,7 @@ public class SQLite extends SQLiteOpenHelper {
         int nativeRating = getInt(cursor, "native_rating");
         LocalDate release = getLocalDate(cursor, "release");
 
-        Movie movie = new Movie(_id, title, seen, description, userRating, nativeRating, release);
+        Movie movie = new Movie(_id, title, seen, description, nativeRating, userRating, release);
 
         String poster = getString(cursor, "poster");
         String backdrop = getString(cursor, "backdrop");
