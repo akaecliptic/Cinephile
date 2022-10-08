@@ -44,7 +44,7 @@ public class ViewCollectionsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setUpViewModelLink();
         assignInstanceName();
-        return inflater.inflate(R.layout.fragment_view_collections, container, false);
+        return inflater.inflate(R.layout.old_fragment_view_collections, container, false);
     }
 
     @Override
