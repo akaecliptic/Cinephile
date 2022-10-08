@@ -27,11 +27,11 @@ public class WatchlistFragment extends BaseFragment {
             RecyclerView recyclerView = view.findViewById(R.id.watchlist_recycler);
             CardSlimAdapter adapter = new CardSlimAdapter(requireContext(), this.viewModel.watchlist());
 
-            adapter.setOnClickCheckbox((m, p) -> System.out.println("checking: " + m.isSeen()));
-            adapter.setOnClickItem((m, p) -> {
+            adapter.setOnClickCheckbox((movie, position) -> viewModel.updateSeen(movie));
+            adapter.setOnClickItem((movie, position) -> {
                 MainActivity activity = (MainActivity) requireActivity();
                 Bundle bundle = new Bundle();
-                bundle.putSerializable(SELECTED_MOVIE, m);
+                bundle.putSerializable(SELECTED_MOVIE, movie);
                 activity.getNavigationController().navigate(R.id.movie_profile_fragment, bundle);
             });
 
