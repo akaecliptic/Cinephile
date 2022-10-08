@@ -99,10 +99,11 @@ public class MovieProfileFragment extends BaseFragment {
         year.setText(String.valueOf(working.getRelease().getYear()));
         information.setText(working.getInfo().toStringPretty());
 
-        // TODO: 2022-10-06 Change to user rating.
+        // TODO: 2022-10-06 Change to user rating when dialogs are implemented.
         ratingProgress.setProgress(working.getNativeRating());
         ratingText.setText(String.valueOf(working.getNativeRating()));
         seen.setChecked(working.isSeen());
+        heart.setVisibility(View.GONE); // TODO: 2022-10-07 Reintroduce feature.
 
         LayoutInflater inflater = LayoutInflater.from(view.getContext());
         working.getInfo().getGenres().forEach(genre -> {
@@ -116,30 +117,43 @@ public class MovieProfileFragment extends BaseFragment {
         FrameLayout frameSeen = view.findViewById(R.id.movie_profile_frame_seen);
         FrameLayout frameProgress = view.findViewById(R.id.movie_profile_frame_progress);
 
-        // TODO: 2022-10-07 Implement functionality.
         frameAdd.setOnClickListener(v -> {
             boolean present = viewModel.watchlist().contains(working);
             if(present) {
+                /* TODO: Dialog stuff */
                 Toast.makeText(requireContext(), "Movie already in watchlist, collections coming soon", Toast.LENGTH_SHORT).show();
                 return;
             }
 
+            toggleSeen(false);
             viewModel.insert(working);
             String prompt = String.format("Added '%s' to Watchlist", working.getTitle());
             Toast.makeText(requireContext(), prompt, Toast.LENGTH_SHORT).show();
         });
-        frameSeen.setOnClickListener(v -> seen.setChecked(!working.isSeen()));
-        frameProgress.setOnClickListener(v -> System.out.println(ratingText.getText()));
+        frameSeen.setOnClickListener(v -> {
+            if (seen.isEnabled()) {
+                seen.setChecked(!working.isSeen());
+                return;
+            }
+
+            Toast.makeText(requireContext(), "Movie must be added to watchlist to mark as seen", Toast.LENGTH_SHORT).show();
+        });
+        frameProgress.setOnClickListener(v -> System.out.println(ratingText.getText()) /* TODO: Dialog stuff */ );
 
         seen.setOnCheckedChangeListener((checkbox, value) -> {
             working.setSeen(value);
             viewModel.updateSeen(working);
         });
-        // TODO: 2022-10-07 Reintroduce feature.
-        heart.setOnCheckedChangeListener((checkbox, value) -> System.out.println(value) /* For later implementation */);
+
+        toggleSeen(viewModel.watchlist().contains(working));
     }
 
     /*          INSTANCE METHODS          */
+
+    private void toggleSeen(boolean value) {
+        seen.setEnabled(value);
+        seen.setClickable(value);
+    }
 
     private void attachAnimator() {
         if (requireActivity().getClass() != SearchActivity.class) {

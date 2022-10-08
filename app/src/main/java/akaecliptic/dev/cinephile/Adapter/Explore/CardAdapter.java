@@ -43,8 +43,8 @@ public class CardAdapter extends BaseAdapter {
         card.setImage(configuration.image(size, movie.getInfo().getPoster()));
 
         card.setRating(movie.getNativeRating());
-        card.setSeen(true);
-        card.setHeart(true);
+        card.setSeen(movie.isSeen());
+        card.setHeart(false);
 
         card.setOnClickListener(v -> itemClickListener.onClick(movie, position));
 

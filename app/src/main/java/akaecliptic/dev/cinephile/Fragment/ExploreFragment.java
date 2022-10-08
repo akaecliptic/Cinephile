@@ -56,17 +56,44 @@ public class ExploreFragment extends BaseFragment {
         }
 
         private List<Movie> getListFromViewModel(int selectedIndex) {
+            Movie[] movies;
+            List<Movie> watchlist = viewModel.watchlist();
             switch (selectedIndex) {
                 default: //Default should select upcoming.
                 case 0:
-                    return Arrays.asList(viewModel.upcoming());
+                    movies = Arrays.copyOf(viewModel.upcoming(), viewModel.upcoming().length);
+                    break;
                 case 1:
-                    return Arrays.asList(viewModel.rated());
+                    movies = Arrays.copyOf(viewModel.rated(), viewModel.rated().length);
+                    break;
                 case 2:
-                    return Arrays.asList(viewModel.popular());
+                    movies = Arrays.copyOf(viewModel.popular(), viewModel.popular().length);
+                    break;
                 case 3:
-                    return Arrays.asList(viewModel.playing());
+                    movies = Arrays.copyOf(viewModel.playing(), viewModel.playing().length);
+                    break;
             }
+
+            /*
+                I don't want to do any funky stuff like last time with having subscribers.
+                In that case it got convoluted quick. Instead, here movies are swapped with their
+                watchlist counterparts. This ensures references are preserved so edits to the object
+                will be available to other reference holders.
+
+                This might be much harder to debug in the future. However, at the current level of
+                application's complexity, it is fine for now.
+
+                2022-10-08
+             */
+
+            for (int i = 0; i < movies.length; i++) {
+                if (!watchlist.contains(movies[i])) continue;
+
+                int index = watchlist.indexOf(movies[i]);
+                movies[i] = watchlist.get(index);
+            }
+
+            return Arrays.asList(movies);
         }
     };
 
