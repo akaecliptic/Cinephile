@@ -7,8 +7,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.GridView;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -122,7 +124,7 @@ public class ExploreFragment extends BaseFragment {
 
     @Override
     protected void initViews(View view) {
-        GridView grid = view.findViewById(R.id.explore_grid);
+        RecyclerView grid = view.findViewById(R.id.explore_grid);
 
         adapter = new CardAdapter(requireContext(), new ArrayList<>(), viewModel.config());
         adapter.setItemClickListener((movie, position) -> {
@@ -134,6 +136,21 @@ public class ExploreFragment extends BaseFragment {
             MainActivity activity = (MainActivity) requireActivity();
             activity.getNavigationController().navigate(R.id.movie_profile_fragment, bundle);
         });
+        adapter.setMoreClickListener(v -> {
+            //Open CardRowFragment
+            System.out.println("MORE");
+        });
+
+        GridLayoutManager layoutManager = new GridLayoutManager(requireContext(), 2);
+        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                if (position == adapter.getItemCount() - 1) return 2;
+                return 1;
+            }
+        });
+
+        grid.setLayoutManager(layoutManager);
         grid.setAdapter(adapter);
     }
 

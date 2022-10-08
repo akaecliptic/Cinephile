@@ -36,15 +36,12 @@
         </LinearLayout>
     </HorizontalScrollView>
 
-    <GridView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/explore_grid"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
 
         android:layout_below="@+id/explore_container_scroll"
-        android:gravity="center"
 
-        android:numColumns="2"
-        android:verticalSpacing="10dp"
         tools:listitem="@layout/list_item_movie_card" />
 </RelativeLayout>

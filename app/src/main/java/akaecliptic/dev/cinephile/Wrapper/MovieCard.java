@@ -9,8 +9,9 @@ import com.google.android.material.imageview.ShapeableImageView;
 import com.squareup.picasso.Picasso;
 
 import akaecliptic.dev.cinephile.R;
+import akaecliptic.dev.cinephile.Super.BaseMovieAdapter.BaseMovieViewHolder;
 
-public class MovieCard {
+public class MovieCard extends BaseMovieViewHolder {
 
     private final View parent;
 
@@ -23,6 +24,7 @@ public class MovieCard {
     private ImageView heart;
 
     public MovieCard(View parent) {
+        super(parent);
         this.parent = parent;
         init();
     }
