@@ -23,19 +23,18 @@ public class WatchlistFragment extends BaseFragment {
 
     @Override
     protected void initViews(View view) {
-        this.viewModel.subscribe(0, () -> {
-            RecyclerView recyclerView = view.findViewById(R.id.watchlist_recycler);
-            CardSlimAdapter adapter = new CardSlimAdapter(requireContext(), this.viewModel.watchlist());
+        RecyclerView recyclerView = view.findViewById(R.id.watchlist_recycler);
+        CardSlimAdapter adapter = new CardSlimAdapter(requireContext(), this.viewModel.watchlist());
 
-            adapter.setOnClickCheckbox((movie, position) -> viewModel.updateSeen(movie));
-            adapter.setOnClickItem((movie, position) -> {
-                MainActivity activity = (MainActivity) requireActivity();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(SELECTED_MOVIE, movie);
-                activity.getNavigationController().navigate(R.id.movie_profile_fragment, bundle);
-            });
+        adapter.setOnClickCheckbox((movie, position) -> viewModel.updateSeen(movie));
+        adapter.setOnClickItem((movie, position) -> {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(SELECTED_MOVIE, movie);
 
-            recyclerView.setAdapter(adapter);
+            MainActivity activity = (MainActivity) requireActivity();
+            activity.getNavigationController().navigate(R.id.movie_profile_fragment, bundle);
         });
+
+        recyclerView.setAdapter(adapter);
     }
 }

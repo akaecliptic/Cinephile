@@ -34,7 +34,7 @@ public class ExploreFragment extends BaseFragment {
             }
 
             String text = ((TextView) view).getText().toString().toLowerCase();
-            if (selectedSection.equals(text)) return;
+            if (text.equals(selectedSection)) return;
 
             selectSection(view, container.indexOfChild(view));
         }
@@ -42,9 +42,12 @@ public class ExploreFragment extends BaseFragment {
         private void selectSection(View view, int selectedIndex) {
             for (int i = 0; i < container.getChildCount(); i++) {
                 if (i == selectedIndex) {
-                    view.setBackgroundTintList(colorSelect);
                     selectedSection = sections[selectedIndex];
+                    lastSelectedIndex = selectedIndex;
+
+                    view.setBackgroundTintList(colorSelect);
                     adapter.setItems(getListFromViewModel(selectedIndex));
+
                     continue;
                 }
 
@@ -55,15 +58,21 @@ public class ExploreFragment extends BaseFragment {
         private List<Movie> getListFromViewModel(int selectedIndex) {
             switch (selectedIndex) {
                 default: //Default should select upcoming.
-                case 0: return Arrays.asList(viewModel.upcoming());
-                case 1: return Arrays.asList(viewModel.rated());
-                case 2: return Arrays.asList(viewModel.popular());
-                case 3: return Arrays.asList(viewModel.playing());
+                case 0:
+                    return Arrays.asList(viewModel.upcoming());
+                case 1:
+                    return Arrays.asList(viewModel.rated());
+                case 2:
+                    return Arrays.asList(viewModel.popular());
+                case 3:
+                    return Arrays.asList(viewModel.playing());
             }
         }
     };
 
     private String selectedSection;
+    private int lastSelectedIndex; //Does this need to be static?
+
     private CardAdapter adapter;
 
     private ViewGroup container;
@@ -90,9 +99,12 @@ public class ExploreFragment extends BaseFragment {
 
         adapter = new CardAdapter(requireContext(), new ArrayList<>(), viewModel.config());
         adapter.setItemClickListener((movie, position) -> {
-            MainActivity activity = (MainActivity) requireActivity();
             Bundle bundle = new Bundle();
             bundle.putSerializable(SELECTED_MOVIE, movie);
+
+            selectedSection = null;
+
+            MainActivity activity = (MainActivity) requireActivity();
             activity.getNavigationController().navigate(R.id.movie_profile_fragment, bundle);
         });
         grid.setAdapter(adapter);
@@ -110,6 +122,6 @@ public class ExploreFragment extends BaseFragment {
             pill.setBackgroundTintList(colorUnselect);
         }
 
-        container.getChildAt(0).performClick();
+        container.getChildAt(lastSelectedIndex).performClick();
     }
 }

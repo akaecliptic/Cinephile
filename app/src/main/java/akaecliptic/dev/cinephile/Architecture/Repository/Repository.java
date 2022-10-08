@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Pair;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -60,6 +61,9 @@ public class Repository {
 
         Kind of trolling, but I like it.
         2022-10-07
+
+        With every commit I am closer to deleting this feature. Soon...
+        2022-10-08
      */
     private Map<Integer, List<InitialisationCallback>> channels;
 
@@ -71,19 +75,20 @@ public class Repository {
     }
 
     private void setup() {
-        channels = new HashMap<>();
+        this.watchlist = new ArrayList<>();
+        this.channels = new HashMap<>();
         /*
             Should probably use enums here, but I want to keep this simple as this might get torn out.
             The other channels will most likely not see much use, just 0 if any.
          */
-        channels.put(0, new LinkedList<>());
-        channels.put(1, new LinkedList<>());
-        channels.put(2, new LinkedList<>());
+        this.channels.put(0, new LinkedList<>());
+        this.channels.put(1, new LinkedList<>());
+        this.channels.put(2, new LinkedList<>());
     }
 
     private void init() {
         executor.execute(() -> {
-            this.watchlist = this.sqlite.selectAll();
+            this.watchlist.addAll(this.sqlite.selectAll());
 
             handler.post(() -> broadcast(0));
         });
@@ -108,14 +113,14 @@ public class Repository {
     /*          PUB / SUB          */
 
     public void subscribe(int channel, InitialisationCallback callback) {
-        List<InitialisationCallback> subscribers = channels.get(channel);
+        List<InitialisationCallback> subscribers = this.channels.get(channel);
         if (subscribers == null) return;
 
         subscribers.add(callback);
     }
 
     private void broadcast(int channel) {
-        List<InitialisationCallback> subscribers = channels.get(channel);
+        List<InitialisationCallback> subscribers = this.channels.get(channel);
         if (subscribers == null) return;
 
         subscribers.forEach(InitialisationCallback::onInit);
