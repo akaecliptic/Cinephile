@@ -94,10 +94,11 @@ public class Repository {
         });
 
         executor.execute(() -> {
-            this.upcoming = this.tmdb.upcoming(1);
-            this.rated = this.tmdb.rated(1);
-            this.popular = this.tmdb.popular(1);
-            this.playing = this.tmdb.playing(1);
+            // TODO: 2022-10-09 Change to lists instead of arrays.
+            this.upcoming = this.tmdb.upcoming(1).results().toArray(new Movie[0]);
+            this.rated = this.tmdb.rated(1).results().toArray(new Movie[0]);
+            this.popular = this.tmdb.popular(1).results().toArray(new Movie[0]);
+            this.playing = this.tmdb.playing(1).results().toArray(new Movie[0]);
 
             handler.post(() -> broadcast(1));
         });
@@ -167,35 +168,35 @@ public class Repository {
 
     public void upcoming(int page, TMDBCallback<Movie[]> callback) {
         executor.execute(() -> {
-            Movie[] movies = this.tmdb.upcoming(page);
+            Movie[] movies = this.tmdb.upcoming(page).results().toArray(new Movie[0]);
             handler.post(() -> callback.onResponse(movies));
         });
     }
 
     public void rated(int page, TMDBCallback<Movie[]> callback) {
         executor.execute(() -> {
-            Movie[] movies = this.tmdb.rated(page);
+            Movie[] movies = this.tmdb.rated(page).results().toArray(new Movie[0]);
             handler.post(() -> callback.onResponse(movies));
         });
     }
 
     public void popular(int page, TMDBCallback<Movie[]> callback) {
         executor.execute(() -> {
-            Movie[] movies = this.tmdb.popular(page);
+            Movie[] movies = this.tmdb.popular(page).results().toArray(new Movie[0]);
             handler.post(() -> callback.onResponse(movies));
         });
     }
 
     public void playing(int page, TMDBCallback<Movie[]> callback) {
         executor.execute(() -> {
-            Movie[] movies = this.tmdb.playing(page);
+            Movie[] movies = this.tmdb.playing(page).results().toArray(new Movie[0]);
             handler.post(() -> callback.onResponse(movies));
         });
     }
 
     public void search(String param, int page, TMDBCallback<Movie[]> callback) {
         executor.execute(() -> {
-            Movie[] movies = this.tmdb.search(param, page);
+            Movie[] movies = this.tmdb.search(param, page).results().toArray(new Movie[0]);
             handler.post(() -> callback.onResponse(movies));
         });
     }

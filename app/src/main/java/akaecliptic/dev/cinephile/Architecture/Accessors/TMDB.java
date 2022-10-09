@@ -13,6 +13,7 @@ import dev.akaecliptic.core.RequestException;
 import dev.akaecliptic.core.TMDBContext;
 import dev.akaecliptic.models.Configuration;
 import dev.akaecliptic.models.Movie;
+import dev.akaecliptic.models.Page;
 
 /**
  * This class is responsible for accessing TMDB. Querying all relevant endpoints. These include
@@ -70,9 +71,9 @@ public class TMDB {
      * Query GET <i>/movie/upcoming</i>
      *
      * @param page The page of results to get.
-     * @return Array of {@link Movie} representing the query.
+     * @return {@link Page} representing the query.
      */
-    public Movie[] upcoming(int page) {
+    public Page upcoming(int page) {
         JsonElement element = null;
 
         try {
@@ -85,18 +86,16 @@ public class TMDB {
 
         if(element == null || element.isJsonNull()) return null;
 
-        JsonElement results = element.getAsJsonObject().get("results");
-
-        return MovieFactory.createList(results);
+        return MovieFactory.createPage(element);
     }
 
     /**
      * Query GET <i>/movie/top_rated</i>
      *
      * @param page The page of results to get.
-     * @return Array of {@link Movie} representing the query.
+     * @return {@link Page} representing the query.
      */
-    public Movie[] rated(int page) {
+    public Page rated(int page) {
         JsonElement element = null;
 
         try {
@@ -109,18 +108,16 @@ public class TMDB {
 
         if(element == null || element.isJsonNull()) return null;
 
-        JsonElement results = element.getAsJsonObject().get("results");
-
-        return MovieFactory.createList(results);
+        return MovieFactory.createPage(element);
     }
 
     /**
      * Query GET <i>/movie/popular</i>
      *
      * @param page The page of results to get.
-     * @return Array of {@link Movie} representing the query.
+     * @return {@link Page} representing the query.
      */
-    public Movie[] popular(int page) {
+    public Page popular(int page) {
         JsonElement element = null;
 
         try {
@@ -133,18 +130,16 @@ public class TMDB {
 
         if(element == null || element.isJsonNull()) return null;
 
-        JsonElement results = element.getAsJsonObject().get("results");
-
-        return MovieFactory.createList(results);
+        return MovieFactory.createPage(element);
     }
 
     /**
      * Query GET <i>/movie/now_playing</i>
      *
      * @param page The page of results to get.
-     * @return Array of {@link Movie} representing the query.
+     * @return {@link Page} representing the query.
      */
-    public Movie[] playing(int page) {
+    public Page playing(int page) {
         JsonElement element = null;
 
         try {
@@ -157,9 +152,7 @@ public class TMDB {
 
         if(element == null || element.isJsonNull()) return null;
 
-        JsonElement results = element.getAsJsonObject().get("results");
-
-        return MovieFactory.createList(results);
+        return MovieFactory.createPage(element);
     }
 
     /**
@@ -167,9 +160,9 @@ public class TMDB {
      *
      * @param param The search parameter.
      * @param page The page of results to get.
-     * @return Array of {@link Movie} representing the query.
+     * @return {@link Page} representing the query.
      */
-    public Movie[] search(String param, int page) {
+    public Page search(String param, int page) {
         JsonElement element = null;
 
         try {
@@ -182,9 +175,7 @@ public class TMDB {
 
         if(element == null || element.isJsonNull()) return null;
 
-        JsonElement results = element.getAsJsonObject().get("results");
-
-        return MovieFactory.createList(results);
+        return MovieFactory.createPage(element);
     }
 
     /**
