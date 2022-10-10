@@ -53,6 +53,10 @@ public class ViewModel extends AndroidViewModel {
         return this.repository.genres();
     }
 
+    public Configuration config() {
+        return this.repository.config();
+    }
+
     public String[] backdrops() {
         return this.repository.config().backdrops();
     }
@@ -63,6 +67,10 @@ public class ViewModel extends AndroidViewModel {
 
     public List<Movie> watchlist() {
         return this.repository.watchlist();
+    }
+
+    public String image(String size, String path) {
+        return this.repository.config().image(size, path);
     }
 
     public void movie(int id, TMDBCallback<Movie> callback) {
@@ -89,12 +97,12 @@ public class ViewModel extends AndroidViewModel {
         this.repository.search(param, page, callback);
     }
 
-    public Configuration config() {
-        return this.repository.config();
+    public void genres(TMDBCallback<Map<Integer, String>> callback) {
+        this.repository.genres(callback);
     }
 
-    public String image(String size, String path) {
-        return this.repository.config().image(size, path);
+    public void config(TMDBCallback<Configuration> callback) {
+        this.repository.config(callback);
     }
 
     /*          SQLITE INTERFACE          */

@@ -158,6 +158,20 @@ public class Repository {
         });
     }
 
+    public void genres(TMDBCallback<Map<Integer, String>> callback) {
+        executor.execute(() -> {
+            Map<Integer, String> genres = this.tmdb.genre();
+            handler.post(() -> callback.onResponse(genres));
+        });
+    }
+
+    public void config(TMDBCallback<Configuration> callback) {
+        executor.execute(() -> {
+            Configuration configuration = this.tmdb.config();
+            handler.post(() -> callback.onResponse(configuration));
+        });
+    }
+
     /*          SQLITE INTERFACE          */
 
     public void insert(Movie movie) {
