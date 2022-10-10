@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph_search"
-    app:startDestination="@id/movie_list_fragment">
+    app:startDestination="@id/movie_row_fragment">
 
     <fragment
         android:id="@+id/movie_profile_fragment"
@@ -12,10 +12,10 @@
         tools:layout="@layout/old_fragment_movie_profile" />
 
     <fragment
-        android:id="@+id/movie_list_fragment"
+        android:id="@+id/movie_row_fragment"
         android:name="akaecliptic.dev.cinephile.Fragment.MovieRowFragment"
         android:label="fragment_movie_list"
-        tools:layout="@layout/fragment_movie_list">
+        tools:layout="@layout/fragment_movie_row">
         <action
             android:id="@+id/action_movie_list_fragment_to_movie_profile_fragment2"
             app:destination="@id/movie_profile_fragment" />

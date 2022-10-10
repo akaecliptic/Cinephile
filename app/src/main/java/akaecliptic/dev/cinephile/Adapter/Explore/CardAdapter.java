@@ -23,11 +23,10 @@ public class CardAdapter extends BaseMovieAdapter {
     private static final int FOOTER = 1;
 
     private final Configuration configuration;
+    private final String size;
 
     private ItemClickListener itemClickListener;
     private OnClickListener moreClickListener;
-
-    private final String size;
 
     public CardAdapter(Context context, List<Movie> items, Configuration configuration) {
         super(context, items);

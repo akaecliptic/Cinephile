@@ -6,8 +6,6 @@ import android.os.Looper;
 import android.util.Pair;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -16,11 +14,11 @@ import java.util.concurrent.Executors;
 import akaecliptic.dev.cinephile.Architecture.Accessors.SQLite;
 import akaecliptic.dev.cinephile.Architecture.Accessors.TMDB;
 import akaecliptic.dev.cinephile.Architecture.MovieRepository;
-import akaecliptic.dev.cinephile.Interface.InitialisationCallback;
 import akaecliptic.dev.cinephile.Interface.TMDBCallback;
 import dev.akaecliptic.models.Configuration;
 import dev.akaecliptic.models.Information;
 import dev.akaecliptic.models.Movie;
+import dev.akaecliptic.models.Page;
 
 /**
  * This class is responsible for interfacing with various underlying data accessors
@@ -44,28 +42,15 @@ public class Repository {
     private final SQLite sqlite;
     private final TMDB tmdb;
 
-    private Movie[] upcoming;
-    private Movie[] rated;
-    private Movie[] popular;
-    private Movie[] playing;
+    private List<Movie> upcoming;
+    private List<Movie> rated;
+    private List<Movie> popular;
+    private List<Movie> playing;
 
     private Map<Integer, String> genres;
     private Configuration configuration;
 
     private List<Movie> watchlist;
-
-    /*
-        Hmm, I like the idea of hooking into the initialisation process through a pseudo broadcaster system.
-        However, this seems unnecessary and convoluted. There are other approaches but, really not a fan of them.
-        Will look into this some more, but will keep this for now, or at least until the possible issues occur.
-
-        Kind of trolling, but I like it.
-        2022-10-07
-
-        With every commit I am closer to deleting this feature. Soon...
-        2022-10-08
-     */
-    private Map<Integer, List<InitialisationCallback>> channels;
 
     public Repository(Context context) {
         this.sqlite = SQLite.getInstance(context);
@@ -75,73 +60,45 @@ public class Repository {
     }
 
     private void setup() {
+        this.upcoming = new ArrayList<>();
+        this.rated = new ArrayList<>();
+        this.popular = new ArrayList<>();
+        this.playing = new ArrayList<>();
+
         this.watchlist = new ArrayList<>();
-        this.channels = new HashMap<>();
-        /*
-            Should probably use enums here, but I want to keep this simple as this might get torn out.
-            The other channels will most likely not see much use, just 0 if any.
-         */
-        this.channels.put(0, new LinkedList<>());
-        this.channels.put(1, new LinkedList<>());
-        this.channels.put(2, new LinkedList<>());
     }
 
     private void init() {
-        executor.execute(() -> {
-            this.watchlist.addAll(this.sqlite.selectAll());
-
-            handler.post(() -> broadcast(0));
-        });
+        executor.execute(() -> this.watchlist.addAll(this.sqlite.selectAll()));
 
         executor.execute(() -> {
-            // TODO: 2022-10-09 Change to lists instead of arrays.
-            this.upcoming = this.tmdb.upcoming(1).results().toArray(new Movie[0]);
-            this.rated = this.tmdb.rated(1).results().toArray(new Movie[0]);
-            this.popular = this.tmdb.popular(1).results().toArray(new Movie[0]);
-            this.playing = this.tmdb.playing(1).results().toArray(new Movie[0]);
-
-            handler.post(() -> broadcast(1));
+            this.upcoming.addAll(this.tmdb.upcoming(1).results());
+            this.rated.addAll(this.tmdb.rated(1).results());
+            this.popular.addAll(this.tmdb.popular(1).results());
+            this.playing.addAll(this.tmdb.playing(1).results());
         });
 
         executor.execute(() -> {
             this.genres = this.tmdb.genre();
             this.configuration = this.tmdb.config();
-
-            handler.post(() -> broadcast(2));
         });
-    }
-
-    /*          PUB / SUB          */
-
-    public void subscribe(int channel, InitialisationCallback callback) {
-        List<InitialisationCallback> subscribers = this.channels.get(channel);
-        if (subscribers == null) return;
-
-        subscribers.add(callback);
-    }
-
-    private void broadcast(int channel) {
-        List<InitialisationCallback> subscribers = this.channels.get(channel);
-        if (subscribers == null) return;
-
-        subscribers.forEach(InitialisationCallback::onInit);
     }
 
     /*          MEMBER VARIABLE GETTERS          */
 
-    public Movie[] upcoming() {
+    public List<Movie> upcoming() {
         return this.upcoming;
     }
 
-    public Movie[] rated() {
+    public List<Movie> rated() {
         return this.rated;
     }
 
-    public Movie[] popular() {
+    public List<Movie> popular() {
         return this.popular;
     }
 
-    public Movie[] playing() {
+    public List<Movie> playing() {
         return this.playing;
     }
 
@@ -166,38 +123,38 @@ public class Repository {
         });
     }
 
-    public void upcoming(int page, TMDBCallback<Movie[]> callback) {
+    public void upcoming(int page, TMDBCallback<Page> callback) {
         executor.execute(() -> {
-            Movie[] movies = this.tmdb.upcoming(page).results().toArray(new Movie[0]);
-            handler.post(() -> callback.onResponse(movies));
+            Page result = this.tmdb.upcoming(page);
+            handler.post(() -> callback.onResponse(result));
         });
     }
 
-    public void rated(int page, TMDBCallback<Movie[]> callback) {
+    public void rated(int page, TMDBCallback<Page> callback) {
         executor.execute(() -> {
-            Movie[] movies = this.tmdb.rated(page).results().toArray(new Movie[0]);
-            handler.post(() -> callback.onResponse(movies));
+            Page result = this.tmdb.rated(page);
+            handler.post(() -> callback.onResponse(result));
         });
     }
 
-    public void popular(int page, TMDBCallback<Movie[]> callback) {
+    public void popular(int page, TMDBCallback<Page> callback) {
         executor.execute(() -> {
-            Movie[] movies = this.tmdb.popular(page).results().toArray(new Movie[0]);
-            handler.post(() -> callback.onResponse(movies));
+            Page result = this.tmdb.popular(page);
+            handler.post(() -> callback.onResponse(result));
         });
     }
 
-    public void playing(int page, TMDBCallback<Movie[]> callback) {
+    public void playing(int page, TMDBCallback<Page> callback) {
         executor.execute(() -> {
-            Movie[] movies = this.tmdb.playing(page).results().toArray(new Movie[0]);
-            handler.post(() -> callback.onResponse(movies));
+            Page result = this.tmdb.playing(page);
+            handler.post(() -> callback.onResponse(result));
         });
     }
 
-    public void search(String param, int page, TMDBCallback<Movie[]> callback) {
+    public void search(String param, int page, TMDBCallback<Page> callback) {
         executor.execute(() -> {
-            Movie[] movies = this.tmdb.search(param, page).results().toArray(new Movie[0]);
-            handler.post(() -> callback.onResponse(movies));
+            Page result = this.tmdb.search(param, page);
+            handler.post(() -> callback.onResponse(result));
         });
     }
 

@@ -3,11 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragment.MovieRowFragment">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/movie_list_recycler"
+        android:id="@+id/movie_row_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/old_list_item_movie_list"/>
+
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+
+        tools:listitem="@layout/list_item_movie_card_row" />
 </RelativeLayout>

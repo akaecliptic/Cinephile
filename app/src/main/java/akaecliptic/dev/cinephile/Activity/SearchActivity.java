@@ -57,7 +57,7 @@ public class SearchActivity extends AppCompatActivity {
             if (getSupportActionBar() != null) {
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 getSupportActionBar().setHomeAsUpIndicator(R.drawable.icon_arrow_back);
-                if(destination.getId() == R.id.movie_list_fragment){
+                if(destination.getId() == R.id.movie_row_fragment){
                     makeQueries(queryString);
                 }
             }
@@ -65,7 +65,7 @@ public class SearchActivity extends AppCompatActivity {
 
         ((Toolbar)findViewById(R.id.toolbar)).setNavigationOnClickListener(v -> {
             if(navController.getCurrentDestination() != null){
-                if(navController.getCurrentDestination().getId() == R.id.movie_list_fragment){
+                if(navController.getCurrentDestination().getId() == R.id.movie_row_fragment){
                     finish();
 //                    WatchListFragment.updateCacheMyList();
                 }

@@ -1,5 +1,6 @@
 package akaecliptic.dev.cinephile.Fragment;
 
+import static akaecliptic.dev.cinephile.Fragment.MovieRowFragment.PAGE_TYPE;
 import static akaecliptic.dev.cinephile.Fragment.WatchlistFragment.SELECTED_MOVIE;
 
 import android.content.res.ColorStateList;
@@ -60,19 +61,20 @@ public class ExploreFragment extends BaseFragment {
         private List<Movie> getListFromViewModel(int selectedIndex) {
             Movie[] movies;
             List<Movie> watchlist = viewModel.watchlist();
+
             switch (selectedIndex) {
                 default: //Default should select upcoming.
                 case 0:
-                    movies = Arrays.copyOf(viewModel.upcoming(), viewModel.upcoming().length);
+                    movies = viewModel.upcoming().toArray(new Movie[0]);
                     break;
                 case 1:
-                    movies = Arrays.copyOf(viewModel.rated(), viewModel.rated().length);
+                    movies = viewModel.rated().toArray(new Movie[0]);
                     break;
                 case 2:
-                    movies = Arrays.copyOf(viewModel.popular(), viewModel.popular().length);
+                    movies = viewModel.popular().toArray(new Movie[0]);
                     break;
                 case 3:
-                    movies = Arrays.copyOf(viewModel.playing(), viewModel.playing().length);
+                    movies = viewModel.playing().toArray(new Movie[0]);
                     break;
             }
 
@@ -137,8 +139,13 @@ public class ExploreFragment extends BaseFragment {
             activity.getNavigationController().navigate(R.id.movie_profile_fragment, bundle);
         });
         adapter.setMoreClickListener(v -> {
-            //Open CardRowFragment
-            System.out.println("MORE");
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(PAGE_TYPE, lastSelectedIndex);
+
+            selectedSection = null;
+
+            MainActivity activity = (MainActivity) requireActivity();
+            activity.getNavigationController().navigate(R.id.movie_row_fragment, bundle);
         });
 
         GridLayoutManager layoutManager = new GridLayoutManager(requireContext(), 2);

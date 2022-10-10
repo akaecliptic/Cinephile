@@ -20,14 +20,14 @@
             app:destination="@id/movie_profile_fragment" />
         <action
             android:id="@+id/action_explore_fragment_to_movie_list_fragment"
-            app:destination="@id/movie_list_fragment" />
+            app:destination="@id/movie_row_fragment" />
     </fragment>
 
     <fragment
         android:id="@+id/movie_profile_fragment"
         android:name="akaecliptic.dev.cinephile.Fragment.MovieProfileFragment"
         android:label="fragment_movie_profile"
-        tools:layout="@layout/old_fragment_movie_profile" />
+        tools:layout="@layout/fragment_movie_profile" />
 
     <fragment
         android:id="@+id/watchlist_fragment"
@@ -42,10 +42,10 @@
             app:destination="@id/collections_fragment" />
     </fragment>
     <fragment
-        android:id="@+id/movie_list_fragment"
+        android:id="@+id/movie_row_fragment"
         android:name="akaecliptic.dev.cinephile.Fragment.MovieRowFragment"
-        android:label="fragment_movie_list"
-        tools:layout="@layout/fragment_movie_list">
+        android:label="fragment_movie_row"
+        tools:layout="@layout/fragment_movie_row">
         <action
             android:id="@+id/action_movie_list_fragment_to_movie_profile_fragment"
             app:destination="@id/movie_profile_fragment" />
@@ -54,7 +54,7 @@
         android:id="@+id/collections_fragment"
         android:name="akaecliptic.dev.cinephile.Fragment.CollectionsFragment"
         android:label="fragment_collections"
-        tools:layout="@layout/fragment_collections">
+        tools:layout="@layout/old_fragment_collections">
         <action
             android:id="@+id/action_collections_fragment_to_movie_profile_fragment"
             app:destination="@id/movie_profile_fragment" />

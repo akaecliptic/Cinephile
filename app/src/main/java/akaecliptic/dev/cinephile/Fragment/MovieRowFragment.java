@@ -1,19 +1,12 @@
 package akaecliptic.dev.cinephile.Fragment;
 
+import static akaecliptic.dev.cinephile.Fragment.WatchlistFragment.SELECTED_MOVIE;
+
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,205 +15,164 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import akaecliptic.dev.cinephile.Adapter.MovieListAdapter;
-import akaecliptic.dev.cinephile.Architecture.MovieViewModel;
-import akaecliptic.dev.cinephile.Architecture.MovieApiDAO;
-import akaecliptic.dev.cinephile.Architecture.MovieApiDAO.MovieType;
 import akaecliptic.dev.cinephile.Activity.MainActivity;
-import akaecliptic.dev.cinephile.Model.Media;
-import akaecliptic.dev.cinephile.Model.Movie;
+import akaecliptic.dev.cinephile.Adapter.Explore.CardRowAdapter;
+import akaecliptic.dev.cinephile.Interface.TMDBCallback;
 import akaecliptic.dev.cinephile.R;
-import akaecliptic.dev.cinephile.Activity.SearchActivity;
-
-import static akaecliptic.dev.cinephile.Fragment.WatchlistFragment.SELECTED_MOVIE;
-import static akaecliptic.dev.cinephile.Fragment.WatchlistFragment.SELECTED_SAVED;
-import static akaecliptic.dev.cinephile.Fragment.WatchlistFragment.SELECTED_TYPE;
+import akaecliptic.dev.cinephile.Super.BaseFragment;
+import dev.akaecliptic.models.Movie;
+import dev.akaecliptic.models.Page;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MovieRowFragment extends Fragment {
+public class MovieRowFragment extends BaseFragment {
 
-    private MovieViewModel viewModel;
-    private ArrayList<Movie> cachedMovies;
-    private boolean lockPagination = false;
-    private MovieType movieType;
-    private int pageCount = 1;
-    private int scrollPosition = 0;
-    private String searchQuery;
+    static final String PAGE_TYPE = "PAGE_TYPE";
 
-    public MovieRowFragment() {
-        // Required empty public constructor
-    }
+    private int type;
+    private int page;
+    private boolean paginate;
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        setUpViewModelLink();
-        setHasOptionsMenu(true);
-        return inflater.inflate(R.layout.fragment_movie_list, container, false);
-    }
+    private List<Movie> pool;
+    private Set<Integer> overlap;
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        if(requireActivity().getClass() == SearchActivity.class){
-            setUpRecyclerSearch();
+    private CardRowAdapter adapter;
+
+    private final TMDBCallback<Page> callback = response -> {
+        List<Movie> watchlist = viewModel.watchlist();
+        List<Movie> combined = response.results()
+                .stream()
+                .map(movie -> {
+                            if (watchlist.contains(movie)) {
+                                int index = watchlist.indexOf(movie);
+                                overlap.add(movie.getId());
+
+                                return watchlist.get(index);
+                            }
+
+                            return movie;
+                        }
+                )
+                .collect(Collectors.toList());
+
+        pool.addAll(combined);
+        page = response.number();
+        paginate = response.paginate();
+
+        if (adapter != null) {
+            int start = pool.size() + 1;
+            int end = pool.size() + combined.size();
+
+            adapter.notifyItemRangeChanged(start, end);
+            adapter.setPaginate(paginate);
         }
-        else if(requireActivity().getClass() == MainActivity.class){
-            getBundle();
-            setUpRecyclerMain();
+    };
+
+    private void initPool() {
+        // Copied from explore fragment:
+        // See ExploreFragment#onSelectSection#getListFromViewModel(int)
+        Movie[] movies;
+        List<Movie> watchlist = viewModel.watchlist();
+
+        switch (type) {
+            default:
+            case 0:
+                movies = viewModel.upcoming().toArray(new Movie[0]);
+                break;
+            case 1:
+                movies = viewModel.rated().toArray(new Movie[0]);
+                break;
+            case 2:
+                movies = viewModel.popular().toArray(new Movie[0]);
+                break;
+            case 3:
+                movies = viewModel.playing().toArray(new Movie[0]);
+                break;
         }
+
+        for (int i = 0; i < movies.length; i++) {
+            if (!watchlist.contains(movies[i])) continue;
+
+            int index = watchlist.indexOf(movies[i]);
+            movies[i] = watchlist.get(index);
+            overlap.add(movies[i].getId());
+        }
+
+        pool.addAll(Arrays.asList(movies));
     }
 
-    private void setUpViewModelLink() {
-        viewModel = new ViewModelProvider(requireActivity()).get(MovieViewModel.class);
-    }
-
-    private void setUpRecyclerSearch() {
-        SearchActivity.setRequestListener((movies, ids, query) -> {
-            String imageConfig = viewModel.getImageConfig(MovieApiDAO.ImageType.PROFILE);
-            if (pageCount == 1){
-                cachedMovies = new ArrayList<>(movies);
-            }else {
-                List<String> movieTitles = cachedMovies.stream().map(Media::getTitle).collect(Collectors.toList());
-                ids = new HashSet<>(viewModel.getItemsLike(movieTitles));
-            }
-
-            searchQuery = query;
-
-            RecyclerView recyclerView = requireActivity().findViewById(R.id.movie_list_recycler);
-            MovieListAdapter adapter = new MovieListAdapter(requireContext(), cachedMovies, imageConfig, ids);
-
-            adapter.setItemClickListener((v, m) -> {
-                Bundle bundle = new Bundle();
-
-                bundle.putSerializable(SELECTED_MOVIE, m);
-                bundle.putBoolean(SELECTED_SAVED, viewModel.isMoviePresent(m.getId()));
-
-                scrollPosition = cachedMovies.indexOf(m);
-
-                Navigation.findNavController(requireView())
-                        .navigate(R.id.action_movie_list_fragment_to_movie_profile_fragment2, bundle);
-
-                Snackbar snackbar = Snackbar.make(requireActivity().findViewById(R.id.search_coordinator),
-                        "Opening '" + m.getTitle() + "'",
-                        Snackbar.LENGTH_SHORT);
-                snackbar.getView().setBackgroundColor(requireActivity().getColor(R.color.colorSecondaryDark));
-                snackbar.show();
-            });
-
-            adapter.setAddClickListener((v, m) -> {
-                viewModel.addItem(m);
-
-                adapter.updateItem(m);
-
-                String message = "'" + m.getTitle() + "' Has been added to your list";
-                Snackbar snackbar = Snackbar.make(requireActivity().findViewById(R.id.search_coordinator),
-                        message,
-                        Snackbar.LENGTH_SHORT);
-                snackbar.getView().setBackgroundColor(requireActivity().getColor(R.color.colorSecondaryDark));
-                snackbar.show();
-            });
-
-            lockPagination = (movies.size() < 20) || lockPagination;
-            adapter.setLockPagination(lockPagination);
-
-            setUpPaginationSearch(adapter);
-
-            recyclerView.setAdapter(adapter);
-            recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-            recyclerView.scrollToPosition(scrollPosition);
-        });
-    }
-
-    private void setUpPaginationSearch(MovieListAdapter adapter){
-        adapter.setPaginateContent(() -> {
-            pageCount++;
-            viewModel.requestMoviesLike(searchQuery, pageCount, movies -> {
-                List<Movie> online = Arrays.asList(movies);
-                List<String> movieTitles = online.stream().map(Media::getTitle).collect(Collectors.toList());
-                List<Movie> movieList = new ArrayList<>(viewModel.getItemsLike(searchQuery));
-                Set<Integer> savedSet = new HashSet<>(viewModel.getItemsLike(movieTitles));
-
-                movieList.addAll(online.stream().filter( m -> !movieList.contains(m)).collect(Collectors.toList()));
-
-                lockPagination = (pageCount == 5 || movies.length < 20);
-                adapter.appendContent(movieList, savedSet, lockPagination);
-            });
-        });
+    private void paginate(int type, int page) {
+        switch (type) {
+            default:
+            case 0:
+                viewModel.upcoming(page, callback);
+                break;
+            case 1:
+                viewModel.rated(page, callback);
+                break;
+            case 2:
+                viewModel.popular(page, callback);
+                break;
+            case 3:
+                viewModel.playing(page, callback);
+                break;
+        }
     }
 
     private void getBundle() {
-        if(getArguments() != null) {
-            movieType = (MovieType) getArguments().getSerializable(SELECTED_TYPE);
-        }
+        if (getArguments() == null) return;
+
+        this.type = getArguments().getInt(PAGE_TYPE);
     }
 
-    private void setUpRecyclerMain() {
-        String imageConfig = viewModel.getImageConfig(MovieApiDAO.ImageType.PROFILE);
+    /*          OVERRIDES          */
 
-        viewModel.requestMoviesType(movieType, pageCount, movies -> {
-            Set<Integer> savedSet = Arrays.stream(movies).filter(viewModel.getItems()::contains).map(Media::getId).collect(Collectors.toSet());
-            if(pageCount == 1)
-                cachedMovies = new ArrayList<>(Arrays.asList(movies));
-
-            RecyclerView recyclerView = requireActivity().findViewById(R.id.movie_list_recycler);
-            MovieListAdapter adapter = new MovieListAdapter(requireContext(), cachedMovies, imageConfig, savedSet);
-
-            adapter.setItemClickListener((v, m) -> {
-                Bundle bundle = new Bundle();
-
-                bundle.putSerializable(SELECTED_MOVIE, m);
-                bundle.putBoolean(SELECTED_SAVED, viewModel.isMoviePresent(m.getId()));
-
-                scrollPosition = cachedMovies.indexOf(m);
-
-                Navigation.findNavController(requireView())
-                        .navigate(R.id.action_movie_list_fragment_to_movie_profile_fragment, bundle);
-
-                Snackbar snackbar = Snackbar.make(requireActivity().findViewById(R.id.main_coordinator),
-                        "Opening '" + m.getTitle() + "'",
-                        Snackbar.LENGTH_SHORT);
-                snackbar.getView().setBackgroundColor(requireActivity().getColor(R.color.colorSecondaryDark));
-                snackbar.show();
-            });
-
-            adapter.setAddClickListener((v, m) -> {
-                viewModel.addItem(m);
-
-                adapter.updateItem(m);
-
-                String message = "'" + m.getTitle() + "' Has been added to your list";
-                Snackbar snackbar = Snackbar.make(requireActivity().findViewById(R.id.main_coordinator),
-                        message,
-                        Snackbar.LENGTH_SHORT);
-                snackbar.getView().setBackgroundColor(requireActivity().getColor(R.color.colorSecondaryDark));
-                snackbar.show();
-            });
-
-            lockPagination = (movies.length < 9) || lockPagination;
-            adapter.setLockPagination(lockPagination);
-
-            setUpPaginationMain(adapter);
-
-            recyclerView.setAdapter(adapter);
-            recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-            recyclerView.scrollToPosition(scrollPosition);
-        });
+    @Override
+    protected void setResource() {
+        this.resource = R.layout.fragment_movie_row;
     }
 
-    private void setUpPaginationMain(MovieListAdapter adapter){
-        adapter.setPaginateContent(() -> {
-            pageCount++;
-            viewModel.requestMoviesType(movieType, pageCount, movies -> {
-                Set<Integer> savedSet = Arrays.stream(movies).filter(viewModel.getItems()::contains).map(Media::getId).collect(Collectors.toSet());
+    @Override
+    protected void beforeViews() {
+        // CONSIDER: May need to look for another way to check if values are already initialed.
+        if (pool != null) return; //Not sure if this is the best way to approach.
 
-                lockPagination = (pageCount == 5 || movies.length < 20);
-                adapter.appendContent(Arrays.asList(movies), savedSet, lockPagination);
-            });
+        this.getBundle();
+        this.page = 1;
+        this.paginate = true;
+        this.pool = new ArrayList<>();
+        this.overlap = new HashSet<>();
+        this.initPool();
+    }
+
+    @Override
+    protected void initViews(View view) {
+        RecyclerView recycler = view.findViewById(R.id.movie_row_recycler);
+
+        adapter = new CardRowAdapter(requireContext(), pool, viewModel.config(), overlap);
+        adapter.setItemClickListener((movie, position) -> {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(SELECTED_MOVIE, movie);
+
+            MainActivity activity = (MainActivity) requireActivity();
+            activity.getNavigationController().navigate(R.id.movie_profile_fragment, bundle);
         });
+        adapter.setMoreClickListener(v -> {
+            if (paginate) paginate(type, ++page);
+        });
+        adapter.setItemAddClickListener(((movie, position) -> {
+            viewModel.insert(movie);
+            overlap.add(movie.getId());
+            adapter.notifyItemChanged(position);
+        }));
+
+        recycler.setAdapter(adapter);
+    }
+
+    @Override
+    protected void afterViews(View view) {
+        adapter.setPaginate(paginate);
     }
 }

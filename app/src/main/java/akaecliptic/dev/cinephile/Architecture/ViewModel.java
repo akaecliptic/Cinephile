@@ -10,11 +10,11 @@ import java.util.List;
 import java.util.Map;
 
 import akaecliptic.dev.cinephile.Architecture.Repository.Repository;
-import akaecliptic.dev.cinephile.Interface.InitialisationCallback;
 import akaecliptic.dev.cinephile.Interface.TMDBCallback;
 import dev.akaecliptic.models.Configuration;
 import dev.akaecliptic.models.Information;
 import dev.akaecliptic.models.Movie;
+import dev.akaecliptic.models.Page;
 
 /**
  * This class is responsible for maintaining scope of data between views, and serves a wrapper for
@@ -31,27 +31,21 @@ public class ViewModel extends AndroidViewModel {
         this.repository = new Repository(application);
     }
 
-    /*          PUB / SUB          */
-
-    public void subscribe(int channel, InitialisationCallback callback) {
-        this.repository.subscribe(channel, callback);
-    }
-
     /*          TMDB INTERFACE          */
 
-    public Movie[] upcoming() {
+    public List<Movie> upcoming() {
         return this.repository.upcoming();
     }
 
-    public Movie[] rated() {
+    public List<Movie> rated() {
         return this.repository.rated();
     }
 
-    public Movie[] popular() {
+    public List<Movie> popular() {
         return this.repository.popular();
     }
 
-    public Movie[] playing() {
+    public List<Movie> playing() {
         return this.repository.playing();
     }
 
@@ -75,23 +69,23 @@ public class ViewModel extends AndroidViewModel {
         this.repository.movie(id, callback);
     }
 
-    public void upcoming(int page, TMDBCallback<Movie[]> callback) {
+    public void upcoming(int page, TMDBCallback<Page> callback) {
         this.repository.upcoming(page, callback);
     }
 
-    public void rated(int page, TMDBCallback<Movie[]> callback) {
+    public void rated(int page, TMDBCallback<Page> callback) {
         this.repository.rated(page, callback);
     }
 
-    public void popular(int page, TMDBCallback<Movie[]> callback) {
+    public void popular(int page, TMDBCallback<Page> callback) {
         this.repository.popular(page, callback);
     }
 
-    public void playing(int page, TMDBCallback<Movie[]> callback) {
+    public void playing(int page, TMDBCallback<Page> callback) {
         this.repository.playing(page, callback);
     }
 
-    public void search(String param, int page, TMDBCallback<Movie[]> callback) {
+    public void search(String param, int page, TMDBCallback<Page> callback) {
         this.repository.search(param, page, callback);
     }
 
