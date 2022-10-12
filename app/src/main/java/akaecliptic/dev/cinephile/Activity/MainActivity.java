@@ -3,16 +3,10 @@ package akaecliptic.dev.cinephile.Activity;
 import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
-import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
-import androidx.navigation.NavController;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
@@ -22,26 +16,29 @@ import java.util.HashSet;
 import java.util.Set;
 
 import akaecliptic.dev.cinephile.R;
+import akaecliptic.dev.cinephile.Super.BaseActivity;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
-    private NavController navigationController;
-    private Toolbar toolbar;
     private BottomNavigationView bottombar;
 
+    public BottomNavigationView getBottombar() {
+        return this.bottombar;
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    protected void setResource() {
+        this.resource = R.layout.activity_main;
+    }
 
-        toolbar = findViewById(R.id.toolbar);
-        bottombar = findViewById(R.id.bottombar);
-        NavHostFragment navigationHostFragment =
-                (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_host_fragment);
+    @Override
+    protected void setNavigates() {
+        super.setNavigates();
+        this.bottombar = findViewById(R.id.bottombar);
+    }
 
-        if (navigationHostFragment != null)
-            navigationController = navigationHostFragment.getNavController();
-
+    @Override
+    protected void linkNavigates() {
         setSupportActionBar(toolbar);
 
         Set<Integer> destinations = new HashSet<>();
@@ -59,30 +56,30 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.toolbar, menu);
 
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) menu.findItem(R.id.toolbar_search).getActionView();
+        MenuItem searchItem = menu.findItem(R.id.toolbar_search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
 
         if (searchManager != null) {
             searchView.setSearchableInfo(searchManager.getSearchableInfo(new ComponentName(this, SearchActivity.class)));
         }
 
+        //This closes the search view when the keyboard is closed.
+        searchView.setOnQueryTextFocusChangeListener((view, focused) -> {
+            if (focused) return;
+
+            searchItem.collapseActionView();
+            searchView.setQuery("", false);
+        });
+
+        //This closes keyboard and hides search view when in movie profile.
+        navigationController.addOnDestinationChangedListener((controller, destination, bundle) -> {
+            if (destination.getId() != R.id.movie_profile_fragment) return; // TODO: 2022-10-12 Watch this.
+
+            searchItem.collapseActionView();
+            searchView.setQuery("", false);
+            searchItem.setVisible(false);
+        });
+
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        return NavigationUI.onNavDestinationSelected(item, navigationController) ||
-                super.onOptionsItemSelected(item);
-    }
-
-    public NavController getNavigationController() {
-        return this.navigationController;
-    }
-
-    public Toolbar getToolbar() {
-        return this.toolbar;
-    }
-
-    public BottomNavigationView getBottombar() {
-        return this.bottombar;
     }
 }

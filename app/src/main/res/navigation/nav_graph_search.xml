@@ -3,19 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph_search"
-    app:startDestination="@id/movie_row_fragment">
+    app:startDestination="@id/movie_search_fragment">
 
     <fragment
         android:id="@+id/movie_profile_fragment"
         android:name="akaecliptic.dev.cinephile.Fragment.MovieProfileFragment"
         android:label="fragment_movie_profile"
-        tools:layout="@layout/old_fragment_movie_profile" />
+        tools:layout="@layout/fragment_movie_profile" />
 
     <fragment
-        android:id="@+id/movie_row_fragment"
-        android:name="akaecliptic.dev.cinephile.Fragment.MovieRowFragment"
-        android:label="fragment_movie_list"
-        tools:layout="@layout/fragment_movie_row">
+        android:id="@+id/movie_search_fragment"
+        android:name="akaecliptic.dev.cinephile.Fragment.MovieSearchFragment"
+        android:label="fragment_movie_search"
+        tools:layout="@layout/fragment_movie_search">
         <action
             android:id="@+id/action_movie_list_fragment_to_movie_profile_fragment2"
             app:destination="@id/movie_profile_fragment" />

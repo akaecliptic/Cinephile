@@ -54,13 +54,14 @@
         <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/font/archivo_narrow_bold.xml" value="0.2921875" />
         <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/font/cousine.xml" value="0.2921875" />
         <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/activity_main.xml" value="0.22" />
-        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/activity_search.xml" value="0.26953125" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/activity_search.xml" value="0.25" />
         <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/bottom_nav.xml" value="0.301953125" />
         <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/card_row_movie.xml" value="0.33" />
         <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/component_card_image.xml" value="1.1" />
         <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/component_icons.xml" value="0.5" />
         <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/component_pill.xml" value="0.67" />
         <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/component_profile_buttonbar.xml" value="0.33" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/component_searchbar.xml" value="0.30234375" />
         <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/dialog_add_collection.xml" value="0.301953125" />
         <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/dialog_delete.xml" value="0.23515625" />
         <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/dialog_new_collection.xml" value="0.23515625" />
@@ -70,6 +71,7 @@
         <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/fragment_movie_list.xml" value="0.33" />
         <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/fragment_movie_profile.xml" value="0.4574688796680498" />
         <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/fragment_movie_row.xml" value="0.31328125" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/fragment_movie_search.xml" value="0.21171875" />
         <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/fragment_mylist.xml" value="0.26953125" />
         <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/fragment_view_collections.xml" value="0.23515625" />
         <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/fragment_watch_list.xml" value="0.33" />
@@ -152,5 +154,12 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.21171875" />
+      </ProjectState>
+    </option>
   </component>
 </project>

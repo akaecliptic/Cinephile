@@ -20,6 +20,7 @@ import com.squareup.picasso.Picasso;
 
 import akaecliptic.dev.cinephile.Activity.MainActivity;
 import akaecliptic.dev.cinephile.Activity.SearchActivity;
+import akaecliptic.dev.cinephile.Architecture.ViewModel;
 import akaecliptic.dev.cinephile.R;
 import akaecliptic.dev.cinephile.Super.BaseFragment;
 import dev.akaecliptic.models.Movie;
@@ -119,7 +120,7 @@ public class MovieProfileFragment extends BaseFragment {
 
         frameAdd.setOnClickListener(v -> {
             boolean present = viewModel.watchlist().contains(working);
-            if(present) {
+            if (present) {
                 /* TODO: Dialog stuff */
                 Toast.makeText(requireContext(), "Movie already in watchlist, collections coming soon", Toast.LENGTH_SHORT).show();
                 return;
@@ -129,6 +130,10 @@ public class MovieProfileFragment extends BaseFragment {
             viewModel.insert(working);
             String prompt = String.format("Added '%s' to Watchlist", working.getTitle());
             Toast.makeText(requireContext(), prompt, Toast.LENGTH_SHORT).show();
+
+            if (requireActivity().getClass() != SearchActivity.class) return;
+
+            ViewModel.pool(working);
         });
         frameSeen.setOnClickListener(v -> {
             if (seen.isEnabled()) {
@@ -138,7 +143,7 @@ public class MovieProfileFragment extends BaseFragment {
 
             Toast.makeText(requireContext(), "Movie must be added to watchlist to mark as seen", Toast.LENGTH_SHORT).show();
         });
-        frameProgress.setOnClickListener(v -> System.out.println(ratingText.getText()) /* TODO: Dialog stuff */ );
+        frameProgress.setOnClickListener(v -> System.out.println(ratingText.getText()) /* TODO: Dialog stuff */);
 
         seen.setOnCheckedChangeListener((checkbox, value) -> {
             working.setSeen(value);

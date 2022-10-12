@@ -14,8 +14,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import akaecliptic.dev.cinephile.Activity.MainActivity;
 import akaecliptic.dev.cinephile.Adapter.Explore.CardAdapter;
@@ -49,7 +49,7 @@ public class ExploreFragment extends BaseFragment {
                     lastSelectedIndex = selectedIndex;
 
                     view.setBackgroundTintList(colorSelect);
-                    adapter.setItems(getListFromViewModel(selectedIndex));
+                    adapter.setItems(getListFromViewModel());
 
                     continue;
                 }
@@ -58,23 +58,23 @@ public class ExploreFragment extends BaseFragment {
             }
         }
 
-        private List<Movie> getListFromViewModel(int selectedIndex) {
-            Movie[] movies;
+        private List<Movie> getListFromViewModel() {
+            List<Movie> movies;
             List<Movie> watchlist = viewModel.watchlist();
 
-            switch (selectedIndex) {
+            switch (lastSelectedIndex) {
                 default: //Default should select upcoming.
                 case 0:
-                    movies = viewModel.upcoming().toArray(new Movie[0]);
+                    movies = viewModel.upcoming();
                     break;
                 case 1:
-                    movies = viewModel.rated().toArray(new Movie[0]);
+                    movies = viewModel.rated();
                     break;
                 case 2:
-                    movies = viewModel.popular().toArray(new Movie[0]);
+                    movies = viewModel.popular();
                     break;
                 case 3:
-                    movies = viewModel.playing().toArray(new Movie[0]);
+                    movies = viewModel.playing();
                     break;
             }
 
@@ -90,14 +90,18 @@ public class ExploreFragment extends BaseFragment {
                 2022-10-08
              */
 
-            for (int i = 0; i < movies.length; i++) {
-                if (!watchlist.contains(movies[i])) continue;
+            List<Movie> combined = movies
+                    .stream()
+                    .map(movie -> {
+                                if (!watchlist.contains(movie)) return movie;
 
-                int index = watchlist.indexOf(movies[i]);
-                movies[i] = watchlist.get(index);
-            }
+                                int index = watchlist.indexOf(movie);
+                                return watchlist.get(index);
+                            }
+                    )
+                    .collect(Collectors.toList());
 
-            return Arrays.asList(movies);
+            return combined;
         }
     };
 
