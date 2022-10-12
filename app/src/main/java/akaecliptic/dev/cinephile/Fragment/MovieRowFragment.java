@@ -45,14 +45,11 @@ public class MovieRowFragment extends BaseFragment {
         List<Movie> combined = response.results()
                 .stream()
                 .map(movie -> {
-                            if (watchlist.contains(movie)) {
-                                int index = watchlist.indexOf(movie);
-                                overlap.add(movie.getId());
+                            if (!watchlist.contains(movie)) return movie;
 
-                                return watchlist.get(index);
-                            }
-
-                            return movie;
+                            int index = watchlist.indexOf(movie);
+                            overlap.add(movie.getId());
+                            return watchlist.get(index);
                         }
                 )
                 .collect(Collectors.toList());
@@ -62,10 +59,10 @@ public class MovieRowFragment extends BaseFragment {
         paginate = response.paginate();
 
         if (adapter != null) {
-            int start = pool.size() + 1;
-            int end = pool.size() + combined.size();
+            int start = (pool.size() - combined.size()) + 1;
+            int count = combined.size();
 
-            adapter.notifyItemRangeChanged(start, end);
+            adapter.notifyItemRangeInserted(start, count);
             adapter.setPaginate(paginate);
         }
     };
@@ -73,50 +70,54 @@ public class MovieRowFragment extends BaseFragment {
     private void initPool() {
         // Copied from explore fragment:
         // See ExploreFragment#onSelectSection#getListFromViewModel(int)
-        Movie[] movies;
+        List<Movie> movies;
         List<Movie> watchlist = viewModel.watchlist();
 
         switch (type) {
             default:
             case 0:
-                movies = viewModel.upcoming().toArray(new Movie[0]);
+                movies = viewModel.upcoming();
                 break;
             case 1:
-                movies = viewModel.rated().toArray(new Movie[0]);
+                movies = viewModel.rated();
                 break;
             case 2:
-                movies = viewModel.popular().toArray(new Movie[0]);
+                movies = viewModel.popular();
                 break;
             case 3:
-                movies = viewModel.playing().toArray(new Movie[0]);
+                movies = viewModel.playing();
                 break;
         }
 
-        for (int i = 0; i < movies.length; i++) {
-            if (!watchlist.contains(movies[i])) continue;
+        List<Movie> combined = movies
+                .stream()
+                .map(movie -> {
+                            if (!watchlist.contains(movie)) return movie;
 
-            int index = watchlist.indexOf(movies[i]);
-            movies[i] = watchlist.get(index);
-            overlap.add(movies[i].getId());
-        }
+                            int index = watchlist.indexOf(movie);
+                            overlap.add(movie.getId());
+                            return watchlist.get(index);
+                        }
+                )
+                .collect(Collectors.toList());
 
-        pool.addAll(Arrays.asList(movies));
+        pool.addAll(combined);
     }
 
-    private void paginate(int type, int page) {
+    private void paginate() {
         switch (type) {
             default:
             case 0:
-                viewModel.upcoming(page, callback);
+                viewModel.upcoming(++page, callback);
                 break;
             case 1:
-                viewModel.rated(page, callback);
+                viewModel.rated(++page, callback);
                 break;
             case 2:
-                viewModel.popular(page, callback);
+                viewModel.popular(++page, callback);
                 break;
             case 3:
-                viewModel.playing(page, callback);
+                viewModel.playing(++page, callback);
                 break;
         }
     }
@@ -160,7 +161,7 @@ public class MovieRowFragment extends BaseFragment {
             activity.getNavigationController().navigate(R.id.movie_profile_fragment, bundle);
         });
         adapter.setMoreClickListener(v -> {
-            if (paginate) paginate(type, ++page);
+            if (paginate) paginate();
         });
         adapter.setItemAddClickListener(((movie, position) -> {
             viewModel.insert(movie);
