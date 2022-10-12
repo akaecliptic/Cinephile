@@ -1,10 +1,14 @@
 package akaecliptic.dev.cinephile.Fragment;
 
+import static android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH;
 import static akaecliptic.dev.cinephile.Fragment.WatchlistFragment.SELECTED_MOVIE;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.TextView.OnEditorActionListener;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
@@ -67,6 +71,27 @@ public class MovieSearchFragment extends BaseFragment {
             adapter.setPaginate(paginate);
         }
     };
+    private final OnEditorActionListener editorAction = (view, id, event) -> {
+        if (id != IME_ACTION_SEARCH) return false;
+
+        int count = pool.size();
+
+        this.page = 0;
+        this.paginate = true;
+        this.pool.clear();
+        this.overlap.clear();
+        this.query = view.getText().toString();
+
+        adapter.notifyItemRangeRemoved(0, count);
+
+        paginate();
+
+        SearchActivity activity = (SearchActivity) requireActivity();
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
+        return true;
+    };
 
     private void paginate() {
         viewModel.search(query, ++page, callback);
@@ -127,15 +152,16 @@ public class MovieSearchFragment extends BaseFragment {
     @Override
     protected void initViews(View view) {
 
+        EditText searchbar = view.findViewById(R.id.searchbar_search);
+        searchbar.setText(query);
+        searchbar.setOnEditorActionListener(editorAction);
+
         if (viewModel.config() != null) {
             initAdapter(view, viewModel.config());
             return;
         }
 
         viewModel.config(config -> initAdapter(view, config));
-
-        EditText searchbar = view.findViewById(R.id.searchbar_search);
-        searchbar.setText(query);
     }
 
     @Override
