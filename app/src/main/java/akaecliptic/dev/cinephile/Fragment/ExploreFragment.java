@@ -90,7 +90,7 @@ public class ExploreFragment extends BaseFragment {
                 2022-10-08
              */
 
-            List<Movie> combined = movies
+            return movies
                     .stream()
                     .map(movie -> {
                                 if (!watchlist.contains(movie)) return movie;
@@ -100,8 +100,6 @@ public class ExploreFragment extends BaseFragment {
                             }
                     )
                     .collect(Collectors.toList());
-
-            return combined;
         }
     };
 
