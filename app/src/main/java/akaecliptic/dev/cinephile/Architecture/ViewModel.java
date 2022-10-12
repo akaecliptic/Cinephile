@@ -63,6 +63,10 @@ public class ViewModel extends AndroidViewModel {
         pool.add(movie);
     }
 
+    public static List<Movie> pool() {
+        return pool;
+    }
+
     /*          CACHED GETTERS          */
 
     public List<Movie> upcoming() {

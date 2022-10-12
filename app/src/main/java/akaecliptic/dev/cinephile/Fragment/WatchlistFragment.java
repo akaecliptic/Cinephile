@@ -5,16 +5,19 @@ import android.view.View;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.List;
+
 import akaecliptic.dev.cinephile.Activity.MainActivity;
 import akaecliptic.dev.cinephile.Adapter.List.CardSlimAdapter;
+import akaecliptic.dev.cinephile.Architecture.ViewModel;
 import akaecliptic.dev.cinephile.R;
 import akaecliptic.dev.cinephile.Super.BaseFragment;
+import dev.akaecliptic.models.Movie;
 
 public class WatchlistFragment extends BaseFragment {
 
     static final String SELECTED_MOVIE = "SELECTED_MOVIE";
     static final String SELECTED_SAVED = "SELECTED_SAVED";
-    static final String SELECTED_TYPE = "SELECTED_TYPE";
 
     @Override
     public void setResource() {
@@ -36,5 +39,13 @@ public class WatchlistFragment extends BaseFragment {
         });
 
         recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        List<Movie> movies = ViewModel.drain();
+        if (movies.isEmpty()) return;
+        this.viewModel.watchlist().addAll(movies);
     }
 }
