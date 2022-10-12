@@ -269,6 +269,7 @@ public class SQLite extends SQLiteOpenHelper {
         Cursor cursor = database.rawQuery(Statements.SELECT_MOVIE, arguments);
 
         cursor.moveToFirst();
+        // TODO: 2022-10-12 Add a check for null row to prevent crash - To be done when writing tests.
 
         int _id = getInt(cursor, "_id");
         String title = getString(cursor, "title");
@@ -449,5 +450,42 @@ public class SQLite extends SQLiteOpenHelper {
         database.update(Tables.MOVIES.toString(), values, clause, argument);
 
         Log.i(TAG, "Updated movie's seen value for movie_id = " + movie.getId() + ".");
+    }
+
+    public List<Movie> query(String query) {
+        Log.i(TAG, "Selecting rows in 'movie_data' view with '" + query + "' in title.");
+
+        String[] argument = { query };
+        Cursor cursor = database.rawQuery(Statements.SELECT_MOVIE_DATA_LIKE, argument);
+        List<Movie> movies = new ArrayList<>();
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            int id = getInt(cursor, "_id");
+            String title = getString(cursor, "title");
+            boolean seen = getBool(cursor, "seen");
+            String description = getString(cursor, "description");
+            int userRating = getInt(cursor, "user_rating");
+            int nativeRating = getInt(cursor, "native_rating");
+            LocalDate release = getLocalDate(cursor, "release");
+
+            Movie movie = new Movie(id, title, seen, description, nativeRating, userRating, release);
+
+            String poster = getString(cursor, "poster");
+            String backdrop = getString(cursor, "backdrop");
+            int runtime = getInt(cursor, "runtime");
+            String tagline = getString(cursor, "tagline");
+            List<Integer> genres = getIntList(cursor, "genres");
+
+            Information information = new Information(poster, backdrop, runtime, tagline, genres);
+
+            movie.setInfo(information);
+            movies.add(movie);
+
+            cursor.moveToNext();
+        }
+        cursor.close();
+
+        return movies;
     }
 }

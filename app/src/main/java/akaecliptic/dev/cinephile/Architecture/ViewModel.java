@@ -6,10 +6,12 @@ import android.util.Pair;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import akaecliptic.dev.cinephile.Architecture.Repository.Repository;
+import akaecliptic.dev.cinephile.Interface.SQLiteCallback;
 import akaecliptic.dev.cinephile.Interface.TMDBCallback;
 import dev.akaecliptic.models.Configuration;
 import dev.akaecliptic.models.Information;
@@ -24,6 +26,20 @@ import dev.akaecliptic.models.Page;
  */
 public class ViewModel extends AndroidViewModel {
 
+    /*
+     * Data between activities is a little tricky with this view model.
+     * Again, I don't really want to use something like the old system.
+     * i.e Having subscribers that listened to changes.
+     *
+     * Instead a static pool is being used. The idea is that at any given time the pool should never contain
+     * enough items for there to be performance penalty. And, if the pool is accessed, it will be drained.
+     *
+     * This should work for now, as there are only two activities hence; two instances. A better solution
+     * will be needed.
+     * 2022-10-12
+     */
+    private static final List<Movie> pool;
+
     private final Repository repository;
 
     public ViewModel(@NonNull Application application) {
@@ -31,7 +47,23 @@ public class ViewModel extends AndroidViewModel {
         this.repository = new Repository(application);
     }
 
-    /*          TMDB INTERFACE          */
+    /*          STATIC MEMBERS          */
+
+    static {
+        pool = new LinkedList<>();
+    }
+
+    public static List<Movie> drain() {
+        List<Movie> temp = new LinkedList<>(pool);
+        pool.clear();
+        return temp;
+    }
+
+    public static void pool(Movie movie) {
+        pool.add(movie);
+    }
+
+    /*          CACHED GETTERS          */
 
     public List<Movie> upcoming() {
         return this.repository.upcoming();
@@ -72,6 +104,8 @@ public class ViewModel extends AndroidViewModel {
     public String image(String size, String path) {
         return this.repository.config().image(size, path);
     }
+
+    /*          TMDB INTERFACE          */
 
     public void movie(int id, TMDBCallback<Movie> callback) {
         this.repository.movie(id, callback);
@@ -115,6 +149,10 @@ public class ViewModel extends AndroidViewModel {
         this.repository.insert(information);
     }
 
+    public void movies(SQLiteCallback<List<Movie>> callback) {
+        this.repository.movies(callback);
+    }
+
     public Movie movie(int id) {
         return this.repository.movie(id);
     }
@@ -141,5 +179,9 @@ public class ViewModel extends AndroidViewModel {
 
     public void updateSeen(Movie movie) {
         this.repository.updateSeen(movie);
+    }
+
+    public void query(String query, SQLiteCallback<List<Movie>> callback) {
+        this.repository.query(query, callback);
     }
 }
