@@ -38,4 +38,5 @@ abstract public class Statements {
     public static final String SELECT_ALL_MOVIE_DATA = "SELECT * FROM 'movie_data';";
     public static final String SELECT_MOVIE = "SELECT * FROM 'movie' WHERE _id = ?;";
     public static final String SELECT_INFORMATION = "SELECT * FROM 'movie_information' WHERE movie_id = ?;";
+    public static final String SELECT_MOVIE_DATA_LIKE = "SELECT * FROM 'movie_data' WHERE title LIKE %?%;";
 }
