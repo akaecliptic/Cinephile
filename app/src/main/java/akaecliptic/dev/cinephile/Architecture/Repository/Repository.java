@@ -14,6 +14,7 @@ import java.util.concurrent.Executors;
 import akaecliptic.dev.cinephile.Architecture.Accessors.SQLite;
 import akaecliptic.dev.cinephile.Architecture.Accessors.TMDB;
 import akaecliptic.dev.cinephile.Architecture.MovieRepository;
+import akaecliptic.dev.cinephile.Interface.CrossAccessorCallback;
 import akaecliptic.dev.cinephile.Interface.SQLiteCallback;
 import akaecliptic.dev.cinephile.Interface.TMDBCallback;
 import dev.akaecliptic.models.Configuration;
@@ -225,6 +226,16 @@ public class Repository {
         executor.execute(() -> {
             List<Movie> movies = this.sqlite.query(query);
             handler.post(() -> callback.onResponse(movies));
+        });
+    }
+
+    /*          MORE INTERFACE          */
+
+    public void querySearch(String query, int page, CrossAccessorCallback<List<Movie>, Page> callback) {
+        executor.execute(() -> {
+            List<Movie> database = this.sqlite.query(query);
+            Page result = this.tmdb.search(query, page);
+            handler.post(() -> callback.onResponses(database, result));
         });
     }
 }

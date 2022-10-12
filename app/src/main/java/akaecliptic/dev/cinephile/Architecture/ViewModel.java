@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import akaecliptic.dev.cinephile.Architecture.Repository.Repository;
+import akaecliptic.dev.cinephile.Interface.CrossAccessorCallback;
 import akaecliptic.dev.cinephile.Interface.SQLiteCallback;
 import akaecliptic.dev.cinephile.Interface.TMDBCallback;
 import dev.akaecliptic.models.Configuration;
@@ -187,5 +188,11 @@ public class ViewModel extends AndroidViewModel {
 
     public void query(String query, SQLiteCallback<List<Movie>> callback) {
         this.repository.query(query, callback);
+    }
+
+    /*          MORE INTERFACE          */
+
+    public void querySearch(String query, int page, CrossAccessorCallback<List<Movie>, Page> callback) {
+        this.repository.querySearch(query, page, callback);
     }
 }

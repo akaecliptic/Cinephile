@@ -2,6 +2,7 @@ package akaecliptic.dev.cinephile.Interface;
 
 import dev.akaecliptic.models.Movie;
 
+@FunctionalInterface
 public interface MovieChangeListener {
 
     /**
