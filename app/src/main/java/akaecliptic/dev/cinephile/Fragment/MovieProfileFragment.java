@@ -125,7 +125,7 @@ public class MovieProfileFragment extends BaseFragment {
                 return;
             }
 
-            toggleSeen(false);
+            toggleSeen(true);
             viewModel.insert(working);
             String prompt = String.format("Added '%s' to Watchlist", working.getTitle());
             Toast.makeText(requireContext(), prompt, Toast.LENGTH_SHORT).show();
