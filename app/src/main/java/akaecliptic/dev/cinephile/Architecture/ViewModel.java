@@ -192,6 +192,13 @@ public class ViewModel extends AndroidViewModel {
 
     /*          MORE INTERFACE          */
 
+    /*
+        Actually, this is not necessary right now, given that watchlist is always stored in memory.
+        There may be cases where a TMDB search does not overlap with an SQLite query.
+        For that very niche case, I will keep this, although, it has yet to occur.
+
+        2022-10-12
+     */
     public void querySearch(String query, int page, CrossAccessorCallback<List<Movie>, Page> callback) {
         this.repository.querySearch(query, page, callback);
     }
