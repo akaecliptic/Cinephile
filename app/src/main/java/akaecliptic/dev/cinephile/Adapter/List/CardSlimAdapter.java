@@ -53,6 +53,8 @@ public class CardSlimAdapter extends BaseMovieAdapter {
 
         holder.setOnClickListener(view -> onClickItem.onClick(movie, position));
         holder.setOnCheckListener((view, value) -> {
+            if(!view.isPressed()) return;
+
             movie.setSeen(value);
             onClickCheckbox.onClick(movie, position);
         });
