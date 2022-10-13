@@ -97,6 +97,17 @@ public class SQLite extends SQLiteOpenHelper {
         super.close();
     }
 
+    @Override
+    public void onOpen(SQLiteDatabase database) {
+        super.onOpen(database);
+        /*
+            So, foreign keys are not on by default...
+            So, this must also be called everytime the database is open...
+         */
+        database.execSQL(Statements.PRAGMA_FOREIGN_KEY);
+        database.setForeignKeyConstraintsEnabled(true);
+    }
+
     // SET UP
 
     /**
@@ -150,7 +161,6 @@ public class SQLite extends SQLiteOpenHelper {
             migrateTables(database);
         }
 
-        database.execSQL(Statements.PRAGMA_FOREIGN_KEY); //So, foreign keys are not on by default...
         database.execSQL(Statements.CREATE_TABLE_MOVIES);
         database.execSQL(Statements.CREATE_TABLE_INFORMATION);
         database.execSQL(Statements.CREATE_VIEW_MOVIE_DATA); //View for querying all movie data
