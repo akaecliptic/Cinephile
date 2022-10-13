@@ -61,15 +61,15 @@
         <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/component_icons.xml" value="0.5" />
         <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/component_pill.xml" value="0.67" />
         <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/component_profile_buttonbar.xml" value="0.33" />
-        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/component_searchbar.xml" value="0.30234375" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/component_searchbar.xml" value="0.25" />
         <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/dialog_add_collection.xml" value="0.301953125" />
-        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/dialog_delete.xml" value="0.23515625" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/dialog_delete.xml" value="0.25" />
         <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/dialog_new_collection.xml" value="0.23515625" />
         <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/dialog_rating.xml" value="0.23515625" />
         <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/fragment_collections.xml" value="0.23515625" />
         <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/fragment_explore.xml" value="0.23515625" />
         <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/fragment_movie_list.xml" value="0.33" />
-        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/fragment_movie_profile.xml" value="0.4574688796680498" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/fragment_movie_profile.xml" value="0.25" />
         <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/fragment_movie_row.xml" value="0.31328125" />
         <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/fragment_movie_search.xml" value="0.21171875" />
         <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/fragment_mylist.xml" value="0.26953125" />

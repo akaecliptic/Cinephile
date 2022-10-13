@@ -1,5 +1,7 @@
 package akaecliptic.dev.cinephile.Fragment;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 import static akaecliptic.dev.cinephile.Fragment.WatchlistFragment.SELECTED_MOVIE;
 
 import android.animation.Animator;
@@ -21,6 +23,7 @@ import com.squareup.picasso.Picasso;
 import akaecliptic.dev.cinephile.Activity.MainActivity;
 import akaecliptic.dev.cinephile.Activity.SearchActivity;
 import akaecliptic.dev.cinephile.Architecture.ViewModel;
+import akaecliptic.dev.cinephile.Dialog.DeleteDialog;
 import akaecliptic.dev.cinephile.R;
 import akaecliptic.dev.cinephile.Super.BaseFragment;
 import dev.akaecliptic.models.Movie;
@@ -98,13 +101,13 @@ public class MovieProfileFragment extends BaseFragment {
 
         title.setText(working.getTitle());
         year.setText(String.valueOf(working.getRelease().getYear()));
-        information.setText(working.getInfo().toStringPretty());
+        information.setText(createDescription());
 
         // TODO: 2022-10-06 Change to user rating when dialogs are implemented.
         ratingProgress.setProgress(working.getNativeRating());
         ratingText.setText(String.valueOf(working.getNativeRating()));
         seen.setChecked(working.isSeen());
-        heart.setVisibility(View.GONE); // TODO: 2022-10-07 Reintroduce feature.
+        heart.setVisibility(GONE); // TODO: 2022-10-07 Reintroduce feature.
 
         LayoutInflater inflater = LayoutInflater.from(view.getContext());
         working.getInfo().getGenres().forEach(genre -> {
@@ -113,6 +116,22 @@ public class MovieProfileFragment extends BaseFragment {
             genreContainer.addView(pill);
         });
 
+        addListeners(view);
+    }
+
+    private String createDescription() {
+        StringBuilder builder = new StringBuilder();
+
+        if (working.getInfo().getTagline() != null) builder.append("\"").append(working.getInfo().getTagline()).append("\"");
+        builder.append(working.getDescription()).append("\n\n");
+        builder.append("release: ").append(working.getRelease()).append("\n");
+        if (working.getInfo().getRuntime() > -1) builder.append("runtime: ").append(working.getInfo().getRuntime()).append("\n");
+        builder.append("rating: ").append(working.getNativeRating()).append("\n");
+
+        return builder.toString();
+    }
+
+    private void addListeners(View view) {
         //ADDING LISTENERS
         FrameLayout frameAdd = view.findViewById(R.id.movie_profile_frame_add);
         FrameLayout frameSeen = view.findViewById(R.id.movie_profile_frame_seen);
@@ -121,7 +140,6 @@ public class MovieProfileFragment extends BaseFragment {
         frameAdd.setOnClickListener(v -> {
             boolean present = viewModel.watchlist().contains(working);
             if (present) {
-                /* TODO: Dialog stuff */
                 Toast.makeText(requireContext(), "Movie already in watchlist, collections coming soon", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -197,12 +215,12 @@ public class MovieProfileFragment extends BaseFragment {
         AnimatorListenerAdapter bottombarListener = new AnimatorListenerAdapter() {
             @Override
             public void onAnimationStart(Animator animation) {
-                if (direction == ANIMATE_IN) bottombar.setVisibility(View.VISIBLE);
+                if (direction == ANIMATE_IN) bottombar.setVisibility(VISIBLE);
             }
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                if (direction == ANIMATE_OUT) bottombar.setVisibility(View.GONE);
+                if (direction == ANIMATE_OUT) bottombar.setVisibility(GONE);
             }
         };
 

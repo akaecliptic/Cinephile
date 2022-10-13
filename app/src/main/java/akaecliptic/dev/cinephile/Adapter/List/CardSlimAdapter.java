@@ -3,6 +3,7 @@ package akaecliptic.dev.cinephile.Adapter.List;
 import android.content.Context;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -20,7 +21,7 @@ import dev.akaecliptic.models.Movie;
 public class CardSlimAdapter extends BaseMovieAdapter {
 
     private ItemClickListener onClickCheckbox;
-
+    private ItemClickListener onLongClickItem;
 
     public CardSlimAdapter(Context context, List<Movie> items) {
         super(context, items);
@@ -30,6 +31,10 @@ public class CardSlimAdapter extends BaseMovieAdapter {
 
     public void setOnClickCheckbox(ItemClickListener onClickCheckbox) {
         this.onClickCheckbox = onClickCheckbox;
+    }
+
+    public void setOnLongClickItem(ItemClickListener onLongClickItem) {
+        this.onLongClickItem = onLongClickItem;
     }
 
     /*          OVERRIDES          */
@@ -52,6 +57,10 @@ public class CardSlimAdapter extends BaseMovieAdapter {
         holder.setRating(movie.getNativeRating()); // TODO: 2022-10-06 Change back to user rating
 
         holder.setOnClickListener(view -> onClickItem.onClick(movie, position));
+        holder.setOnLongClickListener(view -> {
+            onLongClickItem.onClick(movie, position);
+            return true;
+        });
         holder.setOnCheckListener((view, value) -> {
             if(!view.isPressed()) return;
 
@@ -83,6 +92,10 @@ public class CardSlimAdapter extends BaseMovieAdapter {
         // LISTENERS
         public void setOnClickListener(OnClickListener onClickListener) {
             view.setOnClickListener(onClickListener);
+        }
+
+        public void setOnLongClickListener(OnLongClickListener onLongClickListener) {
+            view.setOnLongClickListener(onLongClickListener);
         }
 
         public void setOnCheckListener(OnCheckedChangeListener onCheckedChangeListener) {
