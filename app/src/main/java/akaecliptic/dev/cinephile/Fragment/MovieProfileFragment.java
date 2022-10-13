@@ -23,7 +23,8 @@ import com.squareup.picasso.Picasso;
 import akaecliptic.dev.cinephile.Activity.MainActivity;
 import akaecliptic.dev.cinephile.Activity.SearchActivity;
 import akaecliptic.dev.cinephile.Architecture.ViewModel;
-import akaecliptic.dev.cinephile.Dialog.DeleteDialog;
+import akaecliptic.dev.cinephile.Dialog.RatingDialog;
+import akaecliptic.dev.cinephile.Interface.MovieChangeListener;
 import akaecliptic.dev.cinephile.R;
 import akaecliptic.dev.cinephile.Super.BaseFragment;
 import dev.akaecliptic.models.Movie;
@@ -53,6 +54,12 @@ public class MovieProfileFragment extends BaseFragment {
     private CheckBox heart;
 
     private ViewGroup genreContainer;
+
+    private final MovieChangeListener movieChangeListener = (movie) -> {
+        ratingProgress.setProgress(working.getUserRating());
+        ratingText.setText(String.valueOf(working.getUserRating()));
+        viewModel.updateRating(movie);
+    };
 
     /*          OVERRIDES          */
 
@@ -103,9 +110,8 @@ public class MovieProfileFragment extends BaseFragment {
         year.setText(String.valueOf(working.getRelease().getYear()));
         information.setText(createDescription());
 
-        // TODO: 2022-10-06 Change to user rating when dialogs are implemented.
-        ratingProgress.setProgress(working.getNativeRating());
-        ratingText.setText(String.valueOf(working.getNativeRating()));
+        ratingProgress.setProgress(working.getUserRating());
+        ratingText.setText(String.valueOf(working.getUserRating()));
         seen.setChecked(working.isSeen());
         heart.setVisibility(GONE); // TODO: 2022-10-07 Reintroduce feature.
 
@@ -124,9 +130,9 @@ public class MovieProfileFragment extends BaseFragment {
 
         if (working.getInfo().getTagline() != null) builder.append("\"").append(working.getInfo().getTagline()).append("\"");
         builder.append(working.getDescription()).append("\n\n");
-        builder.append("release: ").append(working.getRelease()).append("\n");
-        if (working.getInfo().getRuntime() > -1) builder.append("runtime: ").append(working.getInfo().getRuntime()).append("\n");
-        builder.append("rating: ").append(working.getNativeRating()).append("\n");
+        builder.append("Release: ").append(working.getRelease()).append("\n");
+        if (working.getInfo().getRuntime() > -1) builder.append("Runtime: ").append(working.getInfo().getRuntime()).append("\n");
+        builder.append("TMDB rating: ").append(working.getNativeRating()).append("\n");
 
         return builder.toString();
     }
@@ -161,7 +167,11 @@ public class MovieProfileFragment extends BaseFragment {
 
             Toast.makeText(requireContext(), "Movie must be added to watchlist to mark as seen", Toast.LENGTH_SHORT).show();
         });
-        frameProgress.setOnClickListener(v -> System.out.println(ratingText.getText()) /* TODO: Dialog stuff */);
+        frameProgress.setOnClickListener(v -> {
+            RatingDialog ratingDialog = new RatingDialog(working);
+            ratingDialog.show(getParentFragmentManager(), TAG);
+            ratingDialog.setMovieChangeListener(movieChangeListener);
+        });
 
         seen.setOnCheckedChangeListener((checkbox, value) -> {
             working.setSeen(value);

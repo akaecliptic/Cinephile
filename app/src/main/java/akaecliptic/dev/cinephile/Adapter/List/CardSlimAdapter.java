@@ -54,7 +54,7 @@ public class CardSlimAdapter extends BaseMovieAdapter {
         holder.setCheck(movie.isSeen());
         holder.setYear(movie.getRelease().getYear());
         holder.setTitle(movie.getTitle());
-        holder.setRating(movie.getNativeRating()); // TODO: 2022-10-06 Change back to user rating
+        holder.setRating(movie.getUserRating());
 
         holder.setOnClickListener(view -> onClickItem.onClick(movie, position));
         holder.setOnLongClickListener(view -> {

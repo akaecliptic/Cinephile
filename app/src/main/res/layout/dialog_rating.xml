@@ -1,52 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp"
+    android:background="@drawable/background_card"
     android:orientation="vertical"
-    android:background="@color/colorTertiaryDark">
+    android:padding="10dp">
 
     <TextView
         android:id="@+id/rating_dialog_text_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
-        android:layout_marginBottom="10dp"
-
         android:text="@string/placeholder"
         android:textAlignment="center"
-        android:textSize="20sp" />
+        android:textSize="24sp" />
 
-    <Spinner
-        android:id="@+id/rating_dialog_spinner_rating"
-        android:layout_width="50dp"
+    <EditText
+        android:id="@+id/rating_dialog_edit_rating"
+        android:layout_width="125dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="@drawable/background_spinner"
-        tools:listitem="@layout/underline_spinner_item" />
+        android:layout_marginVertical="15dp"
+
+        android:gravity="center"
+        android:hint="@string/hint_rating"
+        android:importantForAutofill="no"
+
+        android:inputType="number"
+        android:textSize="20sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal"
-        android:gravity="center">
+
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/rating_dialog_button_confirm"
+            style="@style/button_dialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+
             android:layout_marginHorizontal="10dp"
-            android:text="@string/button_confirm"
-            style="@style/MyDialogButtons"/>
+            android:backgroundTint="@color/accent"
+            android:text="@string/button_confirm" />
 
         <Button
             android:id="@+id/rating_dialog_button_cancel"
+            style="@style/button_dialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+
             android:layout_marginHorizontal="10dp"
-            android:text="@string/button_cancel"
-            style="@style/MyDialogButtons"/>
+            android:backgroundTint="@color/accent_red"
+            android:text="@string/button_cancel" />
     </LinearLayout>
 </LinearLayout>

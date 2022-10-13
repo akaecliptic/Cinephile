@@ -44,8 +44,9 @@
 
     <!-- Prompts -->
     <string name="hint_search">Movie Title</string>
+    <string name="hint_rating">Movie Rating</string>
 
-    <string name="dialog_title_rating">Set Movie Rating</string>
+    <string name="dialog_title_rating">Set Movie Rating:</string>
     <string name="dialog_title_delete">Would you like to delete:</string>
     <string name="dialog_title_new_collection">Name of collection</string>
     <string name="dialog_title_add_collection">Add or remove movie from your collections</string>
