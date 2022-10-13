@@ -130,6 +130,11 @@ public class MovieSearchFragment extends BaseFragment {
         paginate();
     }
 
+    private void setBackNavigate() {
+        SearchActivity activity = (SearchActivity) requireActivity();
+        activity.getToolbar().setNavigationOnClickListener(view -> activity.onBackPressed());
+    }
+
     /*          OVERRIDES          */
 
     @Override
@@ -139,6 +144,7 @@ public class MovieSearchFragment extends BaseFragment {
 
     @Override
     protected void beforeViews() {
+        setBackNavigate();
         // CONSIDER: May need to look for another way to check if values are already initialed.
         if (pool != null) return;
 

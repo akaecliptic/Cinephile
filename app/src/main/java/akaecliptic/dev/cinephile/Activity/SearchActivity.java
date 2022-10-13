@@ -7,7 +7,6 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import java.util.HashSet;
-import java.util.Set;
 
 import akaecliptic.dev.cinephile.R;
 import akaecliptic.dev.cinephile.Super.BaseActivity;
@@ -34,10 +33,7 @@ public class SearchActivity extends BaseActivity {
     protected void linkNavigates() {
         setSupportActionBar(toolbar);
 
-        Set<Integer> destinations = new HashSet<>();
-        destinations.add(R.id.movie_search_fragment);
-
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(destinations).build();
+        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(new HashSet<>()).build();
 
         NavigationUI.setupWithNavController(toolbar, navigationController, appBarConfiguration);
     }
