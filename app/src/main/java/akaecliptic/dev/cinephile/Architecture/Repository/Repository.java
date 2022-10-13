@@ -222,6 +222,10 @@ public class Repository {
         executor.execute(() -> this.sqlite.updateSeen(movie));
     }
 
+    public void updateRating(Movie movie) {
+        executor.execute(() -> this.sqlite.updateRating(movie));
+    }
+
     public void query(String query, SQLiteCallback<List<Movie>> callback) {
         executor.execute(() -> {
             List<Movie> movies = this.sqlite.query(query);

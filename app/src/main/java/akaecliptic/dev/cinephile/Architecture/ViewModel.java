@@ -186,6 +186,10 @@ public class ViewModel extends AndroidViewModel {
         this.repository.updateSeen(movie);
     }
 
+    public void updateRating(Movie movie) {
+        this.repository.updateRating(movie);
+    }
+
     public void query(String query, SQLiteCallback<List<Movie>> callback) {
         this.repository.query(query, callback);
     }

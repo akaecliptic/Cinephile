@@ -462,6 +462,20 @@ public class SQLite extends SQLiteOpenHelper {
         Log.i(TAG, "Updated movie's seen value for movie_id = " + movie.getId() + ".");
     }
 
+    public void updateRating(Movie movie) {
+        Log.i(TAG, "Updating single row's user_rating value in 'movies' table.");
+
+        ContentValues values = new ContentValues();
+        values.put("user_rating", movie.getUserRating());
+
+        String[] argument = { Integer.toString(movie.getId()) };
+        String clause = "_id = ?";
+
+        database.update(Tables.MOVIES.toString(), values, clause, argument);
+
+        Log.i(TAG, "Updated movie's user_rating value for movie_id = " + movie.getId() + ".");
+    }
+
     public List<Movie> query(String query) {
         Log.i(TAG, "Selecting rows in 'movie_data' view with '" + query + "' in title.");
 
