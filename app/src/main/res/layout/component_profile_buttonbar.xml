@@ -52,6 +52,9 @@
             android:indeterminateOnly="false"
             android:progressDrawable="@drawable/background_progress_bar_circle"
 
+            android:max="100"
+            android:min="0"
+
             android:scaleX="1.2"
             android:scaleY="1.2"
             tools:progress="90" />

@@ -35,6 +35,7 @@ public class MovieProfileFragment extends BaseFragment {
     private static final int ANIMATE_OUT = 0;
 
     private Movie working = null;
+    private boolean present = false;
 
     private String backdropSize;
     private String posterSize;
@@ -110,8 +111,15 @@ public class MovieProfileFragment extends BaseFragment {
         year.setText(String.valueOf(working.getRelease().getYear()));
         information.setText(createDescription());
 
-        ratingProgress.setProgress(working.getUserRating());
-        ratingText.setText(String.valueOf(working.getUserRating()));
+        if (present) {
+            ratingProgress.setProgress(working.getUserRating());
+            ratingText.setText(String.valueOf(working.getUserRating()));
+
+        } else {
+            ratingProgress.setProgress(working.getNativeRating());
+            ratingText.setText(String.valueOf(working.getNativeRating()));
+        }
+
         seen.setChecked(working.isSeen());
         heart.setVisibility(GONE); // TODO: 2022-10-07 Reintroduce feature.
 
@@ -144,13 +152,13 @@ public class MovieProfileFragment extends BaseFragment {
         FrameLayout frameProgress = view.findViewById(R.id.movie_profile_frame_progress);
 
         frameAdd.setOnClickListener(v -> {
-            boolean present = viewModel.watchlist().contains(working);
             if (present) {
                 Toast.makeText(requireContext(), "Movie already in watchlist, collections coming soon", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            toggleSeen(true);
+            present = true;
+            toggleSeen();
             viewModel.insert(working);
             String prompt = String.format("Added '%s' to Watchlist", working.getTitle());
             Toast.makeText(requireContext(), prompt, Toast.LENGTH_SHORT).show();
@@ -168,6 +176,11 @@ public class MovieProfileFragment extends BaseFragment {
             Toast.makeText(requireContext(), "Movie must be added to watchlist to mark as seen", Toast.LENGTH_SHORT).show();
         });
         frameProgress.setOnClickListener(v -> {
+            if (!present) {
+                Toast.makeText(requireContext(), "Movie must be added to watchlist to give a rating", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             RatingDialog ratingDialog = new RatingDialog(working);
             ratingDialog.show(getParentFragmentManager(), TAG);
             ratingDialog.setMovieChangeListener(movieChangeListener);
@@ -178,14 +191,14 @@ public class MovieProfileFragment extends BaseFragment {
             viewModel.updateSeen(working);
         });
 
-        toggleSeen(viewModel.watchlist().contains(working));
+        toggleSeen();
     }
 
     /*          INSTANCE METHODS          */
 
-    private void toggleSeen(boolean value) {
-        seen.setEnabled(value);
-        seen.setClickable(value);
+    private void toggleSeen() {
+        seen.setEnabled(present);
+        seen.setClickable(present);
     }
 
     private void attachAnimator() {
@@ -216,6 +229,7 @@ public class MovieProfileFragment extends BaseFragment {
         if (getArguments() == null) return;
 
         working = (Movie) getArguments().getSerializable(SELECTED_MOVIE);
+        present = viewModel.watchlist().contains(working);
     }
 
     private void animateBottombar(int direction) {
