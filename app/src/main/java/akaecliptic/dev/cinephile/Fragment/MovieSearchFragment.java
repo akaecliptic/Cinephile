@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 import akaecliptic.dev.cinephile.Activity.SearchActivity;
 import akaecliptic.dev.cinephile.Adapter.Explore.CardRowAdapter;
 import akaecliptic.dev.cinephile.Architecture.ViewModel;
-import akaecliptic.dev.cinephile.Interface.TMDBCallback;
+import akaecliptic.dev.cinephile.Interface.Callback.TMDBCallback;
 import akaecliptic.dev.cinephile.R;
 import akaecliptic.dev.cinephile.Super.BaseFragment;
 import dev.akaecliptic.models.Configuration;

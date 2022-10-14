@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.appcompat.widget.SearchView;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -56,7 +57,10 @@ public class MainActivity extends BaseActivity {
         getMenuInflater().inflate(R.menu.toolbar, menu);
 
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+
         MenuItem searchItem = menu.findItem(R.id.toolbar_search);
+        MenuItem sortItem = menu.findItem(R.id.toolbar_sort);
+
         SearchView searchView = (SearchView) searchItem.getActionView();
 
         if (searchManager != null) {
@@ -73,11 +77,15 @@ public class MainActivity extends BaseActivity {
 
         //This closes keyboard and hides search view when in movie profile.
         navigationController.addOnDestinationChangedListener((controller, destination, bundle) -> {
-            if (destination.getId() != R.id.movie_profile_fragment) return; // TODO: 2022-10-12 Watch this.
+            if (destination.getId() != R.id.watchlist_fragment) {
+                sortItem.setVisible(false);
+            }
 
-            searchItem.collapseActionView();
-            searchView.setQuery("", false);
-            searchItem.setVisible(false);
+            if (destination.getId() == R.id.movie_profile_fragment) {
+                searchItem.collapseActionView();
+                searchView.setQuery("", false);
+                searchItem.setVisible(false);
+            }
         });
 
         return true;

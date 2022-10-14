@@ -1,11 +1,8 @@
 package akaecliptic.dev.cinephile.Fragment;
 
 import static android.view.View.GONE;
-import static android.view.View.VISIBLE;
 import static akaecliptic.dev.cinephile.Fragment.WatchlistFragment.SELECTED_MOVIE;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,31 +13,25 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.squareup.picasso.Picasso;
 
-import akaecliptic.dev.cinephile.Activity.MainActivity;
 import akaecliptic.dev.cinephile.Activity.SearchActivity;
 import akaecliptic.dev.cinephile.Architecture.ViewModel;
 import akaecliptic.dev.cinephile.Dialog.RatingDialog;
-import akaecliptic.dev.cinephile.Interface.MovieChangeListener;
+import akaecliptic.dev.cinephile.Interface.IAnimatorBottombar;
+import akaecliptic.dev.cinephile.Interface.Listener.MovieChangeListener;
 import akaecliptic.dev.cinephile.R;
 import akaecliptic.dev.cinephile.Super.BaseFragment;
 import dev.akaecliptic.models.Movie;
 
-public class MovieProfileFragment extends BaseFragment {
-
-    private static final int ANIMATE_IN = 1;
-    private static final int ANIMATE_OUT = 0;
+public class MovieProfileFragment extends BaseFragment implements IAnimatorBottombar {
 
     private Movie working = null;
     private boolean present = false;
 
     private String backdropSize;
     private String posterSize;
-
-    private BottomNavigationView bottombar;
 
     private ShapeableImageView poster;
     private ImageView backdrop;
@@ -71,9 +62,9 @@ public class MovieProfileFragment extends BaseFragment {
 
     @Override
     protected void beforeViews() {
-        attachAnimator();
-        setImageSizes();
-        getBundle();
+        this.attachAnimator(requireActivity());
+        this.setImageSizes();
+        this.getBundle();
     }
 
     @Override
@@ -132,6 +123,8 @@ public class MovieProfileFragment extends BaseFragment {
 
         addListeners(view);
     }
+
+    /*          INSTANCE METHODS          */
 
     private String createDescription() {
         StringBuilder builder = new StringBuilder();
@@ -194,27 +187,9 @@ public class MovieProfileFragment extends BaseFragment {
         toggleSeen();
     }
 
-    /*          INSTANCE METHODS          */
-
     private void toggleSeen() {
         seen.setEnabled(present);
         seen.setClickable(present);
-    }
-
-    private void attachAnimator() {
-        if (requireActivity().getClass() != SearchActivity.class) {
-            MainActivity activity = (MainActivity) requireActivity();
-            bottombar = activity.getBottombar();
-
-            activity.getNavigationController()
-                    .addOnDestinationChangedListener((controller, destination, arguments) -> {
-                        int direction = (destination.getId() == R.id.movie_profile_fragment) ?
-                                ANIMATE_OUT :
-                                ANIMATE_IN;
-
-                        animateBottombar(direction);
-                    });
-        }
     }
 
     private void setImageSizes() {
@@ -230,28 +205,5 @@ public class MovieProfileFragment extends BaseFragment {
 
         working = (Movie) getArguments().getSerializable(SELECTED_MOVIE);
         present = viewModel.watchlist().contains(working);
-    }
-
-    private void animateBottombar(int direction) {
-        int translateY = (direction == ANIMATE_IN) ? 0 : bottombar.getHeight();
-        float alpha = (direction == ANIMATE_IN) ? 1.0f : 0.0f;
-        int duration = 150;
-        AnimatorListenerAdapter bottombarListener = new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-                if (direction == ANIMATE_IN) bottombar.setVisibility(VISIBLE);
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                if (direction == ANIMATE_OUT) bottombar.setVisibility(GONE);
-            }
-        };
-
-        bottombar.animate()
-                .translationY(translateY)
-                .alpha(alpha)
-                .setDuration(duration)
-                .setListener(bottombarListener);
     }
 }

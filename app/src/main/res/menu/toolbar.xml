@@ -11,17 +11,8 @@
         app:showAsAction="ifRoom|collapseActionView"/>
 
     <item
-        android:visible="false"
-        android:id="@+id/toolbar_add"
-        android:icon="@drawable/icon_add"
-        android:title="@string/button_add"
-        app:showAsAction="always"/>
-
-    <item
-        android:visible="false"
-        android:id="@+id/toolbar_favourite"
-        android:checkable="true"
-        android:title="@string/button_favourite"
+        android:id="@+id/toolbar_sort"
+        android:icon="@drawable/icon_sort"
+        android:title="@string/button_sort"
         app:showAsAction="ifRoom"/>
-
 </menu>

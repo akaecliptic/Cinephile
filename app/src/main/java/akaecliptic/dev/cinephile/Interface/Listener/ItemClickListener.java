@@ -1,4 +1,4 @@
-package akaecliptic.dev.cinephile.Interface;
+package akaecliptic.dev.cinephile.Interface.Listener;
 
 import dev.akaecliptic.models.Movie;
 

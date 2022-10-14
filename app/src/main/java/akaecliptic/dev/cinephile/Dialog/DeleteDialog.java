@@ -12,7 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
-import akaecliptic.dev.cinephile.Interface.MovieChangeListener;
+import akaecliptic.dev.cinephile.Interface.Listener.MovieChangeListener;
 import akaecliptic.dev.cinephile.R;
 import dev.akaecliptic.models.Movie;
 

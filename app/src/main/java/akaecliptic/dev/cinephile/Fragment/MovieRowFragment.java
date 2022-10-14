@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -17,7 +16,8 @@ import java.util.stream.Collectors;
 
 import akaecliptic.dev.cinephile.Activity.MainActivity;
 import akaecliptic.dev.cinephile.Adapter.Explore.CardRowAdapter;
-import akaecliptic.dev.cinephile.Interface.TMDBCallback;
+import akaecliptic.dev.cinephile.Interface.IAnimatorBottombar;
+import akaecliptic.dev.cinephile.Interface.Callback.TMDBCallback;
 import akaecliptic.dev.cinephile.R;
 import akaecliptic.dev.cinephile.Super.BaseFragment;
 import dev.akaecliptic.models.Movie;
@@ -27,7 +27,7 @@ import dev.akaecliptic.models.Page;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MovieRowFragment extends BaseFragment {
+public class MovieRowFragment extends BaseFragment implements IAnimatorBottombar {
 
     static final String PAGE_TYPE = "PAGE_TYPE";
 
@@ -141,10 +141,13 @@ public class MovieRowFragment extends BaseFragment {
         if (pool != null) return; //Not sure if this is the best way to approach.
 
         this.getBundle();
+        this.attachAnimator(requireActivity());
+
         this.page = 1;
         this.paginate = true;
         this.pool = new ArrayList<>();
         this.overlap = new HashSet<>();
+
         this.initPool();
     }
 

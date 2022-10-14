@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-import akaecliptic.dev.cinephile.Interface.ItemClickListener;
+import akaecliptic.dev.cinephile.Interface.Listener.ItemClickListener;
 import dev.akaecliptic.models.Movie;
 
 /**

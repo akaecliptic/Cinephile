@@ -19,6 +19,7 @@
     <string name="button_add">ADD</string>
     <string name="button_done">DONE</string>
     <string name="button_more">MORE</string>
+    <string name="button_sort">SORT</string>
     <string name="button_filter">FILTER</string>
     <string name="button_search">SEARCH</string>
     <string name="button_confirm">CONFIRM</string>

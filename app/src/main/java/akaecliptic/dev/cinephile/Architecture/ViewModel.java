@@ -11,9 +11,10 @@ import java.util.List;
 import java.util.Map;
 
 import akaecliptic.dev.cinephile.Architecture.Repository.Repository;
-import akaecliptic.dev.cinephile.Interface.CrossAccessorCallback;
-import akaecliptic.dev.cinephile.Interface.SQLiteCallback;
-import akaecliptic.dev.cinephile.Interface.TMDBCallback;
+import akaecliptic.dev.cinephile.Auxiliary.Sorter;
+import akaecliptic.dev.cinephile.Interface.Callback.CrossAccessorCallback;
+import akaecliptic.dev.cinephile.Interface.Callback.SQLiteCallback;
+import akaecliptic.dev.cinephile.Interface.Callback.TMDBCallback;
 import dev.akaecliptic.models.Configuration;
 import dev.akaecliptic.models.Information;
 import dev.akaecliptic.models.Movie;
@@ -40,6 +41,7 @@ public class ViewModel extends AndroidViewModel {
      * 2022-10-12
      */
     private static final List<Movie> pool;
+    private static final Sorter sorter;
 
     private final Repository repository;
 
@@ -52,6 +54,7 @@ public class ViewModel extends AndroidViewModel {
 
     static {
         pool = new LinkedList<>();
+        sorter = new Sorter();
     }
 
     public static List<Movie> drain() {
@@ -66,6 +69,19 @@ public class ViewModel extends AndroidViewModel {
 
     public static List<Movie> pool() {
         return pool;
+    }
+
+    public static String cycleSort(List<Movie> list) {
+        sorter.cycle(list);
+        return sorter.getMessage();
+    }
+
+    public static void sort(List<Movie> list) {
+        sorter.sort(list);
+    }
+
+    public static void sort(List<Movie> list, Sorter.Sort sort) {
+        sorter.sort(list, sort);
     }
 
     /*          CACHED GETTERS          */

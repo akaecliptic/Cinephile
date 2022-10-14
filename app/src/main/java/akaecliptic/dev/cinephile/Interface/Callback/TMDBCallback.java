@@ -1,4 +1,4 @@
-package akaecliptic.dev.cinephile.Interface;
+package akaecliptic.dev.cinephile.Interface.Callback;
 
 @FunctionalInterface
 public interface TMDBCallback<T> {

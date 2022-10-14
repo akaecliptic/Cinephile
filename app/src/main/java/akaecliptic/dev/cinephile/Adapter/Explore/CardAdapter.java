@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 
 import java.util.List;
 
-import akaecliptic.dev.cinephile.Interface.ItemClickListener;
+import akaecliptic.dev.cinephile.Interface.Listener.ItemClickListener;
 import akaecliptic.dev.cinephile.R;
 import akaecliptic.dev.cinephile.Super.BaseMovieAdapter;
 import akaecliptic.dev.cinephile.Wrapper.FooterMore;

@@ -1,8 +1,12 @@
 package akaecliptic.dev.cinephile.Fragment;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
+import androidx.appcompat.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -11,7 +15,7 @@ import akaecliptic.dev.cinephile.Activity.MainActivity;
 import akaecliptic.dev.cinephile.Adapter.List.CardSlimAdapter;
 import akaecliptic.dev.cinephile.Architecture.ViewModel;
 import akaecliptic.dev.cinephile.Dialog.DeleteDialog;
-import akaecliptic.dev.cinephile.Interface.MovieChangeListener;
+import akaecliptic.dev.cinephile.Interface.Listener.MovieChangeListener;
 import akaecliptic.dev.cinephile.R;
 import akaecliptic.dev.cinephile.Super.BaseFragment;
 import dev.akaecliptic.models.Movie;
@@ -33,6 +37,25 @@ public class WatchlistFragment extends BaseFragment {
 
         adapter.notifyItemRemoved(index);
     };
+    @SuppressLint("NotifyDataSetChanged")
+    private final OnMenuItemClickListener onToolbarSort = (item) -> {
+        if (item.getItemId() != R.id.toolbar_sort || adapter == null) return false;
+
+        List<Movie> watchlist = this.viewModel.watchlist();
+        String message = ViewModel.cycleSort(watchlist);
+
+        /*
+            Hmm, I'm only using a straight notifyDataSetChanged because it is faster on my testing virtual device.
+            Will try to run on physical device in future to see if that is still the case.
+
+            2022-10-14
+         */
+        // CONSIDER: changing back to notifyItemRangeChanged. See comment above.
+        adapter.notifyDataSetChanged();
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+        return true;
+    };
+
 
     @Override
     public void setResource() {
@@ -40,9 +63,19 @@ public class WatchlistFragment extends BaseFragment {
     }
 
     @Override
+    protected void beforeViews() {
+        MainActivity activity = (MainActivity) requireActivity();
+        Toolbar toolbar = activity.getToolbar();
+
+        toolbar.setOnMenuItemClickListener(onToolbarSort);
+    }
+
+    @Override
     protected void initViews(View view) {
         RecyclerView recyclerView = view.findViewById(R.id.watchlist_recycler);
-        adapter = new CardSlimAdapter(requireContext(), this.viewModel.watchlist());
+        List<Movie> watchlist = this.viewModel.watchlist();
+        ViewModel.sort(watchlist);
+        adapter = new CardSlimAdapter(requireContext(), watchlist);
 
         adapter.setOnClickCheckbox((movie, position) -> viewModel.updateSeen(movie));
         adapter.setOnClickItem((movie, position) -> {
@@ -64,8 +97,13 @@ public class WatchlistFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+
         List<Movie> movies = ViewModel.drain();
+
         if (movies.isEmpty()) return;
-        this.viewModel.watchlist().addAll(movies);
+
+        List<Movie> watchlist = this.viewModel.watchlist();
+        watchlist.addAll(movies);
+        ViewModel.sort(watchlist);
     }
 }
