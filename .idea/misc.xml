@@ -67,7 +67,7 @@
         <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/dialog_new_collection.xml" value="0.23515625" />
         <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/dialog_rating.xml" value="0.23515625" />
         <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/fragment_collections.xml" value="0.23515625" />
-        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/fragment_explore.xml" value="0.23515625" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/fragment_explore.xml" value="0.5" />
         <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/fragment_movie_list.xml" value="0.33" />
         <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/fragment_movie_profile.xml" value="0.25" />
         <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/fragment_movie_row.xml" value="0.31328125" />
@@ -91,6 +91,7 @@
         <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/list_item_my_list.xml" value="0.67" />
         <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/nav_bottombar.xml" value="0.415625" />
         <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/nav_toolbar.xml" value="0.366015625" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/old_fragment_view_collections.xml" value="0.266015625" />
         <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/old_list_item_movie_list.xml" value="0.178125" />
         <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/old_list_item_my_list.xml" value="0.178125" />
         <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/recycler_item_footer.xml" value="0.301953125" />
