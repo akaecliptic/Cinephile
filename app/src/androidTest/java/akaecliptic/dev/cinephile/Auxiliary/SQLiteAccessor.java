@@ -17,4 +17,14 @@ public abstract class SQLiteAccessor {
         SQLite sqlite = connect(context);
         return sqlite.selectAll();
     }
+
+    public static Movie select(Context context, int id) {
+        SQLite sqlite = connect(context);
+        return sqlite.selectMovie(id);
+    }
+
+    public static void insert(Context context, Movie movie) {
+        SQLite sqlite = connect(context);
+        sqlite.insertMovie(movie);
+    }
 }
