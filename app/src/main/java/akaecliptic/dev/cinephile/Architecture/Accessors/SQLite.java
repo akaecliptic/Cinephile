@@ -278,8 +278,7 @@ public class SQLite extends SQLiteOpenHelper {
         String[] arguments = { Integer.toString(id) };
         Cursor cursor = database.rawQuery(Statements.SELECT_MOVIE, arguments);
 
-        cursor.moveToFirst();
-        // TODO: 2022-10-12 Add a check for null row to prevent crash - To be done when writing tests.
+        if(!(cursor != null && cursor.moveToFirst())) return null;
 
         int _id = getInt(cursor, "_id");
         String title = getString(cursor, "title");
