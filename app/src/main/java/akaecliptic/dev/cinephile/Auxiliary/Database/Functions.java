@@ -133,11 +133,11 @@ abstract public class Functions {
      *
      * @param cursor The cursor from the query to get data.
      * @param column The column to get data.
-     * @return IntegerList value of the data, null if null.
+     * @return IntegerList value of the data, empty list if null.
      */
     public static List<Integer> getIntList(Cursor cursor, String column) {
         int index = cursor.getColumnIndexOrThrow(column);
-        if(cursor.isNull(index)) return null;
+        if(cursor.isNull(index)) return new ArrayList<>();
 
         List<Integer> list = new ArrayList<>();
         String[] array = cursor.getString(index).split(",");
