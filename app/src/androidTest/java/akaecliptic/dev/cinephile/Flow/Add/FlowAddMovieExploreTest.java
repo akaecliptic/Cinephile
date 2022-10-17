@@ -47,7 +47,7 @@ public class FlowAddMovieExploreTest {
     }
 
     @Test
-    public void flow_test_1_addMovieFromExploreCard() {
+    public void flow_test_1_addMovieFromExplore() {
         // Navigate to explore fragment
         ViewInteraction bottombarExplore = onView(withId(R.id.explore_fragment));
         bottombarExplore.perform(click());
@@ -70,7 +70,7 @@ public class FlowAddMovieExploreTest {
         ViewInteraction recyclerItemWatchlist = onView(childAtPosition(withId(R.id.watchlist_recycler), 0));
         recyclerItemWatchlist.perform(click());
 
-        // Mark Movie as Seen
+        // Mark movie as seen
         ViewInteraction buttonSeen = onView(withId(R.id.movie_profile_frame_seen));
         buttonSeen.perform(click());
 
@@ -89,7 +89,7 @@ public class FlowAddMovieExploreTest {
     }
 
     @Test
-    public void flow_test_2_addMovieFromExploreCardRow() {
+    public void flow_test_2_addMovieFromExploreRow() {
         // Navigate to explore fragment
         ViewInteraction bottombarExplore = onView(withId(R.id.explore_fragment));
         bottombarExplore.perform(click());
@@ -127,7 +127,7 @@ public class FlowAddMovieExploreTest {
         // Get all movies in watchlist
         List<Movie> movies = selectAll(ApplicationProvider.getApplicationContext());
 
-        // Assert watchlist has the single item
+        // Assert watchlist has both items
         assertEquals(2, movies.size());
     }
 }
