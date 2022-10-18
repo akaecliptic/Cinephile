@@ -20,6 +20,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import android.util.Pair;
 
+import androidx.annotation.NonNull;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -201,7 +203,7 @@ public class SQLite extends SQLiteOpenHelper {
     /*          DATA ACCESS          */
 
     //INSERT
-    public void insertMovie(Movie movie) {
+    public void insertMovie(@NonNull Movie movie) {
         Log.i(TAG, "Inserting new row in 'movies' table.");
 
         ContentValues values = new ContentValues();
@@ -219,7 +221,7 @@ public class SQLite extends SQLiteOpenHelper {
         insertInformation(new Pair<>(movie.getId(), movie.getInfo()));
     }
 
-    public void insertInformation(Pair<Integer, Information> pair) {
+    public void insertInformation(@NonNull Pair<Integer, Information> pair) {
         Log.i(TAG, "Inserting new row in 'movie_information' table.");
 
         ContentValues values = new ContentValues();
