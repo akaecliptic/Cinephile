@@ -34,7 +34,7 @@ android {
 
 ext {
     //Version Variables
-    navigationVersion = '2.5.2'
+    navigationVersion = '2.5.3'
 }
 
 dependencies {
@@ -48,26 +48,17 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.robolectric:robolectric:4.8'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test:rules:1.4.1-beta01'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0-beta01'
-    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.5.0-beta01'
+    androidTestImplementation 'androidx.test:rules:1.5.0-rc01'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0-rc01'
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.5.0-rc01'
 
     //Navigation implementations
     implementation "androidx.navigation:navigation-fragment:${navigationVersion}"
     implementation "androidx.navigation:navigation-ui:${navigationVersion}"
 
     //Material
-    implementation 'com.google.android.material:material:1.6.1'
-
-    /*
-        The OkHTTP built into android clashes with the custom library made.
-        The quick fix for now is deleting OkHTTP related files from .jar manually,
-        then adding a dependency of the same version used in the .jar here.
-
-        Will look for better solution.
-     */
-    // TODO: 2022-09-30 Revisit, see comment above.
-    //OkHTTP
+    implementation 'com.google.android.material:material:1.7.0'
+    //HTTP
     implementation 'com.squareup.okhttp3:okhttp:4.10.0'
     //Image loading
     implementation 'com.squareup.picasso:picasso:2.71828'
