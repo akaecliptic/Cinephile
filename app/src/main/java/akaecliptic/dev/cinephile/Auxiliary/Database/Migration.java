@@ -73,7 +73,7 @@ abstract public class Migration {
             database.setTransactionSuccessful();
         } catch (SQLException e) {
             Log.w(TAG, "Could not migrate tables.");
-            Log.e(TAG, "Exception '" + e.getMessage() + "' found.");
+            Log.e(TAG, "Exception '" + e + "' found.");
             throw new RuntimeException(e);
         } finally {
             Log.i(TAG, "Ending transaction.");
@@ -109,7 +109,7 @@ abstract public class Migration {
             database.setTransactionSuccessful();
         } catch (SQLException e) {
             Log.w(TAG, "Could not migrate tables.");
-            Log.e(TAG, "Exception '" + e.getMessage() + "' found.");
+            Log.e(TAG, "Exception '" + e + "' found.");
             throw new RuntimeException(e);
         } finally {
             Log.i(TAG, "Ending transaction.");

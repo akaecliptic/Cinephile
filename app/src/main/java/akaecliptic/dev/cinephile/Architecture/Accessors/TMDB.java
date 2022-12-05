@@ -58,7 +58,7 @@ public class TMDB {
             element = caller.movie(id);
         } catch (RequestException e) {
             Log.w(TAG, "Could not request movie with id = " + id + ".");
-            Log.e(TAG, "Exception '" + e.getMessage() + "' found.");
+            Log.e(TAG, "Exception '" + e + "' found.");
             e.printStackTrace();
         }
 
@@ -80,7 +80,7 @@ public class TMDB {
             element = caller.upcoming(page);
         } catch (RequestException e) {
             Log.w(TAG, "Could not request upcoming page " + page + ".");
-            Log.e(TAG, "Exception '" + e.getMessage() + "' found.");
+            Log.e(TAG, "Exception '" + e + "' found.");
             e.printStackTrace();
         }
 
@@ -102,7 +102,7 @@ public class TMDB {
             element = caller.rated(page);
         } catch (RequestException e) {
             Log.w(TAG, "Could not request top rated page " + page + ".");
-            Log.e(TAG, "Exception '" + e.getMessage() + "' found.");
+            Log.e(TAG, "Exception '" + e + "' found.");
             e.printStackTrace();
         }
 
@@ -124,7 +124,7 @@ public class TMDB {
             element = caller.popular(page);
         } catch (RequestException e) {
             Log.w(TAG, "Could not request popular page " + page + ".");
-            Log.e(TAG, "Exception '" + e.getMessage() + "' found.");
+            Log.e(TAG, "Exception '" + e + "' found.");
             e.printStackTrace();
         }
 
@@ -146,7 +146,7 @@ public class TMDB {
             element = caller.playing(page);
         } catch (RequestException e) {
             Log.w(TAG, "Could not request now playing page " + page + ".");
-            Log.e(TAG, "Exception '" + e.getMessage() + "' found.");
+            Log.e(TAG, "Exception '" + e + "' found.");
             e.printStackTrace();
         }
 
@@ -169,7 +169,7 @@ public class TMDB {
             element = caller.search(param, page);
         } catch (RequestException e) {
             Log.w(TAG, "Could not request search for '" + param + "' and page " + page + ".");
-            Log.e(TAG, "Exception '" + e.getMessage() + "' found.");
+            Log.e(TAG, "Exception '" + e + "' found.");
             e.printStackTrace();
         }
 
@@ -190,7 +190,7 @@ public class TMDB {
             element = caller.genre();
         } catch (RequestException e) {
             Log.w(TAG, "Could not request movie genre list.");
-            Log.e(TAG, "Exception '" + e.getMessage() + "' found.");
+            Log.e(TAG, "Exception '" + e + "' found.");
             e.printStackTrace();
         }
 
@@ -211,7 +211,7 @@ public class TMDB {
             element = caller.config();
         } catch (RequestException e) {
             Log.w(TAG, "Could not request configuration data");
-            Log.e(TAG, "Exception '" + e.getMessage() + "' found.");
+            Log.e(TAG, "Exception '" + e + "' found.");
             e.printStackTrace();
         }
 

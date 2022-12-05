@@ -137,7 +137,7 @@ public class SQLite extends SQLiteOpenHelper {
             Files.move(oldDatabaseFile.toPath(), newDatabaseFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             Log.w(TAG, "Could not rename database file.");
-            Log.e(TAG, "Exception '" + e.getMessage() + "' found.");
+            Log.e(TAG, "Exception '" + e + "' found.");
             throw new RuntimeException(e);
         }
 
@@ -146,7 +146,7 @@ public class SQLite extends SQLiteOpenHelper {
             Files.copy(newDatabaseFile.toPath(), backupDatabaseFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             Log.w(TAG, "Could not copy data to backup database.");
-            Log.e(TAG, "Exception '" + e.getMessage() + "' found.");
+            Log.e(TAG, "Exception '" + e + "' found.");
             throw new RuntimeException(e);
         }
 
@@ -357,7 +357,7 @@ public class SQLite extends SQLiteOpenHelper {
             database.setTransactionSuccessful();
         } catch (SQLException e) {
             Log.w(TAG, "Could not update values in 'movies' table.");
-            Log.e(TAG, "Exception '" + e.getMessage() + "' found.");
+            Log.e(TAG, "Exception '" + e + "' found.");
             throw new RuntimeException(e);
         } finally {
             Log.i(TAG, "Ending transaction.");
@@ -392,7 +392,7 @@ public class SQLite extends SQLiteOpenHelper {
             database.setTransactionSuccessful();
         } catch (SQLException e) {
             Log.w(TAG, "Could not update values in 'movie_information' table.");
-            Log.e(TAG, "Exception '" + e.getMessage() + "' found.");
+            Log.e(TAG, "Exception '" + e + "' found.");
             throw new RuntimeException(e);
         } finally {
             Log.i(TAG, "Ending transaction.");
@@ -421,7 +421,7 @@ public class SQLite extends SQLiteOpenHelper {
             database.update(Tables.INFORMATION.toString(), values, clause, argument);
         } catch (SQLException e) {
             Log.w(TAG, "Could not update values in 'movie_information' table.");
-            Log.e(TAG, "Exception '" + e.getMessage() + "' found.");
+            Log.e(TAG, "Exception '" + e + "' found.");
             throw new RuntimeException(e);
         }
 
