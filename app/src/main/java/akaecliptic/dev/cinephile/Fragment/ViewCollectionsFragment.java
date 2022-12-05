@@ -128,8 +128,8 @@ public class ViewCollectionsFragment extends Fragment {
             Bundle b = new Bundle();
 
             b.putString(CollectionsFragment.INSTANCE_NAME, fragList.get(position));
-            Navigation.findNavController(requireView())
-                    .navigate(R.id.action_mylist_fragment_to_collections_fragment, b);
+//            Navigation.findNavController(requireView())
+//                    .navigate(R.id.action_mylist_fragment_to_collections_fragment, b);
 
             Snackbar snackbar = Snackbar.make(requireActivity().findViewById(R.id.main_coordinator),
                     "Opening '" + fragList.get(position) + "'",

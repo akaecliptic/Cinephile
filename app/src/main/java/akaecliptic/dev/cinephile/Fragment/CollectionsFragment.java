@@ -144,11 +144,11 @@ public class CollectionsFragment extends Fragment {
                     navController.getCurrentBackStackEntry().getDestination().getId() :
                     R.id.watchlist_fragment;
 
-            if(origin == R.id.collections_fragment){
-                navController.navigate(R.id.action_collections_fragment_to_movie_profile_fragment, bundle);
-            }else {
-                navController.navigate(R.id.action_mylist_fragment_to_movie_profile_fragment, bundle);
-            }
+//            if(origin == R.id.collections_fragment){
+//                navController.navigate(R.id.action_collections_fragment_to_movie_profile_fragment, bundle);
+//            }else {
+//                navController.navigate(R.id.action_mylist_fragment_to_movie_profile_fragment, bundle);
+//            }
 
             Snackbar snackbar = Snackbar.make(requireActivity().findViewById(R.id.main_coordinator),
                     "Opening '" + adapter.getItem(p).getTitle() + "'",

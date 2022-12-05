@@ -37,9 +37,6 @@
         <action
             android:id="@+id/action_mylist_fragment_to_movie_profile_fragment"
             app:destination="@id/movie_profile_fragment" />
-        <action
-            android:id="@+id/action_mylist_fragment_to_collections_fragment"
-            app:destination="@id/collections_fragment" />
     </fragment>
     <fragment
         android:id="@+id/movie_row_fragment"
@@ -48,15 +45,6 @@
         tools:layout="@layout/fragment_movie_row">
         <action
             android:id="@+id/action_movie_list_fragment_to_movie_profile_fragment"
-            app:destination="@id/movie_profile_fragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/collections_fragment"
-        android:name="akaecliptic.dev.cinephile.Fragment.CollectionsFragment"
-        android:label="fragment_collections"
-        tools:layout="@layout/old_fragment_collections">
-        <action
-            android:id="@+id/action_collections_fragment_to_movie_profile_fragment"
             app:destination="@id/movie_profile_fragment" />
     </fragment>
 </navigation>
