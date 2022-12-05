@@ -1,4 +1,4 @@
-package akaecliptic.dev.cinephile;
+package akaecliptic.dev.cinephile.Database;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -23,7 +23,7 @@ import akaecliptic.dev.cinephile.Auxiliary.MockSQLiteDAO;
 import dev.akaecliptic.models.Movie;
 
 @RunWith(RobolectricTestRunner.class)
-public class SQLiteTest {
+public class MigrationTest {
     private static final String DATABASE_NAME = "_cinephile.db";
     private static final String OLD_DATABASE_NAME = "Cinephile.db";
     private static final String BACKUP_DATABASE_NAME = "OLD_DATABASE_COPY.db";
