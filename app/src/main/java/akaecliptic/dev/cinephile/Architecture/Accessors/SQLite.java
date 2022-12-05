@@ -55,9 +55,9 @@ import dev.akaecliptic.models.Movie;
 // TEST: Migration - need to test migration cases, using old and new DAO.
 public class SQLite extends SQLiteOpenHelper {
 
-    private final String TAG = getClass().getSimpleName();
+    private static final String TAG = SQLite.class.getSimpleName();
 
-    private static final String DATABASE_NAME = "cinephile.db";
+    private static final String DATABASE_NAME = "_cinephile.db"; //Might remove underscore in future
     private static final String OLD_DATABASE_NAME = "Cinephile.db"; //Needed When updating from version 2 -> 3
     private static final String BACKUP_PATH = "OLD_DATABASE_COPY.db";
     private static final int DATABASE_VERSION = 3;
@@ -73,8 +73,10 @@ public class SQLite extends SQLiteOpenHelper {
     }
 
     public static synchronized SQLite getInstance(Context context){
+        if(DATABASE_VERSION == 3) checkOldDatabase(context.getDatabasePath(DATABASE_NAME));
         if (sqlite == null) sqlite = new SQLite(context);
-        database = sqlite.getWritableDatabase(); // TODO: 2022-10-05 Keep an eye on this.
+
+        sqlite.getWritableDatabase(); // TODO: 2022-10-05 Keep an eye on this.
         return sqlite;
     }
 
@@ -83,8 +85,6 @@ public class SQLite extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqliteDatabase) {
         database = sqliteDatabase;
-
-        if(DATABASE_VERSION == 3) checkOldDatabase(database);
         initialiseTables(database);
     }
 
@@ -100,12 +100,13 @@ public class SQLite extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onOpen(SQLiteDatabase database) {
-        super.onOpen(database);
+    public void onOpen(SQLiteDatabase sqliteDatabase) {
+        super.onOpen(sqliteDatabase);
         /*
             So, foreign keys are not on by default...
             So, this must also be called everytime the database is open...
          */
+        database = sqliteDatabase;
         database.execSQL(Statements.PRAGMA_FOREIGN_KEY);
         database.setForeignKeyConstraintsEnabled(true);
     }
@@ -118,7 +119,7 @@ public class SQLite extends SQLiteOpenHelper {
      *
      * @param database The current working database.
      */
-    private void checkOldDatabase(SQLiteDatabase database) {
+    private static void checkOldDatabase(File database) {
         Log.i(TAG, "Checking for old database '" + OLD_DATABASE_NAME + "'");
 
         String newPath = database.getPath();
