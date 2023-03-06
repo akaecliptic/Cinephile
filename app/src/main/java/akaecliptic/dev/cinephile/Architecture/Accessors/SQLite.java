@@ -1,15 +1,12 @@
 package akaecliptic.dev.cinephile.Architecture.Accessors;
 
-import static akaecliptic.dev.cinephile.Auxiliary.Database.Functions.doesTableExist;
 import static akaecliptic.dev.cinephile.Auxiliary.Database.Functions.formatBoolean;
 import static akaecliptic.dev.cinephile.Auxiliary.Database.Functions.formatList;
 import static akaecliptic.dev.cinephile.Auxiliary.Database.Functions.getBool;
 import static akaecliptic.dev.cinephile.Auxiliary.Database.Functions.getInt;
+import static akaecliptic.dev.cinephile.Auxiliary.Database.Functions.getIntList;
 import static akaecliptic.dev.cinephile.Auxiliary.Database.Functions.getLocalDate;
 import static akaecliptic.dev.cinephile.Auxiliary.Database.Functions.getString;
-import static akaecliptic.dev.cinephile.Auxiliary.Database.Functions.getIntList;
-import static akaecliptic.dev.cinephile.Auxiliary.Database.Migration.migrateMovieInformation;
-import static akaecliptic.dev.cinephile.Auxiliary.Database.Migration.migrateMovies;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -22,10 +19,6 @@ import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,19 +45,15 @@ import dev.akaecliptic.models.Movie;
  *     but as of now (09/2022), this is the favoured approach.
  * </p>
  */
-// TEST: Migration - need to test migration cases, using old and new DAO.
 public class SQLite extends SQLiteOpenHelper {
 
     private static final String TAG = SQLite.class.getSimpleName();
 
     private static final String DATABASE_NAME = "_cinephile.db"; //Might remove underscore in future
-    private static final String OLD_DATABASE_NAME = "Cinephile.db"; //Needed When updating from version 2 -> 3
-    private static final String BACKUP_PATH = "OLD_DATABASE_COPY.db";
     private static final int DATABASE_VERSION = 3;
 
     private static SQLiteDatabase database;
     private static SQLite sqlite;
-    private static boolean updateDatabase = false; //Needed When updating from version 2 -> 3
 
     /*          MANAGEMENT          */
 
@@ -73,7 +62,6 @@ public class SQLite extends SQLiteOpenHelper {
     }
 
     public static synchronized SQLite getInstance(Context context){
-        if(DATABASE_VERSION == 3) checkOldDatabase(context.getDatabasePath(DATABASE_NAME));
         if (sqlite == null) sqlite = new SQLite(context);
 
         sqlite.getWritableDatabase(); // TODO: 2022-10-05 Keep an eye on this.
@@ -114,91 +102,14 @@ public class SQLite extends SQLiteOpenHelper {
     // SET UP
 
     /**
-     * Checking for previous implementation of DAO, copying the database and creating backup.
-     * Planning to delete old database in future versions, keeping for redundancy.
-     *
-     * @param database The current working database.
-     */
-    private static void checkOldDatabase(File database) {
-        Log.i(TAG, "Checking for old database '" + OLD_DATABASE_NAME + "'");
-
-        String newPath = database.getPath();
-        String oldPath = newPath.replace(DATABASE_NAME, OLD_DATABASE_NAME);
-        String backupPath = newPath.replace(DATABASE_NAME, BACKUP_PATH);
-
-        File newDatabaseFile = new File(newPath);
-        File oldDatabaseFile = new File(oldPath);
-        File backupDatabaseFile = new File(backupPath);
-
-        if(!oldDatabaseFile.exists() || backupDatabaseFile.exists()) return;
-
-        Log.i(TAG, "Renaming old database to new name.");
-        try {
-            Files.move(oldDatabaseFile.toPath(), newDatabaseFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
-            Log.w(TAG, "Could not rename database file.");
-            Log.e(TAG, "Exception '" + e + "' found.");
-            throw new RuntimeException(e);
-        }
-
-        Log.i(TAG, "Copying data to backup database.");
-        try {
-            Files.copy(newDatabaseFile.toPath(), backupDatabaseFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
-            Log.w(TAG, "Could not copy data to backup database.");
-            Log.e(TAG, "Exception '" + e + "' found.");
-            throw new RuntimeException(e);
-        }
-
-        Log.i(TAG, "Data copied and backup created.");
-        updateDatabase = true;
-    }
-
-    /**
      * Initialises tables in the database.
      *
      * @param database The current working database.
      */
     private void initialiseTables(SQLiteDatabase database) {
-        if(DATABASE_VERSION == 3 && updateDatabase) {
-            migrateTables(database);
-        }
-
         database.execSQL(Statements.CREATE_TABLE_MOVIES);
         database.execSQL(Statements.CREATE_TABLE_INFORMATION);
         database.execSQL(Statements.CREATE_VIEW_MOVIE_DATA); //View for querying all movie data
-    }
-
-    /**
-     * Migrates old data to new table schema preserving data where possible.
-     *
-     * @param database The current working database to migrate to.
-     */
-    // TODO: 2022-09-30 Needs more testing.
-    private void migrateTables(SQLiteDatabase database) {
-
-        boolean hasOldMovies = doesTableExist(database, "old_movies");
-        boolean hasMovies = doesTableExist(database, "movies");
-
-        boolean hasInformation = doesTableExist(database, "movie_information");
-        boolean hasImages = doesTableExist(database, "movie_images");
-        boolean hasStatistics = doesTableExist(database, "movie_statistics");
-
-        //Has new tables and backup
-        if(hasOldMovies && hasMovies && hasInformation) return;
-
-        //No backup table
-        /*
-            This is a weird case - both versions of the tables have the same name.
-            So, there is a case where the migration may run on the new table, and possibly crash.
-            Should only happen once, but this is less than ideal.
-
-            Luckily this should not be an issue version 4 onwards.
-         */
-        if(!hasOldMovies && hasMovies) migrateMovies(database);
-
-        //No information table
-        if(!hasInformation && (hasImages && hasStatistics)) migrateMovieInformation(database);
     }
 
     /*          DATA ACCESS          */
