@@ -148,4 +148,18 @@ abstract public class Functions {
 
         return list;
     }
+
+    /**
+     * Helper function to prepare a cursor for operations,
+     * checking whether a cursor is safe to retrieve data from,
+     * and safely closing the cursor otherwise.
+     *
+     * @param cursor The cursor from the query to validate
+     * @return True if the cursor is safe to preform operations, false otherwise.
+     */
+    public static boolean isValidCursor(Cursor cursor) {
+        boolean valid = cursor != null && cursor.moveToFirst();
+        if(!valid && cursor != null) cursor.close();
+        return valid;
+    }
 }

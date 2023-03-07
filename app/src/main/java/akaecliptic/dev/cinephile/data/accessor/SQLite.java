@@ -7,6 +7,7 @@ import static akaecliptic.dev.cinephile.auxil.database.Functions.getInt;
 import static akaecliptic.dev.cinephile.auxil.database.Functions.getIntList;
 import static akaecliptic.dev.cinephile.auxil.database.Functions.getLocalDate;
 import static akaecliptic.dev.cinephile.auxil.database.Functions.getString;
+import static akaecliptic.dev.cinephile.auxil.database.Functions.isValidCursor;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -177,7 +178,8 @@ public class SQLite extends SQLiteOpenHelper {
         Cursor cursor = database.rawQuery(Statements.SELECT_ALL_MOVIE_DATA, null);
         List<Movie> movies = new ArrayList<>();
 
-        cursor.moveToFirst();
+        if(!isValidCursor(cursor)) return movies;
+
         while (!cursor.isAfterLast()) {
             int id = getInt(cursor, "_id");
             String title = getString(cursor, "title");
@@ -213,7 +215,7 @@ public class SQLite extends SQLiteOpenHelper {
         String[] arguments = { Integer.toString(id) };
         Cursor cursor = database.rawQuery(Statements.SELECT_MOVIE, arguments);
 
-        if(!(cursor != null && cursor.moveToFirst())) return null;
+        if(!isValidCursor(cursor)) return null;
 
         int _id = getInt(cursor, "_id");
         String title = getString(cursor, "title");
@@ -246,7 +248,7 @@ public class SQLite extends SQLiteOpenHelper {
         String[] arguments = { Integer.toString(id) };
         Cursor cursor = database.rawQuery(Statements.SELECT_INFORMATION, arguments);
 
-        cursor.moveToFirst();
+        if(!isValidCursor(cursor)) return null;
 
         String poster = getString(cursor, "poster");
         String backdrop = getString(cursor, "backdrop");
@@ -267,7 +269,8 @@ public class SQLite extends SQLiteOpenHelper {
         Cursor cursor = database.rawQuery(Statements.CREATE_VIEW_COLLECTION_DATA, null);
         Map<Integer, Collection> collections = new HashMap<>();
 
-        cursor.moveToFirst();
+        if(!isValidCursor(cursor)) return collections;
+
         while (!cursor.isAfterLast()) {
             int id = getInt(cursor, "_id");
             String title = getString(cursor, "name");
