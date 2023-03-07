@@ -276,18 +276,20 @@ public class SQLite extends SQLiteOpenHelper {
             String cover = getString(cursor, "cover");
             int movie = getInt(cursor, "movie_id");
 
-            Collection collection = collections.pop();
-
-            if(collection == null || !collection.getName().equals(_name)) {
-
-                collection = new Collection(_name, Collection.Cover.parse(cover));
-                collection.getMembers().add(movie);
+            if(collections.isEmpty()) {
+                Collection collection = new Collection(_name, Collection.Cover.parse(cover));
+                if(movie != -1) collection.getMembers().add(movie);
                 collections.push(collection);
+            } else {
+                Collection collection = collections.peek();
 
-            } else if (collection.getName().equals(_name)) {
-
-                collection.getMembers().add(movie);
-
+                if(!collection.getName().equals(_name)) {
+                    collection = new Collection(_name, Collection.Cover.parse(cover));
+                    if(movie != -1) collection.getMembers().add(movie);
+                    collections.push(collection);
+                } else if(movie != -1) {
+                     collection.getMembers().add(movie);
+                }
             }
 
             cursor.moveToNext();
