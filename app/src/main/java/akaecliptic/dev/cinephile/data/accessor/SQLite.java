@@ -50,7 +50,7 @@ public class SQLite extends SQLiteOpenHelper {
     private static final String TAG = SQLite.class.getSimpleName();
 
     private static final String DATABASE_NAME = "_cinephile.db"; //Might remove underscore in future
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
 
     private static SQLiteDatabase database;
     private static SQLite sqlite;
@@ -109,6 +109,10 @@ public class SQLite extends SQLiteOpenHelper {
     private void initialiseTables(SQLiteDatabase database) {
         database.execSQL(Statements.CREATE_TABLE_MOVIES);
         database.execSQL(Statements.CREATE_TABLE_INFORMATION);
+        database.execSQL(Statements.CREATE_TABLE_COLLECTIONS);
+        database.execSQL(Statements.CREATE_LINK_MOVIE_COLLECTION);
+
+        database.execSQL(Statements.CREATE_VIEW_COLLECTION_DATA); //View for querying all collection data
         database.execSQL(Statements.CREATE_VIEW_MOVIE_DATA); //View for querying all movie data
     }
 

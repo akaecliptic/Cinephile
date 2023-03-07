@@ -4,8 +4,11 @@ import androidx.annotation.NonNull;
 
 public enum Tables {
     MOVIES("movies"),
+    MOVIE_DATA("movie_data"),
+    COLLECTIONS("collections"),
     INFORMATION("movie_information"),
-    MOVIE_DATA("movie_data");
+    COLLECTION_DATA("collection_data"),
+    LINK_MOVIE_COLLECTION("link_movie_collection");
 
     private final String name;
 
