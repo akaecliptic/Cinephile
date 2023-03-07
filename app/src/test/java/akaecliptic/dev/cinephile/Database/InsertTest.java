@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.OrderWith;
@@ -30,9 +31,14 @@ public class InsertTest {
 
     @Before
     public void init() {
-        if(sqlite != null) return;
+        if(this.sqlite != null) return;
 
-        sqlite = SQLite.getInstance(RuntimeEnvironment.getApplication());
+        this.sqlite = SQLite.getInstance(RuntimeEnvironment.getApplication());
+    }
+
+    @After
+    public void close() {
+        if(this.sqlite != null) this.sqlite.close();
     }
 
     /*          MOVIE INSERTS           */
@@ -68,9 +74,6 @@ public class InsertTest {
         assertEquals(userRating, query.getUserRating());
 
         assertEquals(release, query.getRelease());
-
-        // Close the database
-        this.sqlite.close();
     }
 
     @Test
@@ -108,9 +111,6 @@ public class InsertTest {
 
         assertNotEquals(nativeRating, query.getNativeRating());
         assertNotEquals(userRating, query.getUserRating());
-
-        // Close the database
-        this.sqlite.close();
     }
 
     @Test
@@ -156,9 +156,6 @@ public class InsertTest {
 
         // Assert null data value
         assertNull(query.getDescription());
-
-        // Close the database
-        this.sqlite.close();
     }
 
     /*          INFORMATION INSERTS           */

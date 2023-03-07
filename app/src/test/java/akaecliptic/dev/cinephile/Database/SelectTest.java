@@ -6,6 +6,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsEmptyIterable.emptyIterable;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.OrderWith;
@@ -27,9 +28,14 @@ public class SelectTest {
 
     @Before
     public void init() {
-        if(sqlite != null) return;
+        if(this.sqlite != null) return;
 
-        sqlite = SQLite.getInstance(RuntimeEnvironment.getApplication());
+        this.sqlite = SQLite.getInstance(RuntimeEnvironment.getApplication());
+    }
+
+    @After
+    public void close() {
+        if(this.sqlite != null) this.sqlite.close();
     }
 
     /*          SELECTS ON EMPTY DATABASE           */
@@ -38,14 +44,12 @@ public class SelectTest {
     public void test_selectInvalidMovie() {
         Movie movie = this.sqlite.selectMovie(1);
         assertThat(movie, nullValue());
-        this.sqlite.close();
     }
 
     @Test
     public void test_selectInvalidInformation() {
         Information information = this.sqlite.selectInformation(1);
         assertThat(information, nullValue());
-        this.sqlite.close();
     }
 
     @Test
@@ -53,7 +57,6 @@ public class SelectTest {
         List<Movie> movies = this.sqlite.selectMovies();
         assertThat(movies, notNullValue());
         assertThat(movies, is(emptyIterable()));
-        this.sqlite.close();
     }
 
 }
