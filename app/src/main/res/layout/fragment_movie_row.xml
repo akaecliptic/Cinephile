@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".Fragment.MovieRowFragment">
+    tools:context=".fragment.MovieRowFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/movie_row_recycler"

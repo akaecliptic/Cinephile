@@ -15,7 +15,7 @@ import org.robolectric.RuntimeEnvironment;
 
 import java.time.LocalDate;
 
-import akaecliptic.dev.cinephile.Architecture.Accessors.SQLite;
+import akaecliptic.dev.cinephile.data.accessor.SQLite;
 import dev.akaecliptic.models.Information;
 import dev.akaecliptic.models.Movie;
 

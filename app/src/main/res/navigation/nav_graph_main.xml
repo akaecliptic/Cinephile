@@ -7,12 +7,12 @@
 
     <activity
         android:id="@+id/mainActivity"
-        android:name="akaecliptic.dev.cinephile.Activity.MainActivity"
+        android:name="akaecliptic.dev.cinephile.activity.MainActivity"
         android:label="MainActivity" />
 
     <fragment
         android:id="@+id/explore_fragment"
-        android:name="akaecliptic.dev.cinephile.Fragment.ExploreFragment"
+        android:name="akaecliptic.dev.cinephile.fragment.ExploreFragment"
         android:label="fragment_explore"
         tools:layout="@layout/fragment_explore">
         <action
@@ -25,13 +25,13 @@
 
     <fragment
         android:id="@+id/movie_profile_fragment"
-        android:name="akaecliptic.dev.cinephile.Fragment.MovieProfileFragment"
+        android:name="akaecliptic.dev.cinephile.fragment.MovieProfileFragment"
         android:label="fragment_movie_profile"
         tools:layout="@layout/fragment_movie_profile" />
 
     <fragment
         android:id="@+id/watchlist_fragment"
-        android:name="akaecliptic.dev.cinephile.Fragment.WatchlistFragment"
+        android:name="akaecliptic.dev.cinephile.fragment.WatchlistFragment"
         android:label="fragment_watchlist"
         tools:layout="@layout/fragment_watchlist">
         <action
@@ -40,7 +40,7 @@
     </fragment>
     <fragment
         android:id="@+id/movie_row_fragment"
-        android:name="akaecliptic.dev.cinephile.Fragment.MovieRowFragment"
+        android:name="akaecliptic.dev.cinephile.fragment.MovieRowFragment"
         android:label="fragment_movie_row"
         tools:layout="@layout/fragment_movie_row">
         <action

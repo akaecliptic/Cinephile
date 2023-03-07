@@ -5,7 +5,7 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.longClick;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.assertNull;
-import static akaecliptic.dev.cinephile.Auxiliary.Matchers.childAtPosition;
+import static akaecliptic.dev.cinephile.auxil.Matchers.childAtPosition;
 
 import android.content.Context;
 
@@ -21,8 +21,8 @@ import org.junit.runner.RunWith;
 
 import java.time.LocalDate;
 
-import akaecliptic.dev.cinephile.Activity.MainActivity;
-import akaecliptic.dev.cinephile.Auxiliary.SQLiteAccessor;
+import akaecliptic.dev.cinephile.activity.MainActivity;
+import akaecliptic.dev.cinephile.auxil.SQLiteAccessor;
 import akaecliptic.dev.cinephile.R;
 import dev.akaecliptic.models.Information;
 import dev.akaecliptic.models.Movie;

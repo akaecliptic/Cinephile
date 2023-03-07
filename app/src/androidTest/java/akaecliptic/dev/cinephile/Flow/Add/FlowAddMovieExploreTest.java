@@ -8,10 +8,10 @@ import static androidx.test.espresso.contrib.RecyclerViewActions.scrollToPositio
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static akaecliptic.dev.cinephile.Auxiliary.Matchers.childAtPosition;
-import static akaecliptic.dev.cinephile.Auxiliary.Matchers.itemWithClassName;
-import static akaecliptic.dev.cinephile.Auxiliary.Navigation.goBack;
-import static akaecliptic.dev.cinephile.Auxiliary.SQLiteAccessor.selectAll;
+import static akaecliptic.dev.cinephile.auxil.Matchers.childAtPosition;
+import static akaecliptic.dev.cinephile.auxil.Matchers.itemWithClassName;
+import static akaecliptic.dev.cinephile.auxil.Navigation.goBack;
+import static akaecliptic.dev.cinephile.auxil.SQLiteAccessor.selectAll;
 
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.ViewInteraction;
@@ -28,9 +28,9 @@ import org.junit.runner.manipulation.Alphanumeric;
 
 import java.util.List;
 
-import akaecliptic.dev.cinephile.Activity.MainActivity;
+import akaecliptic.dev.cinephile.activity.MainActivity;
 import akaecliptic.dev.cinephile.R;
-import akaecliptic.dev.cinephile.Wrapper.FooterMore;
+import akaecliptic.dev.cinephile.wrapper.FooterMore;
 import dev.akaecliptic.models.Movie;
 
 @LargeTest

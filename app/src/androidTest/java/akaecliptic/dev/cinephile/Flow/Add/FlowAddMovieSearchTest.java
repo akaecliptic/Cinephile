@@ -12,8 +12,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static akaecliptic.dev.cinephile.Auxiliary.Navigation.goBack;
-import static akaecliptic.dev.cinephile.Auxiliary.SQLiteAccessor.selectAll;
+import static akaecliptic.dev.cinephile.auxil.Navigation.goBack;
+import static akaecliptic.dev.cinephile.auxil.SQLiteAccessor.selectAll;
 
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.ViewInteraction;
@@ -27,7 +27,7 @@ import org.junit.runner.RunWith;
 
 import java.util.List;
 
-import akaecliptic.dev.cinephile.Activity.MainActivity;
+import akaecliptic.dev.cinephile.activity.MainActivity;
 import akaecliptic.dev.cinephile.R;
 import dev.akaecliptic.models.Movie;
 

@@ -9,8 +9,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.junit.Assert.assertEquals;
-import static akaecliptic.dev.cinephile.Auxiliary.Matchers.childAtPosition;
-import static akaecliptic.dev.cinephile.Auxiliary.Navigation.goBack;
+import static akaecliptic.dev.cinephile.auxil.Matchers.childAtPosition;
+import static akaecliptic.dev.cinephile.auxil.Navigation.goBack;
 
 import android.content.Context;
 
@@ -29,8 +29,8 @@ import org.junit.runner.manipulation.Alphanumeric;
 
 import java.time.LocalDate;
 
-import akaecliptic.dev.cinephile.Activity.MainActivity;
-import akaecliptic.dev.cinephile.Auxiliary.SQLiteAccessor;
+import akaecliptic.dev.cinephile.activity.MainActivity;
+import akaecliptic.dev.cinephile.auxil.SQLiteAccessor;
 import akaecliptic.dev.cinephile.R;
 import dev.akaecliptic.models.Information;
 import dev.akaecliptic.models.Movie;

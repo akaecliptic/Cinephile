@@ -7,13 +7,13 @@
 
     <fragment
         android:id="@+id/movie_profile_fragment"
-        android:name="akaecliptic.dev.cinephile.Fragment.MovieProfileFragment"
+        android:name="akaecliptic.dev.cinephile.fragment.MovieProfileFragment"
         android:label="fragment_movie_profile"
         tools:layout="@layout/fragment_movie_profile" />
 
     <fragment
         android:id="@+id/movie_search_fragment"
-        android:name="akaecliptic.dev.cinephile.Fragment.MovieSearchFragment"
+        android:name="akaecliptic.dev.cinephile.fragment.MovieSearchFragment"
         android:label="fragment_movie_search"
         tools:layout="@layout/fragment_movie_search">
         <action
