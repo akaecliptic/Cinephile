@@ -116,6 +116,8 @@ public class SQLite extends SQLiteOpenHelper {
 
         database.execSQL(Statements.CREATE_VIEW_COLLECTION_DATA); //View for querying all collection data
         database.execSQL(Statements.CREATE_VIEW_MOVIE_DATA); //View for querying all movie data
+
+        database.execSQL(Statements.INSERT_FAVOURITES_COLLECTION); //There must always be a favourites collection
     }
 
     /*          DATA ACCESS          */
@@ -162,7 +164,7 @@ public class SQLite extends SQLiteOpenHelper {
 
         values.put("_id", collection.getId());
         values.put("name", collection.getName());
-        values.put("cover", collection.getCover());
+        values.put("cover", collection.getCover().toString());
 
         Log.i(TAG, "Inserting row with _id = " + collection.getId() + ".");
         database.insert(Tables.COLLECTIONS.toString(), null, values);
@@ -275,7 +277,7 @@ public class SQLite extends SQLiteOpenHelper {
             Collection collection = collections.get(id);
 
             if(collection == null) {
-                collection = new Collection(id, title, cover);
+                collection = new Collection(id, title, Collection.Cover.parse(cover));
                 collection.getMembers().add(movie);
                 collections.put(id, collection);
                 continue;
@@ -399,7 +401,7 @@ public class SQLite extends SQLiteOpenHelper {
 
                 values.put("_id", collection.getId());
                 values.put("name", collection.getName());
-                values.put("cover", collection.getCover());
+                values.put("cover", collection.getCover().toString());
 
                 String[] argument = { Integer.toString(collection.getId()) };
                 String clause = "_id = ?";
