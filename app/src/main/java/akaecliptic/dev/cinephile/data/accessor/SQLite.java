@@ -22,9 +22,9 @@ import androidx.annotation.NonNull;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 
 import akaecliptic.dev.cinephile.auxil.database.Statements;
 import akaecliptic.dev.cinephile.auxil.database.Tables;
@@ -163,11 +163,10 @@ public class SQLite extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
 
-        values.put("_id", collection.getId());
-        values.put("name", collection.getName());
+        values.put("_name", collection.getName());
         values.put("cover", collection.getCover().toString());
 
-        Log.i(TAG, "Inserting row with _id = " + collection.getId() + ".");
+        Log.i(TAG, "Inserting row with _name = '" + collection.getName() + "'.");
         database.insert(Tables.COLLECTIONS.toString(), null, values);
     }
 
@@ -263,30 +262,33 @@ public class SQLite extends SQLiteOpenHelper {
         return information;
     }
 
-    public Map<Integer, Collection> selectCollections() {
+    public List<Collection> selectCollections() {
         Log.i(TAG, "Selecting all rows in 'collection_data' view.");
 
-        Cursor cursor = database.rawQuery(Statements.CREATE_VIEW_COLLECTION_DATA, null);
-        Map<Integer, Collection> collections = new HashMap<>();
+        Cursor cursor = database.rawQuery(Statements.SELECT_ALL_COLLECTION_DATA, null);
+        // Using stack because queried data is ordered by collection name
+        Stack<Collection> collections = new Stack<>();
 
         if(!isValidCursor(cursor)) return collections;
 
         while (!cursor.isAfterLast()) {
-            int id = getInt(cursor, "_id");
-            String title = getString(cursor, "name");
+            String _name = getString(cursor, "_name");
             String cover = getString(cursor, "cover");
             int movie = getInt(cursor, "movie_id");
 
-            Collection collection = collections.get(id);
+            Collection collection = collections.pop();
 
-            if(collection == null) {
-                collection = new Collection(id, title, Collection.Cover.parse(cover));
+            if(collection == null || !collection.getName().equals(_name)) {
+
+                collection = new Collection(_name, Collection.Cover.parse(cover));
                 collection.getMembers().add(movie);
-                collections.put(id, collection);
-                continue;
-            }
+                collections.push(collection);
 
-            collection.getMembers().add(movie);
+            } else if (collection.getName().equals(_name)) {
+
+                collection.getMembers().add(movie);
+
+            }
 
             cursor.moveToNext();
         }
@@ -402,14 +404,13 @@ public class SQLite extends SQLiteOpenHelper {
             for (Collection collection : collections) {
                 ContentValues values = new ContentValues();
 
-                values.put("_id", collection.getId());
-                values.put("name", collection.getName());
+                values.put("_name", collection.getName());
                 values.put("cover", collection.getCover().toString());
 
-                String[] argument = { Integer.toString(collection.getId()) };
-                String clause = "_id = ?";
+                String[] argument = { collection.getName() };
+                String clause = "_name = ?";
 
-                Log.i(TAG, "Updating row with _id = " + collection.getId() + ".");
+                Log.i(TAG, "Updating row with _name = '" + collection.getName() + "'.");
                 database.update(Tables.COLLECTIONS.toString(), values, clause, argument);
             }
 
@@ -448,14 +449,14 @@ public class SQLite extends SQLiteOpenHelper {
         Log.i(TAG, "Deleted movie information with movie_id = " + id + ".");
     }
 
-    public void deleteCollection(int id) {
+    public void deleteCollection(String name) {
         Log.i(TAG, "Deleting single row in 'collections' table.");
 
-        String[] arguments = { Integer.toString(id) };
-        String clause = "_id = ?";
+        String[] arguments = { name };
+        String clause = "_name = ?";
         database.delete(Tables.COLLECTIONS.toString(), clause, arguments);
 
-        Log.i(TAG, "Deleted collection with _id = " + id + " and associated collection data.");
+        Log.i(TAG, "Deleted collection with _name = '" + name + "' and associated collection data.");
     }
 
     //OTHER CASES
@@ -524,26 +525,26 @@ public class SQLite extends SQLiteOpenHelper {
         return movies;
     }
 
-    public void addToCollection(int movieId, int collectionId) {
+    public void addToCollection(int movieId, String collection) {
         Log.i(TAG, "Inserting new row in 'link_movie_collection' table.");
 
         ContentValues values = new ContentValues();
 
         values.put("movie_id", movieId);
-        values.put("collection_id", collectionId);
+        values.put("collection_name", collection);
 
-        Log.i(TAG, "Inserting table link movie_id " + movieId + " to collection_id " + collectionId + ".");
+        Log.i(TAG, "Inserting table link movie_id " + movieId + " to collection_name '" + collection + "'.");
         database.insert(Tables.LINK_MOVIE_COLLECTION.toString(), null, values);
     }
 
-    public void removeFromCollection(int movieId, int collectionId) {
+    public void removeFromCollection(int movieId, String collection) {
         Log.i(TAG, "Deleting single row in 'link_movie_collection' table.");
 
-        String[] arguments = { Integer.toString(movieId), Integer.toString(collectionId) };
-        String clause = "movie_id = ? AND collection_id = ?";
+        String[] arguments = { Integer.toString(movieId), collection };
+        String clause = "movie_id = ? AND collection_name = ?";
         database.delete(Tables.LINK_MOVIE_COLLECTION.toString(), clause, arguments);
 
-        Log.i(TAG, "Deleted table link movie_id " + movieId + " to collection_id " + collectionId + ".");
+        Log.i(TAG, "Deleted table link movie_id " + movieId + " to collection_name '" + collection + "'.");
     }
 
 }

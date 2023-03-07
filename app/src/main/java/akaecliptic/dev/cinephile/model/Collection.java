@@ -4,44 +4,59 @@ import androidx.annotation.NonNull;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 // CONSIDER: 2023-03-07 Renaming class, completely forgot about java collections...
 public class Collection implements Serializable {
 
-    private int _id;
-    private String name;
+    private String _name;
     private Cover cover;
     private Set<Integer> members;
 
-    public Collection(int _id, String name, Cover cover) {
-        this._id = _id;
-        this.name = name;
+    public Collection(String _name, Cover cover) {
+        this._name = _name;
         this.cover = cover;
         this.members = new HashSet<>();
     }
 
-    public Collection(int _id, String name) {
-        this._id = _id;
-        this.name = name;
+    public Collection(String _name) {
+        this._name = _name;
         this.cover = Cover.DEFAULT;
         this.members = new HashSet<>();
     }
 
-    public int getId() {
-        return _id;
+    @Override
+    public String toString() {
+        return "Collection { " +
+                "name: '" + this._name + '\'' +
+                ", cover: '" + this.cover + '\'' +
+                ", member ids: " + this.members +
+                " }";
     }
 
-    public void setId(int _id) {
-        this._id = _id;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Collection)) return false;
+
+        Collection collection = (Collection) o;
+        return this._name.equals(collection._name) &&
+                Objects.equals(this.cover, collection.cover) &&
+                Objects.equals(this.members, collection.members);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this._name, this.cover, this.members);
     }
 
     public String getName() {
-        return name;
+        return _name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setName(String _name) {
+        this._name = _name;
     }
 
     public Cover getCover() {
