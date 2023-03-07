@@ -31,7 +31,7 @@ public class Collection implements Serializable {
         return "Collection { " +
                 "name: '" + this._name + '\'' +
                 ", cover: '" + this.cover + '\'' +
-                ", member ids: " + this.members +
+                ", members: " + this.members +
                 " }";
     }
 
