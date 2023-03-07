@@ -117,7 +117,7 @@ public class SQLite extends SQLiteOpenHelper {
         database.execSQL(Statements.CREATE_VIEW_COLLECTION_DATA); //View for querying all collection data
         database.execSQL(Statements.CREATE_VIEW_MOVIE_DATA); //View for querying all movie data
 
-        database.execSQL(Statements.INSERT_FAVOURITES_COLLECTION); //There must always be a favourites collection
+        database.execSQL(Statements.INSERT_COLLECTION_FAVOURITES); //There must always be a favourites collection
     }
 
     /*          DATA ACCESS          */

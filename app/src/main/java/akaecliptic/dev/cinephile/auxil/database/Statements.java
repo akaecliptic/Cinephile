@@ -64,5 +64,5 @@ abstract public class Statements {
     public static final String SELECT_MOVIE_DATA_LIKE = "SELECT * FROM 'movie_data' WHERE title LIKE %?%;";
 
     //INSERT
-    public static final String INSERT_FAVOURITES_COLLECTION = "INSERT OR IGNORE INTO 'collections' (_id, name, cover) VALUES (1, 'favourites', 'heart');";
+    public static final String INSERT_COLLECTION_FAVOURITES = "INSERT OR IGNORE INTO 'collections' (_id, name, cover) VALUES (1, 'favourites', 'heart');";
 }
