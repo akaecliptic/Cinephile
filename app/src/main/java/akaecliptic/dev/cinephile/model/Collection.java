@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+// CONSIDER: 2023-03-07 Renaming class, completely forgot about java collections...
 public class Collection implements Serializable {
 
     private int _id;
