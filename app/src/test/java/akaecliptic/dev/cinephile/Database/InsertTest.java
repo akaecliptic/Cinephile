@@ -91,7 +91,7 @@ public class InsertTest {
         this.sqlite.insertMovie(movie);
 
         // Assert there is only one movie in database
-        var movies = this.sqlite.selectAll();
+        var movies = this.sqlite.selectMovies();
         assertEquals(1, movies.size());
 
         // Query the movie from database
@@ -137,7 +137,7 @@ public class InsertTest {
         this.sqlite.insertMovie(movie);
 
         // Assert new movie was correctly added to database
-        var movies = this.sqlite.selectAll();
+        var movies = this.sqlite.selectMovies();
         assertEquals(2, movies.size());
 
         // Query the movie from database

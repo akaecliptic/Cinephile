@@ -21,11 +21,13 @@ import androidx.annotation.NonNull;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import akaecliptic.dev.cinephile.auxil.database.Statements;
 import akaecliptic.dev.cinephile.auxil.database.Tables;
+import akaecliptic.dev.cinephile.model.Collection;
 import dev.akaecliptic.models.Information;
 import dev.akaecliptic.models.Movie;
 
@@ -153,8 +155,21 @@ public class SQLite extends SQLiteOpenHelper {
         database.insert(Tables.INFORMATION.toString(), null, values);
     }
 
+    public void insertCollection(@NonNull Collection collection) {
+        Log.i(TAG, "Inserting new row in 'collections' table.");
+
+        ContentValues values = new ContentValues();
+
+        values.put("_id", collection.getId());
+        values.put("name", collection.getName());
+        values.put("cover", collection.getCover());
+
+        Log.i(TAG, "Inserting row with _id = " + collection.getId() + ".");
+        database.insert(Tables.COLLECTIONS.toString(), null, values);
+    }
+
     //SELECT
-    public List<Movie> selectAll() {
+    public List<Movie> selectMovies() {
         Log.i(TAG, "Selecting all rows in 'movie_data' view.");
 
         Cursor cursor = database.rawQuery(Statements.SELECT_ALL_MOVIE_DATA, null);
@@ -242,6 +257,37 @@ public class SQLite extends SQLiteOpenHelper {
         cursor.close();
 
         return information;
+    }
+
+    public Map<Integer, Collection> selectCollections() {
+        Log.i(TAG, "Selecting all rows in 'collection_data' view.");
+
+        Cursor cursor = database.rawQuery(Statements.CREATE_VIEW_COLLECTION_DATA, null);
+        Map<Integer, Collection> collections = new HashMap<>();
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            int id = getInt(cursor, "_id");
+            String title = getString(cursor, "name");
+            String cover = getString(cursor, "cover");
+            int movie = getInt(cursor, "movie_id");
+
+            Collection collection = collections.get(id);
+
+            if(collection == null) {
+                collection = new Collection(id, title, cover);
+                collection.getMembers().add(movie);
+                collections.put(id, collection);
+                continue;
+            }
+
+            collection.getMembers().add(movie);
+
+            cursor.moveToNext();
+        }
+        cursor.close();
+
+        return collections;
     }
 
     //UPDATE
@@ -343,6 +389,39 @@ public class SQLite extends SQLiteOpenHelper {
         Log.i(TAG, "Update complete.");
     }
 
+    public void updateCollection(Collection... collections) {
+        Log.i(TAG, "Beginning transaction to update rows in 'collections' table.");
+
+        database.beginTransaction();
+        try {
+            for (Collection collection : collections) {
+                ContentValues values = new ContentValues();
+
+                values.put("_id", collection.getId());
+                values.put("name", collection.getName());
+                values.put("cover", collection.getCover());
+
+                String[] argument = { Integer.toString(collection.getId()) };
+                String clause = "_id = ?";
+
+                Log.i(TAG, "Updating row with _id = " + collection.getId() + ".");
+                database.update(Tables.COLLECTIONS.toString(), values, clause, argument);
+            }
+
+            Log.i(TAG, "Committing transaction.");
+            database.setTransactionSuccessful();
+        } catch (SQLException e) {
+            Log.w(TAG, "Could not update values in 'collections' table.");
+            Log.e(TAG, "Exception '" + e + "' found.");
+            throw new RuntimeException(e);
+        } finally {
+            Log.i(TAG, "Ending transaction.");
+            database.endTransaction();
+        }
+
+        Log.i(TAG, "Transaction complete.");
+    }
+
     //DELETE
     public void deleteMovie(int id) {
         Log.i(TAG, "Deleting single row in 'movies' table.");
@@ -362,6 +441,16 @@ public class SQLite extends SQLiteOpenHelper {
         database.delete(Tables.INFORMATION.toString(), clause, arguments);
 
         Log.i(TAG, "Deleted movie information with movie_id = " + id + ".");
+    }
+
+    public void deleteCollection(int id) {
+        Log.i(TAG, "Deleting single row in 'collections' table.");
+
+        String[] arguments = { Integer.toString(id) };
+        String clause = "_id = ?";
+        database.delete(Tables.COLLECTIONS.toString(), clause, arguments);
+
+        Log.i(TAG, "Deleted collection with _id = " + id + " and associated collection data.");
     }
 
     //OTHER CASES
@@ -429,4 +518,27 @@ public class SQLite extends SQLiteOpenHelper {
 
         return movies;
     }
+
+    public void addToCollection(int movieId, int collectionId) {
+        Log.i(TAG, "Inserting new row in 'link_movie_collection' table.");
+
+        ContentValues values = new ContentValues();
+
+        values.put("movie_id", movieId);
+        values.put("collection_id", collectionId);
+
+        Log.i(TAG, "Inserting table link movie_id " + movieId + " to collection_id " + collectionId + ".");
+        database.insert(Tables.LINK_MOVIE_COLLECTION.toString(), null, values);
+    }
+
+    public void removeFromCollection(int movieId, int collectionId) {
+        Log.i(TAG, "Deleting single row in 'link_movie_collection' table.");
+
+        String[] arguments = { Integer.toString(movieId), Integer.toString(collectionId) };
+        String clause = "movie_id = ? AND collection_id = ?";
+        database.delete(Tables.LINK_MOVIE_COLLECTION.toString(), clause, arguments);
+
+        Log.i(TAG, "Deleted table link movie_id " + movieId + " to collection_id " + collectionId + ".");
+    }
+
 }

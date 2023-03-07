@@ -15,7 +15,7 @@ public abstract class SQLiteAccessor {
 
     public static List<Movie> selectAll(Context context) {
         SQLite sqlite = connect(context);
-        return sqlite.selectAll();
+        return sqlite.selectMovies();
     }
 
     public static Movie select(Context context, int id) {

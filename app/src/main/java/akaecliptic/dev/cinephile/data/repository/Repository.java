@@ -71,7 +71,7 @@ public class Repository {
     }
 
     private void init() {
-        executor.execute(() -> this.watchlist.addAll(this.sqlite.selectAll()));
+        executor.execute(() -> this.watchlist.addAll(this.sqlite.selectMovies()));
 
         executor.execute(() -> {
             this.upcoming.addAll(this.tmdb.upcoming(1).results());
@@ -189,7 +189,7 @@ public class Repository {
 
     public void movies(SQLiteCallback<List<Movie>> callback) {
         executor.execute(() -> {
-            List<Movie> movies = this.sqlite.selectAll();
+            List<Movie> movies = this.sqlite.selectMovies();
             handler.post(() -> callback.onResponse(movies));
         });
     }
