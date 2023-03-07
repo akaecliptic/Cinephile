@@ -293,6 +293,36 @@ public class SQLite extends SQLiteOpenHelper {
         return collections;
     }
 
+    public Collection selectCollection(String name) {
+        Log.i(TAG, "Selecting single row in 'collection_data' view.");
+
+        String[] arguments = { name };
+        Cursor cursor = database.rawQuery(Statements.SELECT_COLLECTION, arguments);
+
+        if(!isValidCursor(cursor)) return null;
+
+        String _name = getString(cursor, "_name");
+        String cover = getString(cursor, "cover");
+        int movie = getInt(cursor, "movie_id");
+
+        Collection collection = new Collection(_name, Cover.parse(cover));
+
+        if(movie != -1) {
+            collection.getMembers().add(movie);
+
+            while (!cursor.isAfterLast()) {
+                movie = getInt(cursor, "movie_id");
+                if (movie != -1) collection.getMembers().add(movie);
+
+                cursor.moveToNext();
+            }
+        }
+
+        cursor.close();
+
+        return collection;
+    }
+
     //UPDATE
     public void updateMovie(Movie... movies) {
         Log.i(TAG, "Beginning transaction to update rows in 'movies' table.");
@@ -521,26 +551,26 @@ public class SQLite extends SQLiteOpenHelper {
         return movies;
     }
 
-    public void addToCollection(int movieId, String collection) {
+    public void addToCollection(int movieId, String collectionName) {
         Log.i(TAG, "Inserting new row in 'link_movie_collection' table.");
 
         ContentValues values = new ContentValues();
 
         values.put("movie_id", movieId);
-        values.put("collection_name", collection);
+        values.put("collection_name", collectionName);
 
-        Log.i(TAG, "Inserting table link movie_id " + movieId + " to collection_name '" + collection + "'.");
+        Log.i(TAG, "Inserting table link movie_id " + movieId + " to collection_name '" + collectionName + "'.");
         database.insert(Tables.LINK_MOVIE_COLLECTION.toString(), null, values);
     }
 
-    public void removeFromCollection(int movieId, String collection) {
+    public void removeFromCollection(int movieId, String collectionName) {
         Log.i(TAG, "Deleting single row in 'link_movie_collection' table.");
 
-        String[] arguments = { Integer.toString(movieId), collection };
+        String[] arguments = { Integer.toString(movieId), collectionName };
         String clause = "movie_id = ? AND collection_name = ?";
         database.delete(Tables.LINK_MOVIE_COLLECTION.toString(), clause, arguments);
 
-        Log.i(TAG, "Deleted table link movie_id " + movieId + " to collection_name '" + collection + "'.");
+        Log.i(TAG, "Deleted table link movie_id " + movieId + " to collection_name '" + collectionName + "'.");
     }
 
 }

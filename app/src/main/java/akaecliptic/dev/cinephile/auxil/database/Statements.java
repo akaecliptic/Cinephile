@@ -59,8 +59,11 @@ abstract public class Statements {
     //SELECT
     public static final String SELECT_ALL_MOVIE_DATA = "SELECT * FROM 'movie_data';";
     public static final String SELECT_ALL_COLLECTION_DATA = "SELECT * FROM 'collection_data';";
+
     public static final String SELECT_MOVIE = "SELECT * FROM 'movie_data' WHERE _id = ?;";
+    public static final String SELECT_COLLECTION = "SELECT * FROM 'collection_data' WHERE _name = ?;";
     public static final String SELECT_INFORMATION = "SELECT * FROM 'movie_information' WHERE movie_id = ?;";
+
     public static final String SELECT_MOVIE_DATA_LIKE = "SELECT * FROM 'movie_data' WHERE title LIKE %?%;";
 
     //INSERT
