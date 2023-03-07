@@ -8,6 +8,7 @@ import static akaecliptic.dev.cinephile.auxil.database.Functions.getIntList;
 import static akaecliptic.dev.cinephile.auxil.database.Functions.getLocalDate;
 import static akaecliptic.dev.cinephile.auxil.database.Functions.getString;
 import static akaecliptic.dev.cinephile.auxil.database.Functions.isValidCursor;
+import static akaecliptic.dev.cinephile.model.Collection.Cover;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -276,21 +277,14 @@ public class SQLite extends SQLiteOpenHelper {
             String cover = getString(cursor, "cover");
             int movie = getInt(cursor, "movie_id");
 
-            if(collections.isEmpty()) {
-                Collection collection = new Collection(_name, Collection.Cover.parse(cover));
-                if(movie != -1) collection.getMembers().add(movie);
-                collections.push(collection);
-            } else {
-                Collection collection = collections.peek();
+            Collection collection = (collections.isEmpty()) ? null : collections.peek();
 
-                if(!collection.getName().equals(_name)) {
-                    collection = new Collection(_name, Collection.Cover.parse(cover));
-                    if(movie != -1) collection.getMembers().add(movie);
-                    collections.push(collection);
-                } else if(movie != -1) {
-                     collection.getMembers().add(movie);
-                }
+            if(collection == null || collection.getName().equals(_name)) {
+                collection = new Collection(_name, Cover.parse(cover));
+                collections.push(collection);
             }
+
+            if(movie != -1) collection.getMembers().add(movie);
 
             cursor.moveToNext();
         }
