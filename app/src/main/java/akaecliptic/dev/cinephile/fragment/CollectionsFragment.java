@@ -1,200 +1,117 @@
 package akaecliptic.dev.cinephile.fragment;
 
-import android.app.AlertDialog;
+import static akaecliptic.dev.cinephile.fragment.WatchlistFragment.ALL;
+
+import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
+import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import akaecliptic.dev.cinephile.adapter.CollectionsListAdapter;
-import akaecliptic.dev.cinephile.data.MovieViewModel;
-import akaecliptic.dev.cinephile.data.MovieRepository;
-import akaecliptic.dev.cinephile.model.Movie;
 import akaecliptic.dev.cinephile.R;
+import akaecliptic.dev.cinephile.activity.MainActivity;
+import akaecliptic.dev.cinephile.adapter.watchlist.CardSlimAdapter;
+import akaecliptic.dev.cinephile.base.BaseFragment;
+import akaecliptic.dev.cinephile.data.ViewModel;
+import akaecliptic.dev.cinephile.dialog.DeleteDialog;
+import akaecliptic.dev.cinephile.interaction.listener.MovieChangeListener;
+import akaecliptic.dev.cinephile.model.Collection;
+import dev.akaecliptic.models.Movie;
 
-import static akaecliptic.dev.cinephile.fragment.WatchlistFragment.SELECTED_MOVIE;
-import static akaecliptic.dev.cinephile.fragment.WatchlistFragment.SELECTED_SAVED;
+public class CollectionsFragment extends BaseFragment {
 
-@Deprecated
-public class CollectionsFragment extends Fragment {
-    static final String INSTANCE_NAME = "INSTANCE";
+    static final String SELECTED_MOVIE = "SELECTED_MOVIE";
+    static final String SELECTED_SAVED = "SELECTED_SAVED";
 
-    private String fragName;
+    private CardSlimAdapter adapter;
+    private final String name;
 
-    private MovieViewModel viewModel;
-    private MovieRepository.Sort currentSort = MovieRepository.Sort.DEFAULT;
-    private List<Movie> fragList;
+    private final MovieChangeListener movieChangeListener = (movie) -> {
+        if (adapter == null) return;
 
-    private CollectionsListAdapter adapter;
-    private TextView emptyPrompt;
+        int index = adapter.getItems().indexOf(movie);
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        setUpViewModelLink();
-        assignInstanceName();
-        return inflater.inflate(R.layout.old_fragment_collections, container, false);
+        viewModel.watchlist().remove(movie);
+        viewModel.deleteMovie(movie.getId());
+
+        adapter.notifyItemRemoved(index);
+    };
+    @SuppressLint("NotifyDataSetChanged")
+    private final Toolbar.OnMenuItemClickListener onToolbarSort = (item) -> {
+        if (item.getItemId() != R.id.toolbar_sort || adapter == null) return false;
+
+        List<Movie> watchlist = this.viewModel.watchlist();
+        String message = ViewModel.cycleSort(watchlist);
+
+        /*
+            Hmm, I'm only using a straight notifyDataSetChanged because it is faster on my testing virtual device.
+            Will try to run on physical device in future to see if that is still the case.
+
+            2022-10-14
+         */
+        // CONSIDER: changing back to notifyItemRangeChanged. See comment above.
+        adapter.notifyDataSetChanged();
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+        return true;
+    };
+
+    public CollectionsFragment(String name) {
+        this.name = name;
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        setUpRecycler();
+    public void setResource() {
+        this.resource = R.layout.fragment_collection;
     }
 
     @Override
-    public void onResume() {
-//        MainActivity.setSortClickListener(() -> {
-//            currentSort = viewModel.cycleSort(currentSort);
-//            fragList = viewModel.sortList(fragList, currentSort);
-//
-//            Toast.makeText(requireActivity(), currentSort.getSortType(), Toast.LENGTH_SHORT).show();
-//
-//            adapter.setItems(fragList);
-//        });
+    protected void beforeViews() {
+        MainActivity activity = (MainActivity) requireActivity();
+        Toolbar toolbar = activity.getToolbar();
+        toolbar.setOnMenuItemClickListener(onToolbarSort);
 
-        super.onResume();
-    }
+        List<Movie> list = new ArrayList<>(this.viewModel.watchlist());
+        if(!this.name.equals(ALL)) {
+            Collection collection = this.viewModel.collections()
+                    .stream()
+                    .filter(item -> item.getName().equals(this.name))
+                    .findFirst()
+                    .orElse(null);
 
-    private void setUpViewModelLink() {
-        viewModel = new ViewModelProvider(requireActivity()).get(MovieViewModel.class);
-    }
-
-    private void assignInstanceName() {
-        if (getArguments() != null) {
-            fragName = getArguments().getString(INSTANCE_NAME);
-        }else {
-            fragName = "";
+            list = list
+                    .stream()
+                    .filter(item -> collection == null || collection.getMembers().contains(item.getId()))
+                    .collect(Collectors.toList());
         }
+
+        ViewModel.sort(list);
+        adapter = new CardSlimAdapter(requireContext(), list);
     }
 
-    private void checkPrompt(){
-        emptyPrompt.setVisibility((fragList.isEmpty()) ? View.VISIBLE : View.GONE);
-    }
+    @Override
+    protected void initViews(View view) {
+        RecyclerView recyclerView = view.findViewById(R.id.collections_recycler);
 
-    private void setUpRecycler() {
-        if(fragName.equals("All")){
-            fragList = new ArrayList<>(viewModel.reCacheItems());
-        }else {
-            fragList = viewModel.getItemsInCollection(fragName);
-        }
+        adapter.setOnClickCheckbox((movie, position) -> viewModel.updateSeen(movie));
+        adapter.setOnClickItem((movie, position) -> {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(SELECTED_MOVIE, movie);
 
-        RecyclerView recyclerView = requireView().findViewById(R.id.collections_recycler);
-        adapter = new CollectionsListAdapter(requireContext(), fragList);
-
-        emptyPrompt = requireView().findViewById(R.id.collections_text_empty_prompt);
-        checkPrompt();
-
-        setUpAdapterListeners();
-
-//        WatchListFragment.addSubscriber(() -> {
-//            if(fragName.equals("All")){
-//                fragList = new ArrayList<>(viewModel.reCacheItems());
-//            }else {
-//                fragList = viewModel.getItemsInCollection(fragName);
-//            }
-//
-//            adapter.setItems(fragList);
-//            checkPrompt();
-//        });
-
-        viewModel.addSubscriber((update, destructive) -> {
-            int index = fragList.indexOf(update);
-            if(index >= 0){
-                if(destructive){
-                    fragList.removeIf(m -> m.getId() == update.getId());
-                    adapter.notifyItemRemoved(index);
-                }else {
-                    fragList.set(index, update);
-                    adapter.notifyItemChanged(index);
-                }
-            }
-            checkPrompt();
+            MainActivity activity = (MainActivity) requireActivity();
+            activity.getNavigationController().navigate(R.id.movie_profile_fragment, bundle);
+        });
+        adapter.setOnLongClickItem((movie, position) -> {
+            DeleteDialog deleteDialog = new DeleteDialog(movie);
+            deleteDialog.show(getParentFragmentManager(), TAG);
+            deleteDialog.setMovieChangeListener(movieChangeListener);
         });
 
         recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-    }
-
-    private void setUpAdapterListeners() {
-        adapter.setClickListener((v, p) -> {
-            Bundle bundle = new Bundle();
-
-            bundle.putSerializable(SELECTED_MOVIE, adapter.getItem(p));
-            bundle.putBoolean(SELECTED_SAVED, true);
-
-            NavController navController = Navigation.findNavController(requireView());
-
-            int origin = (navController.getCurrentBackStackEntry() != null) ?
-                    navController.getCurrentBackStackEntry().getDestination().getId() :
-                    R.id.watchlist_fragment;
-
-//            if(origin == R.id.collections_fragment){
-//                navController.navigate(R.id.action_collections_fragment_to_movie_profile_fragment, bundle);
-//            }else {
-//                navController.navigate(R.id.action_mylist_fragment_to_movie_profile_fragment, bundle);
-//            }
-
-            Snackbar snackbar = Snackbar.make(requireActivity().findViewById(R.id.main_coordinator),
-                    "Opening '" + adapter.getItem(p).getTitle() + "'",
-                    Snackbar.LENGTH_SHORT);
-            snackbar.getView().setBackgroundColor(requireActivity().getColor(R.color.colorSecondaryDark));
-            snackbar.show();
-        });
-
-        adapter.setCheckBoxListener((v, p) -> {
-            Movie m = adapter.getItem(p);
-            m.setSeen(!m.isSeen());
-            viewModel.updateItem(m);
-            viewModel.notifyClones(m, false);
-        });
-
-        adapter.setOnLongClickListener((v, p) -> {
-            Movie m = adapter.getItem(p);
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            LayoutInflater inflater = requireActivity().getLayoutInflater();
-            builder.setView(inflater.inflate(R.layout.dialog_delete, (ViewGroup) requireView(), false));
-
-            AlertDialog dialog = builder.create();
-            dialog.show();
-
-            TextView title = dialog.findViewById(R.id.delete_dialog_text_title);
-            TextView movieTitle = dialog.findViewById(R.id.delete_dialog_text_target_title);
-
-            title.setText(R.string.dialog_title_delete);
-            movieTitle.setText(m.getTitle());
-
-            Button confirm = dialog.findViewById(R.id.delete_dialog_button_confirm);
-            Button cancel = dialog.findViewById(R.id.delete_dialog_button_cancel);
-
-            confirm.setOnClickListener(view -> {
-                viewModel.deleteItem(m);
-                fragList.remove(m);
-                adapter.notifyItemRemoved(p);
-                viewModel.notifyClones(m, true);
-
-                dialog.dismiss();
-            });
-
-            cancel.setOnClickListener(view -> dialog.cancel());
-
-            return true;
-        });
     }
 }

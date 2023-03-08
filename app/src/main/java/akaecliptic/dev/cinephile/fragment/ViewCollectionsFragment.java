@@ -26,7 +26,7 @@ import akaecliptic.dev.cinephile.adapter.ViewCollectionsAdapter;
 import akaecliptic.dev.cinephile.data.MovieViewModel;
 import akaecliptic.dev.cinephile.R;
 
-import static akaecliptic.dev.cinephile.fragment.CollectionsFragment.INSTANCE_NAME;
+import static akaecliptic.dev.cinephile.fragment.OldCollectionsFragment.INSTANCE_NAME;
 
 @Deprecated
 public class ViewCollectionsFragment extends Fragment {
@@ -126,7 +126,7 @@ public class ViewCollectionsFragment extends Fragment {
         adapter.setCollectionClick(position -> {
             Bundle b = new Bundle();
 
-            b.putString(CollectionsFragment.INSTANCE_NAME, fragList.get(position));
+            b.putString(OldCollectionsFragment.INSTANCE_NAME, fragList.get(position));
 //            Navigation.findNavController(requireView())
 //                    .navigate(R.id.action_mylist_fragment_to_collections_fragment, b);
 

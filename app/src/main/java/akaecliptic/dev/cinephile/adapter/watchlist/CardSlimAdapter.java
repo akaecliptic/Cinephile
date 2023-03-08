@@ -1,4 +1,4 @@
-package akaecliptic.dev.cinephile.adapter.list;
+package akaecliptic.dev.cinephile.adapter.watchlist;
 
 import android.content.Context;
 import android.view.View;
@@ -13,9 +13,9 @@ import androidx.annotation.NonNull;
 
 import java.util.List;
 
-import akaecliptic.dev.cinephile.interaction.listener.ItemClickListener;
 import akaecliptic.dev.cinephile.R;
 import akaecliptic.dev.cinephile.base.BaseMovieAdapter;
+import akaecliptic.dev.cinephile.interaction.listener.ItemClickListener;
 import dev.akaecliptic.models.Movie;
 
 public class CardSlimAdapter extends BaseMovieAdapter {

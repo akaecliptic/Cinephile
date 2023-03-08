@@ -1,7 +1,7 @@
 package akaecliptic.dev.cinephile.fragment;
 
 import static android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH;
-import static akaecliptic.dev.cinephile.fragment.WatchlistFragment.SELECTED_MOVIE;
+import static akaecliptic.dev.cinephile.fragment.CollectionsFragment.SELECTED_MOVIE;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -19,12 +19,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import akaecliptic.dev.cinephile.R;
 import akaecliptic.dev.cinephile.activity.SearchActivity;
 import akaecliptic.dev.cinephile.adapter.explore.CardRowAdapter;
+import akaecliptic.dev.cinephile.base.BaseFragment;
 import akaecliptic.dev.cinephile.data.ViewModel;
 import akaecliptic.dev.cinephile.interaction.callback.TMDBCallback;
-import akaecliptic.dev.cinephile.R;
-import akaecliptic.dev.cinephile.base.BaseFragment;
 import dev.akaecliptic.models.Configuration;
 import dev.akaecliptic.models.Movie;
 import dev.akaecliptic.models.Page;

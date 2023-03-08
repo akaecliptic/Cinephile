@@ -1,6 +1,6 @@
 package akaecliptic.dev.cinephile.fragment;
 
-import static akaecliptic.dev.cinephile.fragment.WatchlistFragment.SELECTED_MOVIE;
+import static akaecliptic.dev.cinephile.fragment.CollectionsFragment.SELECTED_MOVIE;
 
 import android.os.Bundle;
 import android.view.View;
