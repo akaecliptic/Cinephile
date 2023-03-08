@@ -15,6 +15,7 @@ import akaecliptic.dev.cinephile.auxil.Sorter;
 import akaecliptic.dev.cinephile.interaction.callback.CrossAccessorCallback;
 import akaecliptic.dev.cinephile.interaction.callback.SQLiteCallback;
 import akaecliptic.dev.cinephile.interaction.callback.TMDBCallback;
+import akaecliptic.dev.cinephile.model.Collection;
 import dev.akaecliptic.models.Configuration;
 import dev.akaecliptic.models.Information;
 import dev.akaecliptic.models.Movie;
@@ -39,6 +40,9 @@ public class ViewModel extends AndroidViewModel {
      * This should work for now, as there are only two activities hence; two instances. A better solution
      * will be needed.
      * 2022-10-12
+     *
+     * It's not that deep, will fix soon
+     * 2023-03-08
      */
     private static final List<Movie> pool;
     private static final Sorter sorter;
@@ -120,6 +124,10 @@ public class ViewModel extends AndroidViewModel {
 
     public List<Movie> watchlist() {
         return this.repository.watchlist();
+    }
+
+    public List<Collection> collections() {
+        return this.repository.collections();
     }
 
     public String image(String size, String path) {
@@ -204,6 +212,26 @@ public class ViewModel extends AndroidViewModel {
 
     public void updateRating(Movie movie) {
         this.repository.updateRating(movie);
+    }
+
+    public Collection collection(String name) {
+        return this.repository.collection(name);
+    }
+
+    public void insertCollection(Collection collection) {
+        this.repository.insertCollection(collection);
+    }
+
+    public void updateCollection(Collection collection) {
+        this.repository.updateCollection(collection);
+    }
+
+    public void addToCollection(int id, String name) {
+        this.repository.addToCollection(id, name);
+    }
+
+    public void removeFromCollection(int id, String name) {
+        this.repository.removeFromCollection(id, name);
     }
 
     public void query(String query, SQLiteCallback<List<Movie>> callback) {

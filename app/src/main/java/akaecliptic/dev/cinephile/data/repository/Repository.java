@@ -17,6 +17,7 @@ import akaecliptic.dev.cinephile.data.MovieRepository;
 import akaecliptic.dev.cinephile.interaction.callback.CrossAccessorCallback;
 import akaecliptic.dev.cinephile.interaction.callback.SQLiteCallback;
 import akaecliptic.dev.cinephile.interaction.callback.TMDBCallback;
+import akaecliptic.dev.cinephile.model.Collection;
 import dev.akaecliptic.models.Configuration;
 import dev.akaecliptic.models.Information;
 import dev.akaecliptic.models.Movie;
@@ -53,6 +54,7 @@ public class Repository {
     private Configuration configuration;
 
     private List<Movie> watchlist;
+    private List<Collection> collections;
 
     public Repository(Context context) {
         this.sqlite = SQLite.getInstance(context);
@@ -68,10 +70,14 @@ public class Repository {
         this.playing = new ArrayList<>();
 
         this.watchlist = new ArrayList<>();
+        this.collections = new ArrayList<>();
     }
 
     private void init() {
-        executor.execute(() -> this.watchlist.addAll(this.sqlite.selectMovies()));
+        executor.execute(() -> {
+            this.watchlist.addAll(this.sqlite.selectMovies());
+            this.collections.addAll(this.sqlite.selectCollections());
+        });
 
         executor.execute(() -> {
             this.upcoming.addAll(this.tmdb.upcoming(1).results());
@@ -114,6 +120,10 @@ public class Repository {
 
     public List<Movie> watchlist() {
         return this.watchlist;
+    }
+
+    public List<Collection> collections() {
+        return this.collections;
     }
 
     /*          TMDB INTERFACE          */
@@ -195,6 +205,11 @@ public class Repository {
     }
 
     public Movie movie(int id) {
+        /*
+            Main thread query operations...
+            Luckily this method is only used for testing, but will fix.
+            2023-03-08
+        */
         return this.sqlite.selectMovie(id);
     }
 
@@ -224,6 +239,26 @@ public class Repository {
 
     public void updateRating(Movie movie) {
         executor.execute(() -> this.sqlite.updateRating(movie));
+    }
+
+    public Collection collection(String name) {
+        return this.sqlite.selectCollection(name);
+    }
+
+    public void insertCollection(Collection collection) {
+        executor.execute(() -> this.sqlite.insertCollection(collection));
+    }
+
+    public void updateCollection(Collection collection) {
+        executor.execute(() -> this.sqlite.updateCollection(collection));
+    }
+
+    public void addToCollection(int id, String name) {
+        executor.execute(() -> this.sqlite.addToCollection(id, name));
+    }
+
+    public void removeFromCollection(int id, String name) {
+        executor.execute(() -> this.sqlite.removeFromCollection(id, name));
     }
 
     public void query(String query, SQLiteCallback<List<Movie>> callback) {
