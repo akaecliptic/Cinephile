@@ -75,6 +75,10 @@ public class Collection implements Serializable {
         this.members = members;
     }
 
+    public boolean hasMember(int id) {
+        return this.members.contains(id);
+    }
+
     public enum Cover {
         DEFAULT("default"),
         HEART("heart"),
