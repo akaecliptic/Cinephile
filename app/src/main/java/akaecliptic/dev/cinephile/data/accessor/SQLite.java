@@ -279,7 +279,7 @@ public class SQLite extends SQLiteOpenHelper {
 
             Collection collection = (collections.isEmpty()) ? null : collections.peek();
 
-            if(collection == null || collection.getName().equals(_name)) {
+            if(collection == null || !collection.getName().equals(_name)) {
                 collection = new Collection(_name, Cover.parse(cover));
                 collections.push(collection);
             }
