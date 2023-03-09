@@ -86,7 +86,7 @@ public class CollectionsFragment extends BaseFragment {
 
             list = list
                     .stream()
-                    .filter(item -> collection == null || collection.getMembers().contains(item.getId()))
+                    .filter(item -> collection == null || collection.hasMember(item.getId()))
                     .collect(Collectors.toList());
         }
 

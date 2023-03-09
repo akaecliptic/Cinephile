@@ -3,9 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp"
+    android:background="@drawable/background_card"
     android:orientation="vertical"
-    android:background="@color/colorTertiaryDark">
+    android:padding="10dp">
 
     <TextView
         android:id="@+id/add_collection_dialog_text_title"
@@ -21,32 +21,34 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/_225sdp"
         android:layout_marginVertical="@dimen/_10sdp"
-        tools:listitem="@layout/list_item_collection"
-        android:textSize="17sp"/>
+        android:textSize="17sp"
+        tools:listitem="@layout/list_item_collection" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/add_collection_dialog_button_new"
+            style="@style/button_dialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+
             android:layout_marginHorizontal="10dp"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/button_new"
-            style="@style/MyDialogButtons"/>
+            android:backgroundTint="@color/accent"
+            android:text="@string/button_new" />
 
         <Button
             android:id="@+id/add_collection_dialog_button_done"
+            style="@style/button_dialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+
             android:layout_marginHorizontal="10dp"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/button_done"
-            style="@style/MyDialogButtons"/>
+            android:backgroundTint="@color/accent"
+            android:text="@string/button_done" />
     </LinearLayout>
 
 </LinearLayout>

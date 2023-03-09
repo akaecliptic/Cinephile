@@ -2,6 +2,7 @@ package akaecliptic.dev.cinephile.fragment;
 
 import static android.view.View.GONE;
 import static akaecliptic.dev.cinephile.fragment.CollectionsFragment.SELECTED_MOVIE;
+import static akaecliptic.dev.cinephile.fragment.WatchlistFragment.FAV;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,19 +17,24 @@ import android.widget.Toast;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.squareup.picasso.Picasso;
 
+import java.util.List;
+
+import akaecliptic.dev.cinephile.R;
 import akaecliptic.dev.cinephile.activity.SearchActivity;
+import akaecliptic.dev.cinephile.base.BaseFragment;
 import akaecliptic.dev.cinephile.data.ViewModel;
+import akaecliptic.dev.cinephile.dialog.AddCollectionDialog;
 import akaecliptic.dev.cinephile.dialog.RatingDialog;
 import akaecliptic.dev.cinephile.interaction.IAnimatorBottombar;
 import akaecliptic.dev.cinephile.interaction.listener.MovieChangeListener;
-import akaecliptic.dev.cinephile.R;
-import akaecliptic.dev.cinephile.base.BaseFragment;
+import akaecliptic.dev.cinephile.model.Collection;
 import dev.akaecliptic.models.Movie;
 
 public class MovieProfileFragment extends BaseFragment implements IAnimatorBottombar {
 
     private Movie working = null;
     private boolean present = false;
+    private Collection favourites;
 
     private String backdropSize;
     private String posterSize;
@@ -101,6 +107,7 @@ public class MovieProfileFragment extends BaseFragment implements IAnimatorBotto
         title.setText(working.getTitle());
         year.setText(String.valueOf(working.getRelease().getYear()));
         information.setText(createDescription());
+        seen.setChecked(working.isSeen());
 
         if (present) {
             ratingProgress.setProgress(working.getUserRating());
@@ -110,9 +117,6 @@ public class MovieProfileFragment extends BaseFragment implements IAnimatorBotto
             ratingProgress.setProgress(working.getNativeRating());
             ratingText.setText(String.valueOf(working.getNativeRating()));
         }
-
-        seen.setChecked(working.isSeen());
-        heart.setVisibility(GONE); // TODO: 2022-10-07 Reintroduce feature.
 
         LayoutInflater inflater = LayoutInflater.from(view.getContext());
         working.getInfo().getGenres().forEach(genre -> {
@@ -146,7 +150,20 @@ public class MovieProfileFragment extends BaseFragment implements IAnimatorBotto
 
         frameAdd.setOnClickListener(v -> {
             if (present) {
-                Toast.makeText(requireContext(), "Movie already in watchlist, collections coming soon", Toast.LENGTH_SHORT).show();
+                List<Collection> collections = this.viewModel.collections();
+                AddCollectionDialog addCollectionDialog = new AddCollectionDialog(working, collections);
+                addCollectionDialog.setOnCollectionSelected((movie, collection, add) -> {
+                    if (add) {
+                        this.viewModel.addToCollection(movie, collection);
+                        Toast.makeText(requireContext(), "Added movie to '" + collection + "'", Toast.LENGTH_SHORT).show();
+                    } else {
+                        this.viewModel.removeFromCollection(movie, collection);
+                        Toast.makeText(requireContext(), "Removed movie from '" + collection + "'", Toast.LENGTH_SHORT).show();
+                    }
+
+                    if (collection.equals(FAV)) toggleHeart();
+                });
+                addCollectionDialog.show(getParentFragmentManager(), TAG);
                 return;
             }
 
@@ -184,6 +201,7 @@ public class MovieProfileFragment extends BaseFragment implements IAnimatorBotto
             viewModel.updateSeen(working);
         });
 
+        initHeart();
         toggleSeen();
     }
 
@@ -205,5 +223,33 @@ public class MovieProfileFragment extends BaseFragment implements IAnimatorBotto
 
         working = (Movie) getArguments().getSerializable(SELECTED_MOVIE);
         present = viewModel.watchlist().contains(working);
+
+        favourites = this.viewModel.collections()
+                .stream()
+                .filter(collection -> collection.getName().equals(FAV))
+                .findFirst()
+                .orElse(null);
+    }
+
+    private void toggleHeart() {
+        this.heart.setVisibility(favourites == null ? GONE : View.VISIBLE);
+        this.heart.setChecked(favourites.hasMember(working.getId()));
+    }
+
+    private void initHeart() {
+        toggleHeart();
+        if (favourites == null) return;
+        this.heart.setOnClickListener( view -> {
+            boolean add = !favourites.hasMember(working.getId());
+            if (add) {
+                favourites.getMembers().add(working.getId());
+                this.viewModel.addToCollection(working.getId(), FAV);
+                Toast.makeText(requireContext(), "Added movie to '" + FAV + "'", Toast.LENGTH_SHORT).show();
+            } else {
+                favourites.getMembers().remove(working.getId());
+                this.viewModel.removeFromCollection(working.getId(), FAV);
+                Toast.makeText(requireContext(), "Removed movie from '" + FAV + "'", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

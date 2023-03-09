@@ -11,68 +11,59 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import akaecliptic.dev.cinephile.R;
+import akaecliptic.dev.cinephile.interaction.listener.OnCollectionSelected;
+import akaecliptic.dev.cinephile.model.Collection;
 
-@Deprecated
-public class CollectionsArrayAdapter<T extends String> extends ArrayAdapter<T> {
+public class CollectionsArrayAdapter extends ArrayAdapter<Collection> {
 
-    private Context context;
-    private List<T> collections;
-    private List<Boolean> isPresent;
+    private final int movie;
+    private final LayoutInflater inflater;
+    private final List<Collection> collections;
     private OnCollectionSelected collectionSelected;
 
-    public CollectionsArrayAdapter(@NonNull Context context, int resource, int textViewResourceId, @NonNull List<T> names, List<String> presentIn) {
-        super(context, resource, textViewResourceId, names);
-        this.context = context;
+    public CollectionsArrayAdapter(@NonNull Context context, @NonNull List<Collection> collections, int movie) {
+        super(context, R.layout.list_item_collection, R.id.list_collection_text_title, collections);
+        this.inflater = LayoutInflater.from(context);
 
-        collections = names;
-        isPresent = new ArrayList<>();
-        checkMovieInCollections(collections, presentIn);
-    }
-
-    private void checkMovieInCollections(List<T> collections, List<String> presentIn) {
-        for (int i = 0; i < collections.size(); i++) {
-            isPresent.add(i, presentIn.contains(collections.get(i)));
-        }
+        this.movie = movie;
+        this.collections = collections;
     }
 
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View listItem = convertView;
+        Collection working = collections.get(position);
 
-        if(listItem == null)
-            listItem = LayoutInflater.from(context).inflate(R.layout.list_item_collection, parent, false);
+        if (listItem == null)
+            listItem = this.inflater.inflate(R.layout.list_item_collection, parent, false);
 
         TextView collection = listItem.findViewById(R.id.list_collection_text_title);
         ImageView check = listItem.findViewById(R.id.list_collection_image_check);
 
-        collection.setText(collections.get(position));
-        check.setVisibility(isPresent.get(position) ? View.VISIBLE : View.INVISIBLE);
+        collection.setText(working.getName());
+        check.setVisibility(working.hasMember(movie) ? View.VISIBLE : View.INVISIBLE);
 
         listItem.setOnClickListener(view -> {
-            isPresent.set(position, !isPresent.get(position));
-            collectionSelected.select(position, isPresent.get(position));
-            check.setVisibility(isPresent.get(position) ? View.VISIBLE : View.INVISIBLE);
+            boolean isMember = working.hasMember(movie);
+
+            if (isMember) {
+                working.getMembers().remove(movie);
+            } else {
+                working.getMembers().add(movie);
+            }
+
+            this.collectionSelected.select(movie, working.getName(), working.hasMember(movie));
+            check.setVisibility(working.hasMember(movie) ? View.VISIBLE : View.INVISIBLE);
         });
 
         return listItem;
     }
 
-    @Override
-    public void notifyDataSetChanged() {
-        super.notifyDataSetChanged();
-        isPresent.add(isPresent.size(), false);
-    }
-
-    public void setOnCollectionSelected(OnCollectionSelected collectionSelected){
+    public void setOnCollectionSelected(OnCollectionSelected collectionSelected) {
         this.collectionSelected = collectionSelected;
-    }
-
-    public interface OnCollectionSelected {
-        void select(int position, boolean set);
     }
 }
