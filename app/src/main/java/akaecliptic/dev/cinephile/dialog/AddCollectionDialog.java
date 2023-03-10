@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +16,7 @@ import java.util.List;
 
 import akaecliptic.dev.cinephile.R;
 import akaecliptic.dev.cinephile.adapter.CollectionsArrayAdapter;
+import akaecliptic.dev.cinephile.interaction.listener.OnCollectionAdded;
 import akaecliptic.dev.cinephile.interaction.listener.OnCollectionSelected;
 import akaecliptic.dev.cinephile.model.Collection;
 import dev.akaecliptic.models.Movie;
@@ -27,6 +27,7 @@ public class AddCollectionDialog extends DialogFragment {
     private final List<Collection> collections;
 
     private OnCollectionSelected onCollectionSelected;
+    private OnCollectionAdded onCollectionAdded;
 
     public AddCollectionDialog(Movie movie, List<Collection> collections) {
         this.working = movie;
@@ -43,22 +44,19 @@ public class AddCollectionDialog extends DialogFragment {
 
         Dialog dialog = builder.setView(view).create();
 
-        TextView title = view.findViewById(R.id.add_collection_dialog_text_title);
         ListView list = view.findViewById(R.id.add_collection_dialog_list_collections);
-
         CollectionsArrayAdapter adapter = new CollectionsArrayAdapter(requireContext(), this.collections, this.working.getId());
+
         adapter.setOnCollectionSelected(this.onCollectionSelected);
         list.setAdapter(adapter);
 
         Button createNew = view.findViewById(R.id.add_collection_dialog_button_new);
         Button done = view.findViewById(R.id.add_collection_dialog_button_done);
 
-        title.setText(requireContext().getText(R.string.dialog_title_add_collection).toString());
-
         createNew.setOnClickListener(v -> {
-            // TODO: 2023-03-09 Add Functionality
-            System.out.println("New Collection");
-            dialog.dismiss();
+            NewCollectionDialog newCollectionDialog = new NewCollectionDialog(working.getId());
+            newCollectionDialog.setOnCollectionAdded(this.onCollectionAdded);
+            newCollectionDialog.show(getParentFragmentManager(), this.getClass().getSimpleName());
         });
         done.setOnClickListener(v -> dialog.dismiss());
 
@@ -67,5 +65,9 @@ public class AddCollectionDialog extends DialogFragment {
 
     public void setOnCollectionSelected(OnCollectionSelected onCollectionSelected) {
         this.onCollectionSelected = onCollectionSelected;
+    }
+
+    public void setOnCollectionAdded(OnCollectionAdded onCollectionAdded) {
+        this.onCollectionAdded = onCollectionAdded;
     }
 }

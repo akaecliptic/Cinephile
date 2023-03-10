@@ -49,7 +49,7 @@
 
     <string name="dialog_title_rating">Set Movie Rating:</string>
     <string name="dialog_title_delete">Would you like to delete:</string>
-    <string name="dialog_title_new_collection">Name of collection</string>
+    <string name="dialog_title_new_collection">Create new collection</string>
     <string name="dialog_title_add_collection">Add or remove movie from your collections</string>
 
     <string name="prompt_empty_collections">"Looks like you have no movies in your list. \n Try checking out the Explore page."</string>

@@ -3,9 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp"
+    android:background="@drawable/background_card"
     android:orientation="vertical"
-    android:background="@color/colorTertiaryDark">
+    android:padding="10dp">
 
     <TextView
         android:layout_width="match_parent"
@@ -18,37 +18,41 @@
         android:textSize="20sp" />
 
     <EditText
-        android:id="@+id/new_collection_dialog_text_collection_title"
+        android:id="@+id/new_collection_dialog_edit_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="text"
         android:hint="@string/placeholder_collection_title"
+        android:importantForAutofill="no"
+        android:inputType="text"
         android:textAlignment="center"
         android:textSize="17sp"
-        android:autofillHints=""
         tools:ignore="LabelFor" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:orientation="horizontal"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/new_collection_dialog_button_confirm"
+            style="@style/button_dialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+
             android:layout_marginHorizontal="10dp"
-            android:text="@string/button_confirm"
-            style="@style/MyDialogButtons"/>
+            android:backgroundTint="@color/accent"
+            android:text="@string/button_confirm" />
 
         <Button
             android:id="@+id/new_collection_dialog_button_cancel"
+            style="@style/button_dialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+
             android:layout_marginHorizontal="10dp"
-            android:text="@string/button_cancel"
-            style="@style/MyDialogButtons"/>
+            android:backgroundTint="@color/accent_red"
+            android:text="@string/button_cancel" />
     </LinearLayout>
 </LinearLayout>

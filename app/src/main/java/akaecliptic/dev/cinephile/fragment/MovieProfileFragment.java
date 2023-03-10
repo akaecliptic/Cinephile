@@ -163,6 +163,21 @@ public class MovieProfileFragment extends BaseFragment implements IAnimatorBotto
 
                     if (collection.equals(FAV)) toggleHeart();
                 });
+                addCollectionDialog.setOnCollectionAdded((movie, collection) -> {
+                    long count = this.viewModel.collections().stream().filter(c -> c.getName().equals(collection)).count();
+
+                    if (count == 0) {
+                        // TODO: 2023-03-10 Fix race condition this will cause.
+                        this.viewModel.insertCollection(new Collection(collection));
+                        this.viewModel.addToCollection(movie, collection);
+
+                        Toast.makeText(requireContext(), "Created and added movie to '" + collection + "'", Toast.LENGTH_SHORT).show();
+                        return true;
+                    } else {
+                        Toast.makeText(requireContext(), "Creation failed,'" + collection + "' already exists", Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+                });
                 addCollectionDialog.show(getParentFragmentManager(), TAG);
                 return;
             }

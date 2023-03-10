@@ -104,7 +104,7 @@ public class ViewCollectionsFragment extends Fragment {
         Button cancel = newCollection.findViewById(R.id.new_collection_dialog_button_cancel);
 
         confirm.setOnClickListener(v -> {
-            EditText collection = newCollection.findViewById(R.id.new_collection_dialog_text_collection_title);
+            EditText collection = newCollection.findViewById(R.id.new_collection_dialog_edit_title);
             String toCreate = collection.getText().toString();
 
             boolean allowed = !(viewModel.getCollectionHeadings().contains(toCreate) || viewModel.getCollectionNames().contains(toCreate));
