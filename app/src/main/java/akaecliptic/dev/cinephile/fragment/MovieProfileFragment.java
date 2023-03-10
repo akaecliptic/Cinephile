@@ -167,9 +167,9 @@ public class MovieProfileFragment extends BaseFragment implements IAnimatorBotto
                     long count = this.viewModel.collections().stream().filter(c -> c.getName().equals(collection)).count();
 
                     if (count == 0) {
-                        // TODO: 2023-03-10 Fix race condition this will cause.
-                        this.viewModel.insertCollection(new Collection(collection));
-                        this.viewModel.addToCollection(movie, collection);
+                        Collection add = new Collection(collection);
+                        add.getMembers().add(movie);
+                        this.viewModel.insertCollection(add);
 
                         Toast.makeText(requireContext(), "Created and added movie to '" + collection + "'", Toast.LENGTH_SHORT).show();
                         return true;

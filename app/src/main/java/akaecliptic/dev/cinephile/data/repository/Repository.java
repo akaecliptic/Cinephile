@@ -246,7 +246,12 @@ public class Repository {
     }
 
     public void insertCollection(Collection collection) {
-        executor.execute(() -> this.sqlite.insertCollection(collection));
+        executor.execute(() -> {
+            this.sqlite.insertCollection(collection);
+            for (Integer member : collection.getMembers()) {
+                this.sqlite.addToCollection(member, collection.getName());
+            }
+        });
     }
 
     public void updateCollection(Collection collection) {
