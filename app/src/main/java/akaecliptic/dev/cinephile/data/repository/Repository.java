@@ -13,7 +13,6 @@ import java.util.concurrent.Executors;
 
 import akaecliptic.dev.cinephile.data.accessor.SQLite;
 import akaecliptic.dev.cinephile.data.accessor.TMDB;
-import akaecliptic.dev.cinephile.data.MovieRepository;
 import akaecliptic.dev.cinephile.interaction.callback.CrossAccessorCallback;
 import akaecliptic.dev.cinephile.interaction.callback.SQLiteCallback;
 import akaecliptic.dev.cinephile.interaction.callback.TMDBCallback;
@@ -32,8 +31,6 @@ import dev.akaecliptic.models.Page;
  *     <li>Caching results</li>
  *     <li>Keeping operations off UI thread</li>
  * </ul>
- *
- * <p>A newer implementation of {@link MovieRepository} (now deprecated).</p>
  */
 public class Repository {
 

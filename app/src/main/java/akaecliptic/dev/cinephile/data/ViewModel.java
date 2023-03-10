@@ -10,8 +10,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import akaecliptic.dev.cinephile.data.repository.Repository;
 import akaecliptic.dev.cinephile.auxil.Sorter;
+import akaecliptic.dev.cinephile.data.repository.Repository;
 import akaecliptic.dev.cinephile.interaction.callback.CrossAccessorCallback;
 import akaecliptic.dev.cinephile.interaction.callback.SQLiteCallback;
 import akaecliptic.dev.cinephile.interaction.callback.TMDBCallback;
@@ -24,8 +24,6 @@ import dev.akaecliptic.models.Page;
 /**
  * This class is responsible for maintaining scope of data between views, and serves a wrapper for
  * interfacing with {@link Repository} data.
- *
- * <p>A newer implementation of {@link MovieViewModel} (now deprecated).</p>
  */
 public class ViewModel extends AndroidViewModel {
 

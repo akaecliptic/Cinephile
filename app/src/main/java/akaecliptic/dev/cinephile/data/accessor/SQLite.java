@@ -41,8 +41,6 @@ import dev.akaecliptic.models.Movie;
  *     <li>Data CRUD Operations</li>
  * </ul>
  *
- * <p>A newer implementation of {@link akaecliptic.dev.cinephile.data.SQLiteDAO} (now deprecated).</p>
- *
  * <p>
  *     All CRUD operations are synchronous and single threaded. For now the decision is to leave the responsibility
  *     of off-loading work off the UI thread to the repository class. This may change in a later version,
