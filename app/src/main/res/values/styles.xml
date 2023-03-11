@@ -57,7 +57,6 @@
     </style>
 
     <!-- NEW STYLES - MIGRATING TO -->
-    <!-- TODO: Add As Needed -->
     <style name="application_background">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
