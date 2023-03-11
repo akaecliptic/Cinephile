@@ -1,12 +1,11 @@
 package akaecliptic.dev.cinephile.data;
 
 import android.app.Application;
-import android.util.Pair;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.MutableLiveData;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -17,7 +16,6 @@ import akaecliptic.dev.cinephile.interaction.callback.SQLiteCallback;
 import akaecliptic.dev.cinephile.interaction.callback.TMDBCallback;
 import akaecliptic.dev.cinephile.model.Collection;
 import dev.akaecliptic.models.Configuration;
-import dev.akaecliptic.models.Information;
 import dev.akaecliptic.models.Movie;
 import dev.akaecliptic.models.Page;
 
@@ -27,22 +25,6 @@ import dev.akaecliptic.models.Page;
  */
 public class ViewModel extends AndroidViewModel {
 
-    /*
-     * Data between activities is a little tricky with this view model.
-     * Again, I don't really want to use something like the old system.
-     * i.e Having subscribers that listened to changes.
-     *
-     * Instead a static pool is being used. The idea is that at any given time the pool should never contain
-     * enough items for there to be performance penalty. And, if the pool is accessed, it will be drained.
-     *
-     * This should work for now, as there are only two activities hence; two instances. A better solution
-     * will be needed.
-     * 2022-10-12
-     *
-     * It's not that deep, will fix soon
-     * 2023-03-08
-     */
-    private static final List<Movie> pool;
     private static final Sorter sorter;
 
     private final Repository repository;
@@ -55,22 +37,7 @@ public class ViewModel extends AndroidViewModel {
     /*          STATIC MEMBERS          */
 
     static {
-        pool = new LinkedList<>();
         sorter = new Sorter();
-    }
-
-    public static List<Movie> drain() {
-        List<Movie> temp = new LinkedList<>(pool);
-        pool.clear();
-        return temp;
-    }
-
-    public static void pool(Movie movie) {
-        pool.add(movie);
-    }
-
-    public static List<Movie> pool() {
-        return pool;
     }
 
     public static String cycleSort(List<Movie> list) {
@@ -120,11 +87,11 @@ public class ViewModel extends AndroidViewModel {
         return this.repository.config().posters();
     }
 
-    public List<Movie> watchlist() {
+    public MutableLiveData<List<Movie>> watchlist() {
         return this.repository.watchlist();
     }
 
-    public List<Collection> collections() {
+    public MutableLiveData<List<Collection>> collections() {
         return this.repository.collections();
     }
 
@@ -172,36 +139,16 @@ public class ViewModel extends AndroidViewModel {
         this.repository.insert(movie);
     }
 
-    public void insert(Pair<Integer, Information> information) {
-        this.repository.insert(information);
-    }
-
     public void movies(SQLiteCallback<List<Movie>> callback) {
         this.repository.movies(callback);
     }
 
-    public Movie movie(int id) {
-        return this.repository.movie(id);
-    }
-
-    public Information information(int id) {
-        return this.repository.information(id);
-    }
-
-    public void updateMovie(Movie... movie) {
-        this.repository.updateMovie(movie);
-    }
-
-    public void updateInformation(Map<Integer, Information> map) {
-        this.repository.updateInformation(map);
+    public void movie(int id, SQLiteCallback<Movie> callback) {
+        this.repository.movie(id, callback);
     }
 
     public void deleteMovie(int id) {
         this.repository.deleteMovie(id);
-    }
-
-    public void deleteInformation(int id) {
-        this.repository.deleteInformation(id);
     }
 
     public void updateSeen(Movie movie) {
@@ -212,8 +159,8 @@ public class ViewModel extends AndroidViewModel {
         this.repository.updateRating(movie);
     }
 
-    public Collection collection(String name) {
-        return this.repository.collection(name);
+    public void collection(String name, SQLiteCallback<Collection> callback) {
+        this.repository.collection(name, callback);
     }
 
     public void insertCollection(Collection collection) {
@@ -222,6 +169,10 @@ public class ViewModel extends AndroidViewModel {
 
     public void updateCollection(Collection collection) {
         this.repository.updateCollection(collection);
+    }
+
+    public void deleteCollection(String name) {
+        this.repository.deleteCollection(name);
     }
 
     public void addToCollection(int id, String name) {

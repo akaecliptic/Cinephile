@@ -27,6 +27,7 @@ import dev.akaecliptic.models.Page;
 /**
  * A simple {@link Fragment} subclass.
  */
+// TODO: 2023-03-11 Restructure class
 public class MovieRowFragment extends BaseFragment implements IAnimatorBottombar {
 
     static final String PAGE_TYPE = "PAGE_TYPE";
@@ -41,67 +42,68 @@ public class MovieRowFragment extends BaseFragment implements IAnimatorBottombar
     private CardRowAdapter adapter;
 
     private final TMDBCallback<Page> callback = response -> {
-        List<Movie> watchlist = viewModel.watchlist();
-        List<Movie> combined = response.results()
-                .stream()
-                .map(movie -> {
-                            if (!watchlist.contains(movie)) return movie;
+        viewModel.watchlist().observe(getViewLifecycleOwner(), watchlist -> {
+            List<Movie> combined = response.results()
+                    .stream()
+                    .map(movie -> {
+                                if (!watchlist.contains(movie)) return movie;
 
-                            int index = watchlist.indexOf(movie);
-                            overlap.add(movie.getId());
-                            return watchlist.get(index);
-                        }
-                )
-                .collect(Collectors.toList());
+                                int index = watchlist.indexOf(movie);
+                                overlap.add(movie.getId());
+                                return watchlist.get(index);
+                            }
+                    )
+                    .collect(Collectors.toList());
 
-        pool.addAll(combined);
-        page = response.number();
-        paginate = response.paginate();
+            pool.addAll(combined);
+            page = response.number();
+            paginate = response.paginate();
 
-        if (adapter != null) {
-            int start = (pool.size() - combined.size()) + 1;
-            int count = combined.size();
+            if (adapter != null) {
+                int start = (pool.size() - combined.size()) + 1;
+                int count = combined.size();
 
-            adapter.notifyItemRangeInserted(start, count);
-            adapter.setPaginate(paginate);
-        }
+                adapter.notifyItemRangeInserted(start, count);
+                adapter.setPaginate(paginate);
+            }
+        });
     };
 
     private void initPool() {
         // Copied from explore fragment:
         // See ExploreFragment#onSelectSection#getListFromViewModel(int)
+        viewModel.watchlist().observe(getViewLifecycleOwner(), watchlist -> {
         List<Movie> movies;
-        List<Movie> watchlist = viewModel.watchlist();
+            switch (type) {
+                default:
+                case 0:
+                    movies = viewModel.upcoming();
+                    break;
+                case 1:
+                    movies = viewModel.rated();
+                    break;
+                case 2:
+                    movies = viewModel.popular();
+                    break;
+                case 3:
+                    movies = viewModel.playing();
+                    break;
+            }
 
-        switch (type) {
-            default:
-            case 0:
-                movies = viewModel.upcoming();
-                break;
-            case 1:
-                movies = viewModel.rated();
-                break;
-            case 2:
-                movies = viewModel.popular();
-                break;
-            case 3:
-                movies = viewModel.playing();
-                break;
-        }
+            List<Movie> combined = movies
+                    .stream()
+                    .map(movie -> {
+                                if (!watchlist.contains(movie)) return movie;
 
-        List<Movie> combined = movies
-                .stream()
-                .map(movie -> {
-                            if (!watchlist.contains(movie)) return movie;
+                                int index = watchlist.indexOf(movie);
+                                overlap.add(movie.getId());
+                                return watchlist.get(index);
+                            }
+                    )
+                    .collect(Collectors.toList());
 
-                            int index = watchlist.indexOf(movie);
-                            overlap.add(movie.getId());
-                            return watchlist.get(index);
-                        }
-                )
-                .collect(Collectors.toList());
-
-        pool.addAll(combined);
+            pool.addAll(combined);
+        });
     }
 
     private void paginate() {

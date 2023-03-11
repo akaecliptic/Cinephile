@@ -24,6 +24,7 @@ import akaecliptic.dev.cinephile.interaction.listener.MovieChangeListener;
 import akaecliptic.dev.cinephile.model.Collection;
 import dev.akaecliptic.models.Movie;
 
+// TODO: 2023-03-11 Restructure class
 public class CollectionsFragment extends BaseFragment {
 
     static final String SELECTED_MOVIE = "SELECTED_MOVIE";
@@ -37,7 +38,6 @@ public class CollectionsFragment extends BaseFragment {
 
         int index = adapter.getItems().indexOf(movie);
 
-        viewModel.watchlist().remove(movie);
         viewModel.deleteMovie(movie.getId());
 
         adapter.notifyItemRemoved(index);
@@ -46,8 +46,8 @@ public class CollectionsFragment extends BaseFragment {
     private final Toolbar.OnMenuItemClickListener onToolbarSort = (item) -> {
         if (item.getItemId() != R.id.toolbar_sort || adapter == null) return false;
 
-        List<Movie> watchlist = this.viewModel.watchlist();
-        String message = ViewModel.cycleSort(watchlist);
+        this.viewModel.watchlist().observe(getViewLifecycleOwner(), watchlist -> {
+            String message = ViewModel.cycleSort(watchlist);
 
         /*
             Hmm, I'm only using a straight notifyDataSetChanged because it is faster on my testing virtual device.
@@ -55,9 +55,10 @@ public class CollectionsFragment extends BaseFragment {
 
             2022-10-14
          */
-        // CONSIDER: changing back to notifyItemRangeChanged. See comment above.
-        adapter.notifyDataSetChanged();
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+            // CONSIDER: changing back to notifyItemRangeChanged. See comment above.
+            adapter.notifyDataSetChanged();
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+        });
         return true;
     };
 
@@ -76,22 +77,29 @@ public class CollectionsFragment extends BaseFragment {
         Toolbar toolbar = activity.getToolbar();
         toolbar.setOnMenuItemClickListener(onToolbarSort);
 
-        List<Movie> list = new ArrayList<>(this.viewModel.watchlist());
-        if(!this.name.equals(ALL)) {
-            Collection collection = this.viewModel.collections()
-                    .stream()
-                    .filter(item -> item.getName().equals(this.name))
-                    .findFirst()
-                    .orElse(null);
+        adapter = new CardSlimAdapter(requireContext(), new ArrayList<>());
+        this.viewModel.watchlist().observe(getViewLifecycleOwner(), watchlist -> {
+            List<Movie> list = new ArrayList<>(watchlist);
+            if(!this.name.equals(ALL)) {
+                this.viewModel.collections().observe(getViewLifecycleOwner(), collections -> {
+                    Collection collection = collections.stream()
+                            .filter(item -> item.getName().equals(this.name))
+                            .findFirst()
+                            .orElse(null);
 
-            list = list
-                    .stream()
-                    .filter(item -> collection == null || collection.hasMember(item.getId()))
-                    .collect(Collectors.toList());
-        }
+                    List<Movie> filtered = list
+                            .stream()
+                            .filter(item -> collection == null || collection.hasMember(item.getId()))
+                            .collect(Collectors.toList());
 
-        ViewModel.sort(list);
-        adapter = new CardSlimAdapter(requireContext(), list);
+                    ViewModel.sort(filtered);
+                    adapter.setItems(filtered);
+                });
+            }
+
+            ViewModel.sort(list);
+            adapter.setItems(list);
+        });
     }
 
     @Override

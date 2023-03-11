@@ -23,7 +23,7 @@ import akaecliptic.dev.cinephile.R;
 import akaecliptic.dev.cinephile.base.BaseFragment;
 import dev.akaecliptic.models.Movie;
 
-
+// TODO: 2023-03-11 Restructure class
 public class ExploreFragment extends BaseFragment {
 
     private final String[] sections = {"upcoming", "top rated", "popular", "now playing"};
@@ -49,7 +49,10 @@ public class ExploreFragment extends BaseFragment {
                     lastSelectedIndex = selectedIndex;
 
                     view.setBackgroundTintList(colorSelect);
-                    adapter.setItems(getListFromViewModel());
+                    viewModel.watchlist().observe(
+                            getViewLifecycleOwner(),
+                            watchlist -> adapter.setItems(getListFromViewModel(watchlist))
+                    );
 
                     continue;
                 }
@@ -58,9 +61,8 @@ public class ExploreFragment extends BaseFragment {
             }
         }
 
-        private List<Movie> getListFromViewModel() {
+        private List<Movie> getListFromViewModel(List<Movie> watchlist) {
             List<Movie> movies;
-            List<Movie> watchlist = viewModel.watchlist();
 
             switch (lastSelectedIndex) {
                 default: //Default should select upcoming.

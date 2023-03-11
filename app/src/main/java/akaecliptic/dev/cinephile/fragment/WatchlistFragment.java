@@ -13,10 +13,9 @@ import java.util.stream.Collectors;
 import akaecliptic.dev.cinephile.R;
 import akaecliptic.dev.cinephile.adapter.watchlist.WatchlistCollectionAdapter;
 import akaecliptic.dev.cinephile.base.BaseFragment;
-import akaecliptic.dev.cinephile.data.ViewModel;
 import akaecliptic.dev.cinephile.model.Collection;
-import dev.akaecliptic.models.Movie;
 
+// TODO: 2023-03-11 Restructure class
 public class WatchlistFragment extends BaseFragment {
 
     public static final String FAV = "favourites";
@@ -30,18 +29,19 @@ public class WatchlistFragment extends BaseFragment {
     }
 
     @Override
-    protected void beforeViews() {
-         this.collections = this.viewModel.collections()
-                .stream()
-                .map(Collection::getName)
-                .filter(name -> !name.equals("favourites"))
-                .collect(Collectors.toList());
-         this.collections.add(0, ALL);
-         this.collections.add(1, FAV);
+    protected void initViews(View view) {
+        this.viewModel.collections().observe(getViewLifecycleOwner(), collections -> {
+            this.collections = collections.stream()
+                    .map(Collection::getName)
+                    .filter(name -> !name.equals("favourites"))
+                    .collect(Collectors.toList());
+            this.collections.add(0, ALL);
+            this.collections.add(1, FAV);
+            initTabs(view);
+        });
     }
 
-    @Override
-    protected void initViews(View view) {
+    private void initTabs(View view) {
         WatchlistCollectionAdapter adapter = new WatchlistCollectionAdapter(this, collections);
         ViewPager2 pager = view.findViewById(R.id.watchlist_pager);
         pager.setAdapter(adapter);
@@ -52,18 +52,5 @@ public class WatchlistFragment extends BaseFragment {
                 pager,
                 (tab, position) -> tab.setText(this.collections.get(position))
         ).attach();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        List<Movie> movies = ViewModel.drain();
-
-        if (movies.isEmpty()) return;
-
-        List<Movie> watchlist = this.viewModel.watchlist();
-        watchlist.addAll(movies);
-        ViewModel.sort(watchlist);
     }
 }

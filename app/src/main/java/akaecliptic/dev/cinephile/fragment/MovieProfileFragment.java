@@ -17,12 +17,8 @@ import android.widget.Toast;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.squareup.picasso.Picasso;
 
-import java.util.List;
-
 import akaecliptic.dev.cinephile.R;
-import akaecliptic.dev.cinephile.activity.SearchActivity;
 import akaecliptic.dev.cinephile.base.BaseFragment;
-import akaecliptic.dev.cinephile.data.ViewModel;
 import akaecliptic.dev.cinephile.dialog.AddCollectionDialog;
 import akaecliptic.dev.cinephile.dialog.RatingDialog;
 import akaecliptic.dev.cinephile.interaction.IAnimatorBottombar;
@@ -30,6 +26,7 @@ import akaecliptic.dev.cinephile.interaction.listener.MovieChangeListener;
 import akaecliptic.dev.cinephile.model.Collection;
 import dev.akaecliptic.models.Movie;
 
+// TODO: 2023-03-11 Restructure class, it's a little messy
 public class MovieProfileFragment extends BaseFragment implements IAnimatorBottombar {
 
     private Movie working = null;
@@ -148,49 +145,46 @@ public class MovieProfileFragment extends BaseFragment implements IAnimatorBotto
         FrameLayout frameSeen = view.findViewById(R.id.movie_profile_frame_seen);
         FrameLayout frameProgress = view.findViewById(R.id.movie_profile_frame_progress);
 
-        frameAdd.setOnClickListener(v -> {
-            if (present) {
-                List<Collection> collections = this.viewModel.collections();
-                AddCollectionDialog addCollectionDialog = new AddCollectionDialog(working, collections);
-                addCollectionDialog.setOnCollectionSelected((movie, collection, add) -> {
-                    if (add) {
-                        this.viewModel.addToCollection(movie, collection);
-                        Toast.makeText(requireContext(), "Added movie to '" + collection + "'", Toast.LENGTH_SHORT).show();
-                    } else {
-                        this.viewModel.removeFromCollection(movie, collection);
-                        Toast.makeText(requireContext(), "Removed movie from '" + collection + "'", Toast.LENGTH_SHORT).show();
-                    }
+        this.viewModel.collections().observe(getViewLifecycleOwner(), collections -> {
+            frameAdd.setOnClickListener(v -> {
+                if (present) {
+                    AddCollectionDialog addCollectionDialog = new AddCollectionDialog(working, collections);
+                    addCollectionDialog.setOnCollectionSelected((movie, collection, add) -> {
+                        if (add) {
+                            this.viewModel.addToCollection(movie, collection);
+                            Toast.makeText(requireContext(), "Added movie to '" + collection + "'", Toast.LENGTH_SHORT).show();
+                        } else {
+                            this.viewModel.removeFromCollection(movie, collection);
+                            Toast.makeText(requireContext(), "Removed movie from '" + collection + "'", Toast.LENGTH_SHORT).show();
+                        }
 
-                    if (collection.equals(FAV)) toggleHeart();
-                });
-                addCollectionDialog.setOnCollectionAdded((movie, collection) -> {
-                    long count = this.viewModel.collections().stream().filter(c -> c.getName().equals(collection)).count();
+                        if (collection.equals(FAV)) toggleHeart();
+                    });
+                    addCollectionDialog.setOnCollectionAdded((movie, collection) -> {
+                        long count = collections.stream().filter(c -> c.getName().equals(collection)).count();
 
-                    if (count == 0) {
-                        Collection add = new Collection(collection);
-                        add.getMembers().add(movie);
-                        this.viewModel.insertCollection(add);
+                        if (count == 0) {
+                            Collection add = new Collection(collection);
+                            add.getMembers().add(movie);
+                            this.viewModel.insertCollection(add);
 
-                        Toast.makeText(requireContext(), "Created and added movie to '" + collection + "'", Toast.LENGTH_SHORT).show();
-                        return true;
-                    } else {
-                        Toast.makeText(requireContext(), "Creation failed,'" + collection + "' already exists", Toast.LENGTH_SHORT).show();
-                        return false;
-                    }
-                });
-                addCollectionDialog.show(getParentFragmentManager(), TAG);
-                return;
-            }
+                            Toast.makeText(requireContext(), "Created and added movie to '" + collection + "'", Toast.LENGTH_SHORT).show();
+                            return true;
+                        } else {
+                            Toast.makeText(requireContext(), "Creation failed,'" + collection + "' already exists", Toast.LENGTH_SHORT).show();
+                            return false;
+                        }
+                    });
+                    addCollectionDialog.show(getParentFragmentManager(), TAG);
+                    return;
+                }
 
-            present = true;
-            toggleSeen();
-            viewModel.insert(working);
-            String prompt = String.format("Added '%s' to Watchlist", working.getTitle());
-            Toast.makeText(requireContext(), prompt, Toast.LENGTH_SHORT).show();
-
-            if (requireActivity().getClass() != SearchActivity.class) return;
-
-            ViewModel.pool(working);
+                present = true;
+                toggleSeen();
+                viewModel.insert(working);
+                String prompt = String.format("Added '%s' to Watchlist", working.getTitle());
+                Toast.makeText(requireContext(), prompt, Toast.LENGTH_SHORT).show();
+            });
         });
         frameSeen.setOnClickListener(v -> {
             if (seen.isEnabled()) {
@@ -218,6 +212,7 @@ public class MovieProfileFragment extends BaseFragment implements IAnimatorBotto
 
         initHeart();
         toggleSeen();
+        addObservers();
     }
 
     private void toggleSeen() {
@@ -235,15 +230,18 @@ public class MovieProfileFragment extends BaseFragment implements IAnimatorBotto
 
     private void getBundle() {
         if (getArguments() == null) return;
-
         working = (Movie) getArguments().getSerializable(SELECTED_MOVIE);
-        present = viewModel.watchlist().contains(working);
+    }
 
-        favourites = this.viewModel.collections()
-                .stream()
-                .filter(collection -> collection.getName().equals(FAV))
-                .findFirst()
-                .orElse(null);
+    private void addObservers() {
+        this.viewModel.watchlist().observe(getViewLifecycleOwner(), watchlist -> present = watchlist.contains(working));
+        this.viewModel.collections().observe(getViewLifecycleOwner(), collections -> {
+            favourites = collections
+                    .stream()
+                    .filter(collection -> collection.getName().equals(FAV))
+                    .findFirst()
+                    .orElse(null);
+        });
     }
 
     private void toggleHeart() {

@@ -23,7 +23,6 @@ import akaecliptic.dev.cinephile.R;
 import akaecliptic.dev.cinephile.activity.SearchActivity;
 import akaecliptic.dev.cinephile.adapter.explore.CardRowAdapter;
 import akaecliptic.dev.cinephile.base.BaseFragment;
-import akaecliptic.dev.cinephile.data.ViewModel;
 import akaecliptic.dev.cinephile.interaction.callback.TMDBCallback;
 import dev.akaecliptic.models.Configuration;
 import dev.akaecliptic.models.Movie;
@@ -33,6 +32,7 @@ import dev.akaecliptic.models.Page;
 /**
  * A simple {@link Fragment} subclass.
  */
+// TODO: 2023-03-11 Rewrite class, the logic is too fuzzy
 public class MovieSearchFragment extends BaseFragment {
 
     private String query;
@@ -45,31 +45,32 @@ public class MovieSearchFragment extends BaseFragment {
     private CardRowAdapter adapter;
 
     private final TMDBCallback<Page> callback = response -> {
-        List<Movie> watchlist = viewModel.watchlist();
-        List<Movie> combined = response.results()
-                .stream()
-                .map(movie -> {
-                            if (!watchlist.contains(movie)) return movie;
+         viewModel.watchlist().observe(getViewLifecycleOwner(), watchlist -> {
+            List<Movie> combined = response.results()
+                    .stream()
+                    .map(movie -> {
+                                if (!watchlist.contains(movie)) return movie;
 
-                            int index = watchlist.indexOf(movie);
-                            overlap.add(movie.getId());
+                                int index = watchlist.indexOf(movie);
+                                overlap.add(movie.getId());
 
-                            return watchlist.get(index);
-                        }
-                )
-                .collect(Collectors.toList());
+                                return watchlist.get(index);
+                            }
+                    )
+                    .collect(Collectors.toList());
 
-        pool.addAll(combined);
-        page = response.number();
-        paginate = response.paginate();
+            pool.addAll(combined);
+            page = response.number();
+            paginate = response.paginate();
 
-        if (adapter != null) {
-            int start = (pool.size() - combined.size()) + 1;
-            int count = combined.size();
+            if (adapter != null) {
+                int start = (pool.size() - combined.size()) + 1;
+                int count = combined.size();
 
-            adapter.notifyItemRangeInserted(start, count);
-            adapter.setPaginate(paginate);
-        }
+                adapter.notifyItemRangeInserted(start, count);
+                adapter.setPaginate(paginate);
+            }
+        });
     };
     private final OnEditorActionListener editorAction = (view, id, event) -> {
         if (id != IME_ACTION_SEARCH) return false;
@@ -122,8 +123,6 @@ public class MovieSearchFragment extends BaseFragment {
             viewModel.insert(movie);
             overlap.add(movie.getId());
             adapter.notifyItemChanged(position);
-
-            ViewModel.pool(movie);
         }));
 
         recycler.setAdapter(adapter);
@@ -168,13 +167,5 @@ public class MovieSearchFragment extends BaseFragment {
         }
 
         viewModel.config(config -> initAdapter(view, config));
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        List<Movie> movies = ViewModel.pool();
-        if (movies.isEmpty()) return;
-        overlap.addAll(movies.stream().map(Movie::getId).collect(Collectors.toSet()));
     }
 }
