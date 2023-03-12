@@ -307,6 +307,7 @@ public class SQLite extends SQLiteOpenHelper {
 
         if(movie != -1) {
             collection.getMembers().add(movie);
+            cursor.moveToNext();
 
             while (!cursor.isAfterLast()) {
                 movie = getInt(cursor, "movie_id");
