@@ -21,22 +21,25 @@ public class CollectionsArrayAdapter extends ArrayAdapter<Collection> {
 
     private final int movie;
     private final LayoutInflater inflater;
-    private final List<Collection> collections;
     private OnCollectionSelected collectionSelected;
 
-    public CollectionsArrayAdapter(@NonNull Context context, @NonNull List<Collection> collections, int movie) {
-        super(context, R.layout.list_item_collection, R.id.list_collection_text_title, collections);
+    public CollectionsArrayAdapter(@NonNull Context context, int movie) {
+        super(context, R.layout.list_item_collection, R.id.list_collection_text_title);
         this.inflater = LayoutInflater.from(context);
-
         this.movie = movie;
-        this.collections = collections;
+    }
+
+    public void setItems(List<Collection> collections) {
+        this.clear();
+        this.addAll(collections);
+        this.notifyDataSetChanged();
     }
 
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View listItem = convertView;
-        Collection working = collections.get(position);
+        Collection working = this.getItem(position);
 
         if (listItem == null)
             listItem = this.inflater.inflate(R.layout.list_item_collection, parent, false);

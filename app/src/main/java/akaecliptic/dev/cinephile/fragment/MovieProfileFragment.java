@@ -1,6 +1,5 @@
 package akaecliptic.dev.cinephile.fragment;
 
-import static android.view.View.GONE;
 import static akaecliptic.dev.cinephile.fragment.CollectionsFragment.SELECTED_MOVIE;
 import static akaecliptic.dev.cinephile.fragment.WatchlistFragment.FAV;
 
@@ -26,12 +25,10 @@ import akaecliptic.dev.cinephile.interaction.listener.MovieChangeListener;
 import akaecliptic.dev.cinephile.model.Collection;
 import dev.akaecliptic.models.Movie;
 
-// TODO: 2023-03-11 Restructure class, it's a little messy
 public class MovieProfileFragment extends BaseFragment implements IAnimatorBottombar {
 
     private Movie working = null;
     private boolean present = false;
-    private Collection favourites;
 
     private String backdropSize;
     private String posterSize;
@@ -89,136 +86,24 @@ public class MovieProfileFragment extends BaseFragment implements IAnimatorBotto
 
     @Override
     protected void afterViews(View view) {
-        //ASSIGNING DEFAULT VALUES
-        Picasso.get()
-                .load(viewModel.image(backdropSize, working.getInfo().getBackdrop()))
-                .fit()
-                .centerCrop()
-                .into(backdrop);
-        Picasso.get()
-                .load(viewModel.image(posterSize, working.getInfo().getPoster()))
-                .fit()
-                .centerCrop()
-                .into(poster);
+        createImages();
+        createDescription();
+
+        addRating();
+        addGenres(view);
 
         title.setText(working.getTitle());
         year.setText(String.valueOf(working.getRelease().getYear()));
-        information.setText(createDescription());
         seen.setChecked(working.isSeen());
 
-        if (present) {
-            ratingProgress.setProgress(working.getUserRating());
-            ratingText.setText(String.valueOf(working.getUserRating()));
-
-        } else {
-            ratingProgress.setProgress(working.getNativeRating());
-            ratingText.setText(String.valueOf(working.getNativeRating()));
-        }
-
-        LayoutInflater inflater = LayoutInflater.from(view.getContext());
-        working.getInfo().getGenres().forEach(genre -> {
-            TextView pill = (TextView) inflater.inflate(R.layout.component_pill, genreContainer, false);
-            pill.setText(viewModel.genres().get(genre));
-            genreContainer.addView(pill);
-        });
-
         addListeners(view);
-    }
-
-    /*          INSTANCE METHODS          */
-
-    private String createDescription() {
-        StringBuilder builder = new StringBuilder();
-
-        if (working.getInfo().getTagline() != null) builder.append("\"").append(working.getInfo().getTagline()).append("\"");
-        builder.append(working.getDescription()).append("\n\n");
-        builder.append("Release: ").append(working.getRelease()).append("\n");
-        if (working.getInfo().getRuntime() > -1) builder.append("Runtime: ").append(working.getInfo().getRuntime()).append("\n");
-        builder.append("TMDB rating: ").append(working.getNativeRating()).append("\n");
-
-        return builder.toString();
-    }
-
-    private void addListeners(View view) {
-        //ADDING LISTENERS
-        FrameLayout frameAdd = view.findViewById(R.id.movie_profile_frame_add);
-        FrameLayout frameSeen = view.findViewById(R.id.movie_profile_frame_seen);
-        FrameLayout frameProgress = view.findViewById(R.id.movie_profile_frame_progress);
-
-        this.viewModel.collections().observe(getViewLifecycleOwner(), collections -> {
-            frameAdd.setOnClickListener(v -> {
-                if (present) {
-                    AddCollectionDialog addCollectionDialog = new AddCollectionDialog(working, collections);
-                    addCollectionDialog.setOnCollectionSelected((movie, collection, add) -> {
-                        if (add) {
-                            this.viewModel.addToCollection(movie, collection);
-                            Toast.makeText(requireContext(), "Added movie to '" + collection + "'", Toast.LENGTH_SHORT).show();
-                        } else {
-                            this.viewModel.removeFromCollection(movie, collection);
-                            Toast.makeText(requireContext(), "Removed movie from '" + collection + "'", Toast.LENGTH_SHORT).show();
-                        }
-
-                        if (collection.equals(FAV)) toggleHeart();
-                    });
-                    addCollectionDialog.setOnCollectionAdded((movie, collection) -> {
-                        long count = collections.stream().filter(c -> c.getName().equals(collection)).count();
-
-                        if (count == 0) {
-                            Collection add = new Collection(collection);
-                            add.getMembers().add(movie);
-                            this.viewModel.insertCollection(add);
-
-                            Toast.makeText(requireContext(), "Created and added movie to '" + collection + "'", Toast.LENGTH_SHORT).show();
-                            return true;
-                        } else {
-                            Toast.makeText(requireContext(), "Creation failed,'" + collection + "' already exists", Toast.LENGTH_SHORT).show();
-                            return false;
-                        }
-                    });
-                    addCollectionDialog.show(getParentFragmentManager(), TAG);
-                    return;
-                }
-
-                present = true;
-                toggleSeen();
-                viewModel.insert(working);
-                String prompt = String.format("Added '%s' to Watchlist", working.getTitle());
-                Toast.makeText(requireContext(), prompt, Toast.LENGTH_SHORT).show();
-            });
-        });
-        frameSeen.setOnClickListener(v -> {
-            if (seen.isEnabled()) {
-                seen.setChecked(!working.isSeen());
-                return;
-            }
-
-            Toast.makeText(requireContext(), "Movie must be added to watchlist to mark as seen", Toast.LENGTH_SHORT).show();
-        });
-        frameProgress.setOnClickListener(v -> {
-            if (!present) {
-                Toast.makeText(requireContext(), "Movie must be added to watchlist to give a rating", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            RatingDialog ratingDialog = new RatingDialog(working);
-            ratingDialog.show(getParentFragmentManager(), TAG);
-            ratingDialog.setMovieChangeListener(movieChangeListener);
-        });
-
-        seen.setOnCheckedChangeListener((checkbox, value) -> {
-            working.setSeen(value);
-            viewModel.updateSeen(working);
-        });
+        addObserver();
 
         initHeart();
-        toggleSeen();
-        addObservers();
+        initSeen();
     }
 
-    private void toggleSeen() {
-        seen.setEnabled(present);
-        seen.setClickable(present);
-    }
+    /*          INSTANCE INITIALIZERS          */
 
     private void setImageSizes() {
         String[] backdrops = viewModel.backdrops();
@@ -233,36 +118,180 @@ public class MovieProfileFragment extends BaseFragment implements IAnimatorBotto
         working = (Movie) getArguments().getSerializable(SELECTED_MOVIE);
     }
 
-    private void addObservers() {
-        this.viewModel.watchlist().observe(getViewLifecycleOwner(), watchlist -> present = watchlist.contains(working));
-        this.viewModel.collections().observe(getViewLifecycleOwner(), collections -> {
-            favourites = collections
-                    .stream()
-                    .filter(collection -> collection.getName().equals(FAV))
-                    .findFirst()
-                    .orElse(null);
+    /*          BINDING MOVIE TO VIEWS         */
+
+    private void addGenres(View view) {
+        LayoutInflater inflater = LayoutInflater.from(view.getContext());
+        working.getInfo().getGenres().forEach(genre -> {
+            TextView pill = (TextView) inflater.inflate(R.layout.component_pill, genreContainer, false);
+            pill.setText(viewModel.genres().get(genre));
+            genreContainer.addView(pill);
         });
     }
 
+    private void addRating() {
+        if (present) {
+            ratingProgress.setProgress(working.getUserRating());
+            ratingText.setText(String.valueOf(working.getUserRating()));
+        } else {
+            ratingProgress.setProgress(working.getNativeRating());
+            ratingText.setText(String.valueOf(working.getNativeRating()));
+        }
+    }
+
+    private void createImages() {
+        Picasso.get()
+                .load(viewModel.image(backdropSize, working.getInfo().getBackdrop()))
+                .fit()
+                .centerCrop()
+                .into(backdrop);
+        Picasso.get()
+                .load(viewModel.image(posterSize, working.getInfo().getPoster()))
+                .fit()
+                .centerCrop()
+                .into(poster);
+    }
+
+    private void createDescription() {
+        StringBuilder builder = new StringBuilder();
+
+        if (working.getInfo().getTagline() != null)
+            builder.append("\"").append(working.getInfo().getTagline()).append("\"");
+
+        builder.append(working.getDescription()).append("\n\n");
+        builder.append("Release: ").append(working.getRelease()).append("\n");
+
+        if (working.getInfo().getRuntime() > -1)
+            builder.append("Runtime: ").append(working.getInfo().getRuntime()).append("\n");
+
+        builder.append("TMDB rating: ").append(working.getNativeRating()).append("\n");
+
+        information.setText(builder.toString());
+    }
+
+    /*          INITIALISING MAIN BUTTONS          */
+
+    private void addListeners(View view) {
+        //ADDING LISTENERS
+        FrameLayout frameAdd = view.findViewById(R.id.movie_profile_frame_add);
+        FrameLayout frameSeen = view.findViewById(R.id.movie_profile_frame_seen);
+        FrameLayout frameProgress = view.findViewById(R.id.movie_profile_frame_progress);
+
+        addAddListener(frameAdd);
+        addSeenListener(frameSeen);
+        addProgressListener(frameProgress);
+    }
+
+    private void addAddListener(FrameLayout layout) {
+        layout.setOnClickListener(v -> {
+            if (present) {
+                AddCollectionDialog addCollectionDialog = new AddCollectionDialog(working, this);
+
+                setCollectionSelectedListener(addCollectionDialog);
+                setNewCollectionDialogListener(addCollectionDialog);
+
+                addCollectionDialog.show(getParentFragmentManager(), TAG);
+            } else {
+                viewModel.insert(working);
+                String prompt = String.format("Added '%s' to Watchlist", working.getTitle());
+                Toast.makeText(requireContext(), prompt, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void setCollectionSelectedListener(AddCollectionDialog dialog) {
+        dialog.setOnCollectionSelected((movie, collection, add) -> {
+            if (add) {
+                viewModel.addToCollection(movie, collection);
+                Toast.makeText(requireContext(), "Added movie to '" + collection + "'", Toast.LENGTH_SHORT).show();
+            } else {
+                viewModel.removeFromCollection(movie, collection);
+                Toast.makeText(requireContext(), "Removed movie from '" + collection + "'", Toast.LENGTH_SHORT).show();
+            }
+
+            if (collection.equals(FAV)) toggleHeart();
+        });
+    }
+
+    private void setNewCollectionDialogListener(AddCollectionDialog dialog) {
+        dialog.setOnCollectionCreated((movie, name, dismiss) ->
+                viewModel.collection(name, result -> {
+                    if (result == null) {
+                        Collection add = new Collection(name);
+                        add.getMembers().add(movie);
+                        viewModel.insertCollection(add);
+
+                        requireActivity().runOnUiThread(() -> {
+                            Toast.makeText(requireContext(), "Created and added movie to '" + name + "'", Toast.LENGTH_SHORT).show();
+                            dismiss.call();
+                        });
+                    } else {
+                        requireActivity().runOnUiThread(() ->
+                                Toast.makeText(requireContext(), "Creation failed,'" + name + "' already exists", Toast.LENGTH_SHORT).show()
+                        );
+                    }
+                })
+        );
+    }
+
+    private void addSeenListener(FrameLayout layout) {
+        layout.setOnClickListener(v -> {
+            if (seen.isEnabled()) {
+                seen.setChecked(!working.isSeen());
+            } else {
+                Toast.makeText(requireContext(), "Movie must be added to watchlist to mark as seen", Toast.LENGTH_SHORT).show();
+            }
+        });
+        seen.setOnCheckedChangeListener((checkbox, value) -> {
+            working.setSeen(value);
+            viewModel.updateSeen(working);
+        });
+    }
+
+    public void addProgressListener(FrameLayout layout) {
+        layout.setOnClickListener(v -> {
+            if (!present) {
+                Toast.makeText(requireContext(), "Movie must be added to watchlist to give a rating", Toast.LENGTH_SHORT).show();
+            } else {
+                RatingDialog ratingDialog = new RatingDialog(working);
+                ratingDialog.show(getParentFragmentManager(), TAG);
+                ratingDialog.setMovieChangeListener(movieChangeListener);
+            }
+        });
+    }
+
+    /*          CONDITIONAL VIEWS          */
+
+    private void addObserver() {
+        viewModel.watchlist().observe(getViewLifecycleOwner(), watchlist -> present = watchlist.contains(working));
+    }
+
+    private void initSeen() {
+        seen.setEnabled(present);
+        seen.setClickable(present);
+    }
+
     private void toggleHeart() {
-        this.heart.setVisibility(favourites == null ? GONE : View.VISIBLE);
-        this.heart.setChecked(favourites.hasMember(working.getId()));
+        viewModel.collection(FAV, favourites -> this.heart.setChecked(favourites.hasMember(working.getId())));
     }
 
     private void initHeart() {
-        toggleHeart();
-        if (favourites == null) return;
-        this.heart.setOnClickListener( view -> {
-            boolean add = !favourites.hasMember(working.getId());
-            if (add) {
-                favourites.getMembers().add(working.getId());
-                this.viewModel.addToCollection(working.getId(), FAV);
-                Toast.makeText(requireContext(), "Added movie to '" + FAV + "'", Toast.LENGTH_SHORT).show();
-            } else {
-                favourites.getMembers().remove(working.getId());
-                this.viewModel.removeFromCollection(working.getId(), FAV);
-                Toast.makeText(requireContext(), "Removed movie from '" + FAV + "'", Toast.LENGTH_SHORT).show();
-            }
+        viewModel.collection(FAV, favourites -> {
+            this.heart.setOnClickListener(view -> {
+                boolean add = !favourites.hasMember(working.getId());
+
+                if (add) {
+                    favourites.getMembers().add(working.getId());
+                    viewModel.addToCollection(working.getId(), FAV);
+                    Toast.makeText(requireContext(), "Added movie to '" + FAV + "'", Toast.LENGTH_SHORT).show();
+                } else {
+                    favourites.getMembers().remove(working.getId());
+                    viewModel.removeFromCollection(working.getId(), FAV);
+                    Toast.makeText(requireContext(), "Removed movie from '" + FAV + "'", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            this.heart.setChecked(favourites.hasMember(working.getId()));
         });
     }
 }
