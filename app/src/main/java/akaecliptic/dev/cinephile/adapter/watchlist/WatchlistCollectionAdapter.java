@@ -1,5 +1,7 @@
 package akaecliptic.dev.cinephile.adapter.watchlist;
 
+import android.annotation.SuppressLint;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
@@ -11,7 +13,7 @@ import akaecliptic.dev.cinephile.fragment.WatchlistFragment;
 
 public class WatchlistCollectionAdapter extends FragmentStateAdapter {
 
-    private final List<String> collections;
+    private List<String> collections;
 
     public WatchlistCollectionAdapter(WatchlistFragment fragment, List<String> collections) {
         super(fragment);
@@ -27,5 +29,16 @@ public class WatchlistCollectionAdapter extends FragmentStateAdapter {
     @Override
     public int getItemCount() {
         return this.collections.size();
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void setCollections(List<String> collections) {
+        /*
+            This might be unnecessary, may be able to get away with just clearing list then adding new items.
+            Leaving for now, to make sure tabs are updated correctly.
+         */
+        // CONSIDER: 2023-03-12 Removing
+        this.collections = collections;
+        this.notifyDataSetChanged();
     }
 }
