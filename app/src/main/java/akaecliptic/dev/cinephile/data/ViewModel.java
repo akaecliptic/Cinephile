@@ -4,7 +4,7 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.LiveData;
 
 import java.util.List;
 import java.util.Map;
@@ -87,11 +87,11 @@ public class ViewModel extends AndroidViewModel {
         return this.repository.config().posters();
     }
 
-    public MutableLiveData<List<Movie>> watchlist() {
+    public LiveData<List<Movie>> watchlist() {
         return this.repository.watchlist();
     }
 
-    public MutableLiveData<List<Collection>> collections() {
+    public LiveData<List<Collection>> collections() {
         return this.repository.collections();
     }
 

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import java.util.ArrayList;
@@ -117,11 +118,11 @@ public class Repository {
         return this.configuration;
     }
 
-    public MutableLiveData<List<Movie>> watchlist() {
+    public LiveData<List<Movie>> watchlist() {
         return this.watchlist;
     }
 
-    public MutableLiveData<List<Collection>> collections() {
+    public LiveData<List<Collection>> collections() {
         return this.collections;
     }
 
