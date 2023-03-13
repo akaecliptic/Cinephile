@@ -56,6 +56,16 @@ abstract public class Statements {
         "ON c._name = l.collection_name " +
         "ORDER BY c._name;";
 
+    public static final String CREATE_VIEW_COLLECTION_MOVIE_DATA = "CREATE VIEW IF NOT EXISTS 'collection_movie_data' AS " +
+            "SELECT c._name, m.*, i.poster, i.backdrop, i.genres, i.runtime, i.tagline " +
+            "FROM 'collections' c " +
+            "LEFT JOIN 'link_movie_collection' l " +
+            "ON c._name = l.collection_name " +
+            "INNER JOIN 'movies' m " +
+            "ON l.movie_id = m._id " +
+            "LEFT JOIN 'movie_information' i " +
+            "ON m._id = i.movie_id;";
+
     //SELECT
     public static final String SELECT_ALL_MOVIE_DATA = "SELECT * FROM 'movie_data';";
     public static final String SELECT_ALL_COLLECTION_DATA = "SELECT * FROM 'collection_data';";
@@ -63,6 +73,7 @@ abstract public class Statements {
     public static final String SELECT_MOVIE = "SELECT * FROM 'movie_data' WHERE _id = ?;";
     public static final String SELECT_COLLECTION = "SELECT * FROM 'collection_data' WHERE _name = ?;";
     public static final String SELECT_INFORMATION = "SELECT * FROM 'movie_information' WHERE movie_id = ?;";
+    public static final String SELECT_COLLECTION_MOVIES = "SELECT * FROM 'collection_movie_data' WHERE _name = ?;";
 
     public static final String SELECT_MOVIE_DATA_LIKE = "SELECT * FROM 'movie_data' WHERE title LIKE %?%;";
 

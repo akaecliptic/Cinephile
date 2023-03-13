@@ -32,6 +32,9 @@ import dev.akaecliptic.models.Movie;
 @RunWith(RobolectricTestRunner.class)
 public class CollectionTest {
     private SQLite sqlite = null;
+    private Movie movie1;
+    private Movie movie2;
+    private Movie movie3;
 
     @Before
     public void init() {
@@ -39,29 +42,25 @@ public class CollectionTest {
 
         this.sqlite = SQLite.getInstance(RuntimeEnvironment.getApplication());
 
-        this.sqlite.insertMovie(
-                new Movie(
-                        1, "Movie 1", true,
-                        "Test Movie 1", 90, 70,
-                        LocalDate.now(), new Information()
-                )
+        this.movie1 = new Movie(
+                1, "Movie 1", true,
+                "Test Movie 1", 90, 70,
+                LocalDate.now(), new Information()
+        );
+        this.movie2 = new Movie(
+                2, "Movie 2", true,
+                "Test Movie 2", 50, 30,
+                LocalDate.now(), new Information()
+        );
+        this.movie3 = new Movie(
+                3, "Movie 3", true,
+                "Test Movie 3", 65, 80,
+                LocalDate.now(), new Information()
         );
 
-        this.sqlite.insertMovie(
-                new Movie(
-                        2, "Movie 2", true,
-                        "Test Movie 2", 50, 30,
-                        LocalDate.now(), new Information()
-                )
-        );
-
-        this.sqlite.insertMovie(
-                new Movie(
-                        3, "Movie 3", true,
-                        "Test Movie 3", 65, 80,
-                        LocalDate.now(), new Information()
-                )
-        );
+        this.sqlite.insertMovie(movie1);
+        this.sqlite.insertMovie(movie2);
+        this.sqlite.insertMovie(movie3);
     }
 
     @After
@@ -143,6 +142,25 @@ public class CollectionTest {
 
         assertThat(updated, notNullValue());
         assertThat(updated.getMembers(), is(emptyIterable()));
+    }
+
+    @Test
+    public void test_selectMoviesFromCollections() {
+        Collection insert = new Collection("Some Movies");
+        this.sqlite.insertCollection(insert);
+
+        var movies = this.sqlite.selectMoviesFromCollection(insert.getName());
+
+        assertThat(movies, is(emptyIterable()));
+
+        this.sqlite.addToCollection(1, insert.getName());
+        this.sqlite.addToCollection(3, insert.getName());
+
+        movies = this.sqlite.selectMoviesFromCollection(insert.getName());
+
+        assertThat(movies, not(emptyIterable()));
+        assertThat(movies.size(), is(2));
+        assertThat(movies, hasItems(this.movie1, this.movie3));
     }
 
 }

@@ -8,6 +8,7 @@ public enum Tables {
     COLLECTIONS("collections"),
     INFORMATION("movie_information"),
     COLLECTION_DATA("collection_data"),
+    COLLECTION_MOVIE_DATA("collection_movie_data"),
     LINK_MOVIE_COLLECTION("link_movie_collection");
 
     private final String name;

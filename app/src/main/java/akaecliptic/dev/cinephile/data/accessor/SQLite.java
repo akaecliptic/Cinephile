@@ -116,6 +116,7 @@ public class SQLite extends SQLiteOpenHelper {
 
         database.execSQL(Statements.CREATE_VIEW_COLLECTION_DATA); //View for querying all collection data
         database.execSQL(Statements.CREATE_VIEW_MOVIE_DATA); //View for querying all movie data
+        database.execSQL(Statements.CREATE_VIEW_COLLECTION_MOVIE_DATA); //View for querying movie data from collection
 
         database.execSQL(Statements.INSERT_COLLECTION_FAVOURITES); //There must always be a favourites collection
     }
@@ -570,6 +571,44 @@ public class SQLite extends SQLiteOpenHelper {
         database.delete(Tables.LINK_MOVIE_COLLECTION.toString(), clause, arguments);
 
         Log.i(TAG, "Deleted table link movie_id " + movieId + " to collection_name '" + collectionName + "'.");
+    }
+
+    public List<Movie> selectMoviesFromCollection(String name) {
+        Log.i(TAG, "Selecting single row in 'collection_data' view.");
+
+        String[] arguments = { name };
+        Cursor cursor = database.rawQuery(Statements.SELECT_COLLECTION_MOVIES, arguments);
+        List<Movie> movies = new ArrayList<>();
+
+        if(!isValidCursor(cursor)) return movies;
+
+        while (!cursor.isAfterLast()) {
+            int id = getInt(cursor, "_id");
+            String title = getString(cursor, "title");
+            boolean seen = getBool(cursor, "seen");
+            String description = getString(cursor, "description");
+            int userRating = getInt(cursor, "user_rating");
+            int nativeRating = getInt(cursor, "native_rating");
+            LocalDate release = getLocalDate(cursor, "release");
+
+            Movie movie = new Movie(id, title, seen, description, nativeRating, userRating, release);
+
+            String poster = getString(cursor, "poster");
+            String backdrop = getString(cursor, "backdrop");
+            int runtime = getInt(cursor, "runtime");
+            String tagline = getString(cursor, "tagline");
+            List<Integer> genres = getIntList(cursor, "genres");
+
+            Information information = new Information(poster, backdrop, runtime, tagline, genres);
+
+            movie.setInfo(information);
+            movies.add(movie);
+
+            cursor.moveToNext();
+        }
+        cursor.close();
+
+        return movies;
     }
 
 }
