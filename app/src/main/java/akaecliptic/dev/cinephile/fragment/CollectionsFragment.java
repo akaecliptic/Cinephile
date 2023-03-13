@@ -23,7 +23,6 @@ import akaecliptic.dev.cinephile.interaction.listener.MovieChangeListener;
 public class CollectionsFragment extends BaseFragment {
 
     static final String SELECTED_MOVIE = "SELECTED_MOVIE";
-    static final String SELECTED_SAVED = "SELECTED_SAVED";
 
     private CardSlimAdapter adapter;
     private final String name;
