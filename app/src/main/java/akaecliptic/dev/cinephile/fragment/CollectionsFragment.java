@@ -42,13 +42,6 @@ public class CollectionsFragment extends BaseFragment {
         if (item.getItemId() != R.id.toolbar_sort || adapter == null) return false;
 
         String message = ViewModel.cycleSort(adapter.getItems());
-        /*
-            Hmm, I'm only using a straight notifyDataSetChanged because it is faster on my testing virtual device.
-            Will try to run on physical device in future to see if that is still the case.
-
-            2022-10-14
-         */
-        // CONSIDER: changing back to notifyItemRangeChanged. See comment above.
         adapter.notifyDataSetChanged();
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
 
@@ -86,9 +79,20 @@ public class CollectionsFragment extends BaseFragment {
     protected void initViews(View view) {
         RecyclerView recyclerView = view.findViewById(R.id.collections_recycler);
         recyclerView.setAdapter(adapter);
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        maintainSort();
         addAdapterListeners();
         addToolbarListeners();
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private void maintainSort() {
+        ViewModel.sort(adapter.getItems());
+        adapter.notifyDataSetChanged();
     }
 
     public void addAdapterListeners() {
