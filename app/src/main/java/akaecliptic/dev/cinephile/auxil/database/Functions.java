@@ -19,13 +19,13 @@ abstract public class Functions {
      * <p>Anything greater than 0 returns true - the table exists.</p>
      *
      * @param database The database to check.
-     * @param table The table to check existence.
+     * @param table    The table to check existence.
      * @return True if the table exists, false otherwise.
      */
     public static boolean doesTableExist(SQLiteDatabase database, String table) {
         String query = "SELECT name FROM sqlite_master WHERE type = 'table' AND name = ? COLLATE NOCASE;";
 
-        Cursor c = database.rawQuery(query, new String[]{ table });
+        Cursor c = database.rawQuery(query, new String[]{table});
         int count = c.getCount();
 
         c.close();
@@ -58,7 +58,7 @@ abstract public class Functions {
      * @return String value of list in comma separated values, null if list is empty.
      */
     public static String formatList(List<Integer> list) {
-        if(list.isEmpty()) return null;
+        if (list.isEmpty()) return null;
 
         String temp = list.toString();
         return temp.substring(1, temp.length() - 1);
@@ -137,7 +137,7 @@ abstract public class Functions {
      */
     public static List<Integer> getIntList(Cursor cursor, String column) {
         int index = cursor.getColumnIndexOrThrow(column);
-        if(cursor.isNull(index)) return new ArrayList<>();
+        if (cursor.isNull(index)) return new ArrayList<>();
 
         List<Integer> list = new ArrayList<>();
         String[] array = cursor.getString(index).split(",");
@@ -159,7 +159,24 @@ abstract public class Functions {
      */
     public static boolean isValidCursor(Cursor cursor) {
         boolean valid = cursor != null && cursor.moveToFirst();
-        if(!valid && cursor != null) cursor.close();
+        if (!valid && cursor != null) cursor.close();
         return valid;
+    }
+
+    /**
+     * Helper function that builds a query string to select a group of movies from a set of ids.
+     *
+     * @param count The number of arguments to template
+     * @return Formatted string with the number of argument templates equal to given count
+     */
+    public static String selectMovieWhereIn(int count) {
+        StringBuilder base = new StringBuilder("SELECT * FROM 'movie_data' WHERE _id IN (");
+        for (int i = 0; i < count; i++) {
+            base.append(" ?");
+            if (i != (count - 1)) base.append(",");
+        }
+        base.append(" )");
+
+        return base.toString();
     }
 }
