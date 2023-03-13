@@ -11,8 +11,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import akaecliptic.dev.cinephile.R;
 import akaecliptic.dev.cinephile.activity.MainActivity;
@@ -21,10 +19,7 @@ import akaecliptic.dev.cinephile.base.BaseFragment;
 import akaecliptic.dev.cinephile.data.ViewModel;
 import akaecliptic.dev.cinephile.dialog.DeleteDialog;
 import akaecliptic.dev.cinephile.interaction.listener.MovieChangeListener;
-import akaecliptic.dev.cinephile.model.Collection;
-import dev.akaecliptic.models.Movie;
 
-// TODO: 2023-03-11 Restructure class
 public class CollectionsFragment extends BaseFragment {
 
     static final String SELECTED_MOVIE = "SELECTED_MOVIE";
@@ -46,19 +41,17 @@ public class CollectionsFragment extends BaseFragment {
     private final Toolbar.OnMenuItemClickListener onToolbarSort = (item) -> {
         if (item.getItemId() != R.id.toolbar_sort || adapter == null) return false;
 
-        this.viewModel.watchlist().observe(getViewLifecycleOwner(), watchlist -> {
-            String message = ViewModel.cycleSort(watchlist);
-
+        String message = ViewModel.cycleSort(adapter.getItems());
         /*
             Hmm, I'm only using a straight notifyDataSetChanged because it is faster on my testing virtual device.
             Will try to run on physical device in future to see if that is still the case.
 
             2022-10-14
          */
-            // CONSIDER: changing back to notifyItemRangeChanged. See comment above.
-            adapter.notifyDataSetChanged();
-            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
-        });
+        // CONSIDER: changing back to notifyItemRangeChanged. See comment above.
+        adapter.notifyDataSetChanged();
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+
         return true;
     };
 
@@ -73,39 +66,32 @@ public class CollectionsFragment extends BaseFragment {
 
     @Override
     protected void beforeViews() {
-        MainActivity activity = (MainActivity) requireActivity();
-        Toolbar toolbar = activity.getToolbar();
-        toolbar.setOnMenuItemClickListener(onToolbarSort);
-
         adapter = new CardSlimAdapter(requireContext(), new ArrayList<>());
         this.viewModel.watchlist().observe(getViewLifecycleOwner(), watchlist -> {
-            List<Movie> list = new ArrayList<>(watchlist);
-            if(!this.name.equals(ALL)) {
-                this.viewModel.collections().observe(getViewLifecycleOwner(), collections -> {
-                    Collection collection = collections.stream()
-                            .filter(item -> item.getName().equals(this.name))
-                            .findFirst()
-                            .orElse(null);
-
-                    List<Movie> filtered = list
-                            .stream()
-                            .filter(item -> collection == null || collection.hasMember(item.getId()))
-                            .collect(Collectors.toList());
-
-                    ViewModel.sort(filtered);
-                    adapter.setItems(filtered);
-                });
+            if (this.name.equals(ALL)) {
+                ViewModel.sort(watchlist);
+                adapter.setItems(watchlist);
+            } else {
+                this.viewModel.selectMoviesFromCollection(this.name, movies ->
+                    requireActivity().runOnUiThread(() -> {
+                        ViewModel.sort(movies);
+                        adapter.setItems(movies);
+                    })
+                );
             }
-
-            ViewModel.sort(list);
-            adapter.setItems(list);
         });
     }
 
     @Override
     protected void initViews(View view) {
         RecyclerView recyclerView = view.findViewById(R.id.collections_recycler);
+        recyclerView.setAdapter(adapter);
 
+        addAdapterListeners();
+        addToolbarListeners();
+    }
+
+    public void addAdapterListeners() {
         adapter.setOnClickCheckbox((movie, position) -> viewModel.updateSeen(movie));
         adapter.setOnClickItem((movie, position) -> {
             Bundle bundle = new Bundle();
@@ -119,7 +105,12 @@ public class CollectionsFragment extends BaseFragment {
             deleteDialog.show(getParentFragmentManager(), TAG);
             deleteDialog.setMovieChangeListener(movieChangeListener);
         });
+    }
 
-        recyclerView.setAdapter(adapter);
+    public void addToolbarListeners() {
+        MainActivity activity = (MainActivity) requireActivity();
+
+        Toolbar toolbar = activity.getToolbar();
+        toolbar.setOnMenuItemClickListener(onToolbarSort);
     }
 }
