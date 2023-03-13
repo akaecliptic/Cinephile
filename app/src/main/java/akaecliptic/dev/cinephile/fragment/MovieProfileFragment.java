@@ -89,18 +89,13 @@ public class MovieProfileFragment extends BaseFragment implements IAnimatorBotto
         createImages();
         createDescription();
 
-        addRating();
-        addGenres(view);
-
         title.setText(working.getTitle());
         year.setText(String.valueOf(working.getRelease().getYear()));
         seen.setChecked(working.isSeen());
 
-        addListeners(view);
-        addObserver();
-
-        initHeart();
-        initSeen();
+        addGenres(view);
+        addObserver(view);
+        addHeartListener();
     }
 
     /*          INSTANCE INITIALIZERS          */
@@ -262,8 +257,14 @@ public class MovieProfileFragment extends BaseFragment implements IAnimatorBotto
 
     /*          CONDITIONAL VIEWS          */
 
-    private void addObserver() {
-        viewModel.watchlist().observe(getViewLifecycleOwner(), watchlist -> present = watchlist.contains(working));
+    private void addObserver(View view) {
+        viewModel.watchlist().observe(getViewLifecycleOwner(), watchlist -> {
+            present = watchlist.contains(working);
+            initSeen();
+            initHeart();
+            addRating();
+            addListeners(view);
+        });
     }
 
     private void initSeen() {
@@ -271,11 +272,15 @@ public class MovieProfileFragment extends BaseFragment implements IAnimatorBotto
         seen.setClickable(present);
     }
 
+    private void initHeart() {
+        heart.setVisibility(present ? View.VISIBLE : View.GONE);
+    }
+
     private void toggleHeart() {
         viewModel.collection(FAV, favourites -> this.heart.setChecked(favourites.hasMember(working.getId())));
     }
 
-    private void initHeart() {
+    private void addHeartListener() {
         viewModel.collection(FAV, favourites -> {
             this.heart.setOnClickListener(view -> {
                 boolean add = !favourites.hasMember(working.getId());
