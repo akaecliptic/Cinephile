@@ -305,6 +305,13 @@ public class Repository {
         });
     }
 
+    public void selectMoviesFromCollection(String name, SQLiteCallback<List<Movie>> callback) {
+        executor.execute(() -> {
+            List<Movie> movie = this.sqlite.selectMoviesFromCollection(name);
+            callback.onResponse(movie);
+        });
+    }
+
     /*          MORE INTERFACE          */
 
     public void query(String query, SQLiteCallback<List<Movie>> callback) {

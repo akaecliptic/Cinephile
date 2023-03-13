@@ -183,6 +183,10 @@ public class ViewModel extends AndroidViewModel {
         this.repository.removeFromCollection(id, name);
     }
 
+    public void selectMoviesFromCollection(String name, SQLiteCallback<List<Movie>> callback) {
+        this.repository.selectMoviesFromCollection(name, callback);
+    }
+
     public void query(String query, SQLiteCallback<List<Movie>> callback) {
         this.repository.query(query, callback);
     }
