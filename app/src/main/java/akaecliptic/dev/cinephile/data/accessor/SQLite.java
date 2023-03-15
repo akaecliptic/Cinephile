@@ -8,6 +8,7 @@ import static akaecliptic.dev.cinephile.auxil.database.Functions.getIntList;
 import static akaecliptic.dev.cinephile.auxil.database.Functions.getLocalDate;
 import static akaecliptic.dev.cinephile.auxil.database.Functions.getString;
 import static akaecliptic.dev.cinephile.auxil.database.Functions.isValidCursor;
+import static akaecliptic.dev.cinephile.auxil.database.Functions.selectMovieWhereIn;
 import static akaecliptic.dev.cinephile.model.Collection.Cover;
 
 import android.content.ContentValues;
@@ -23,6 +24,7 @@ import androidx.annotation.NonNull;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
@@ -574,10 +576,48 @@ public class SQLite extends SQLiteOpenHelper {
     }
 
     public List<Movie> selectMoviesFromCollection(String name) {
-        Log.i(TAG, "Selecting single row in 'collection_data' view.");
+        Log.i(TAG, "Selecting rows in 'collection_movie_data' view.");
 
         String[] arguments = { name };
         Cursor cursor = database.rawQuery(Statements.SELECT_COLLECTION_MOVIES, arguments);
+        List<Movie> movies = new ArrayList<>();
+
+        if(!isValidCursor(cursor)) return movies;
+
+        while (!cursor.isAfterLast()) {
+            int id = getInt(cursor, "_id");
+            String title = getString(cursor, "title");
+            boolean seen = getBool(cursor, "seen");
+            String description = getString(cursor, "description");
+            int userRating = getInt(cursor, "user_rating");
+            int nativeRating = getInt(cursor, "native_rating");
+            LocalDate release = getLocalDate(cursor, "release");
+
+            Movie movie = new Movie(id, title, seen, description, nativeRating, userRating, release);
+
+            String poster = getString(cursor, "poster");
+            String backdrop = getString(cursor, "backdrop");
+            int runtime = getInt(cursor, "runtime");
+            String tagline = getString(cursor, "tagline");
+            List<Integer> genres = getIntList(cursor, "genres");
+
+            Information information = new Information(poster, backdrop, runtime, tagline, genres);
+
+            movie.setInfo(information);
+            movies.add(movie);
+
+            cursor.moveToNext();
+        }
+        cursor.close();
+
+        return movies;
+    }
+
+    public List<Movie> selectMoviesWhereIn(int... ids) {
+        Log.i(TAG, "Selecting rows in 'movie_data' view.");
+
+        String[] arguments = Arrays.stream(ids).mapToObj(String::valueOf).toArray(String[]::new);
+        Cursor cursor = database.rawQuery(selectMovieWhereIn(ids.length), arguments);
         List<Movie> movies = new ArrayList<>();
 
         if(!isValidCursor(cursor)) return movies;

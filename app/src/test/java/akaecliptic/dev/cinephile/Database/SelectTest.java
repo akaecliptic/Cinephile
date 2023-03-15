@@ -1,5 +1,6 @@
 package akaecliptic.dev.cinephile.Database;
 
+import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -15,6 +16,7 @@ import org.junit.runner.manipulation.Alphanumeric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import akaecliptic.dev.cinephile.data.accessor.SQLite;
@@ -57,6 +59,38 @@ public class SelectTest {
         List<Movie> movies = this.sqlite.selectMovies();
         assertThat(movies, notNullValue());
         assertThat(movies, is(emptyIterable()));
+    }
+
+    @Test
+    public void test_selectMoviesWhereIn() {
+        var movie1 = new Movie(
+                1, "Movie 1", true,
+                "Test Movie 1", 90, 70,
+                LocalDate.now(), new Information()
+        );
+        var movie2 = new Movie(
+                2, "Movie 2", true,
+                "Test Movie 2", 50, 30,
+                LocalDate.now(), new Information()
+        );
+        var movie3 = new Movie(
+                3, "Movie 3", true,
+                "Test Movie 3", 65, 80,
+                LocalDate.now(), new Information()
+        );
+
+        this.sqlite.insertMovie(movie1);
+        this.sqlite.insertMovie(movie2);
+        this.sqlite.insertMovie(movie3);
+
+        var movies = this.sqlite.selectMoviesWhereIn(movie1.getId(), movie3.getId());
+        assertThat(movies, notNullValue());
+        assertThat(movies.size(), is(2));
+        assertThat(movies, hasItems(movie1, movie3));
+
+        this.sqlite.deleteMovie(movie1.getId());
+        this.sqlite.deleteMovie(movie2.getId());
+        this.sqlite.deleteMovie(movie3.getId());
     }
 
 }
