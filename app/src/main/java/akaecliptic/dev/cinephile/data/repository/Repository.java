@@ -312,6 +312,13 @@ public class Repository {
         });
     }
 
+    public void selectMoviesWhereIn(SQLiteCallback<List<Movie>> callback, int... ids) {
+        executor.execute(() -> {
+            List<Movie> movie = this.sqlite.selectMoviesWhereIn(ids);
+            callback.onResponse(movie);
+        });
+    }
+
     /*          MORE INTERFACE          */
 
     public void query(String query, SQLiteCallback<List<Movie>> callback) {

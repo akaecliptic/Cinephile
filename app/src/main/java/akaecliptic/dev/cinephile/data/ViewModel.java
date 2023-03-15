@@ -187,6 +187,10 @@ public class ViewModel extends AndroidViewModel {
         this.repository.selectMoviesFromCollection(name, callback);
     }
 
+    public void selectMoviesWhereIn(SQLiteCallback<List<Movie>> callback, int... ids) {
+        this.repository.selectMoviesWhereIn(callback, ids);
+    }
+
     public void query(String query, SQLiteCallback<List<Movie>> callback) {
         this.repository.query(query, callback);
     }
