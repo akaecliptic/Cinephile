@@ -58,6 +58,12 @@ public class CardRowAdapter extends BaseMovieAdapter {
         this.paginate = paginate;
     }
 
+    public void addItems(List<Movie> items) {
+        int start = this.items.size();
+        this.items.addAll(items);
+        notifyItemRangeInserted(start, items.size());
+    }
+
     /*          OVERRIDES          */
 
     @NonNull
