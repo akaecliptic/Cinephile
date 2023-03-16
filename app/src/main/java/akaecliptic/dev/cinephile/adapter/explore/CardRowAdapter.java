@@ -56,6 +56,15 @@ public class CardRowAdapter extends BaseMovieAdapter {
 
     public void setPaginate(boolean paginate) {
         this.paginate = paginate;
+        /*
+            This alerts the adapter whether to account for a footer.
+            It was causing some issues within the search fragment, but only there oddly enough.
+            This fix seems to work, but not completely satisfied.
+
+            2023-03-16
+         */
+        // REVIEW: 2023-03-16 Watch this for any future problems
+        if (!paginate) notifyItemRemoved(this.items.size());
     }
 
     public void addItems(List<Movie> items) {
