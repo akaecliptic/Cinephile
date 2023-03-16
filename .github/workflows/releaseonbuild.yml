@@ -25,7 +25,7 @@ jobs:
       - name: run unit tests & generate apk
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: --stacktrace :app:testReleaseUnitTest :app:assemble
+          arguments: --stacktrace :app:testReleaseUnitTest :app:assemble -PCinephile_ApiKey=${{ secrets.API_KEY }}
 
       - name: set version tag
         if: startsWith(github.ref, 'refs/tags/')
