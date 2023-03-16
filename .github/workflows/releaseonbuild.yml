@@ -1,0 +1,60 @@
+name: android ci/cd - release on build
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+    tags:
+      - 'v0.*'
+
+jobs:
+  build:
+    name: prepare app
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v3
+
+      - name: set up jdk 11
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '11'
+
+      - name: run unit tests & generate apk
+        uses: gradle/gradle-build-action@v2
+          with:
+            arguments: --stacktrace :app:testReleaseUnitTest :app:assemble
+
+      - name: set version tag
+          if: startsWith(github.ref, 'refs/tags/')
+          run: |
+            echo "VERSION_TAG=${GITHUB_REF_NAME}" >> $GITHUB_ENV
+
+      - name: sign apk
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: r0adkll/sign-android-release@v1
+        with:
+          releaseDirectory: app/build/outputs/apk/release
+          signingKeyBase64: ${{ secrets.SIGNING_KEY }}
+          alias: ${{ secrets.ALIAS }}
+          keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEY_PASSWORD }}
+
+      - name: prepare apk
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          mv app/build/outputs/apk/release/app-release-unsigned.apk cinephile-${{ env.VERSION_TAG }}.apk
+
+      - name: release apk
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ env.VERSION_TAG }}
+          name: Cinephile ${{ env.VERSION_TAG }}
+          files: cinephile-${{ env.VERSION_TAG }}.apk
+          draft: true
+          prerelease: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
