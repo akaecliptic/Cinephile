@@ -67,7 +67,7 @@ public class FlowAddMovieExploreTest {
         goBack();
 
         // Select the added movie
-        ViewInteraction recyclerItemWatchlist = onView(childAtPosition(withId(R.id.watchlist_recycler), 0));
+        ViewInteraction recyclerItemWatchlist = onView(childAtPosition(withId(R.id.collections_recycler), 0));
         recyclerItemWatchlist.perform(click());
 
         // Mark movie as seen
@@ -95,8 +95,7 @@ public class FlowAddMovieExploreTest {
         bottombarExplore.perform(click());
 
         // Select top rated section of explore
-        ViewInteraction buttonRated = onView(withId(R.id.explore_rated));
-        buttonRated.perform(click());
+        // TODO: 2023-03-16 Revisit this and other flows
 
         // Scroll to footer position
         ViewInteraction recyclerGrid = onView(withId(R.id.explore_grid));

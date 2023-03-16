@@ -156,6 +156,9 @@ public class InsertTest {
 
         // Assert null data value
         assertNull(query.getDescription());
+
+        this.sqlite.deleteMovie(1);
+        this.sqlite.deleteMovie(2);
     }
 
     /*          INFORMATION INSERTS           */

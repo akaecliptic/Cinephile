@@ -48,7 +48,7 @@ public class FlowDeleteMovieTest {
     @Test
     public void flow_test_deleteMovieWatchlist() {
         // Select dummy movie
-        ViewInteraction recyclerItemExplore = onView(childAtPosition(withId(R.id.watchlist_recycler), 0));
+        ViewInteraction recyclerItemExplore = onView(childAtPosition(withId(R.id.collections_recycler), 0));
         recyclerItemExplore.perform(longClick());
 
         // Confirm delete

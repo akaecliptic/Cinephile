@@ -77,7 +77,7 @@ public class FlowUpdateMovieRatingTest {
     @Test
     public void flow_test_2_updateRatingWatchlist() {
         // Select dummy movie
-        ViewInteraction recyclerItemExplore = onView(childAtPosition(withId(R.id.watchlist_recycler), 0));
+        ViewInteraction recyclerItemExplore = onView(childAtPosition(withId(R.id.collections_recycler), 0));
         recyclerItemExplore.perform(click());
 
         // Select rating button
