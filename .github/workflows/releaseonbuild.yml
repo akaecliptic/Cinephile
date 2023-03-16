@@ -24,13 +24,13 @@ jobs:
 
       - name: run unit tests & generate apk
         uses: gradle/gradle-build-action@v2
-          with:
-            arguments: --stacktrace :app:testReleaseUnitTest :app:assemble
+        with:
+          arguments: --stacktrace :app:testReleaseUnitTest :app:assemble
 
       - name: set version tag
-          if: startsWith(github.ref, 'refs/tags/')
-          run: |
-            echo "VERSION_TAG=${GITHUB_REF_NAME}" >> $GITHUB_ENV
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          echo "VERSION_TAG=${GITHUB_REF_NAME}" >> $GITHUB_ENV
 
       - name: sign apk
         if: startsWith(github.ref, 'refs/tags/')
