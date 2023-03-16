@@ -47,33 +47,6 @@ public class MovieRowFragment extends BaseFragment implements IAnimatorBottombar
         this.section = (Section) getArguments().get(PAGE_TYPE);
     }
 
-    /*          OVERRIDES          */
-
-    @Override
-    protected void setResource() {
-        this.resource = R.layout.fragment_movie_row;
-    }
-
-    @Override
-    protected void beforeViews() {
-        if (page != 1) return;
-
-        this.getBundle();
-        this.attachAnimator(requireActivity());
-        this.overlap = new HashSet<>();
-        this.pool = new ArrayList<>();
-    }
-
-    @Override
-    protected void initViews(View view) {
-        RecyclerView recycler = view.findViewById(R.id.movie_row_recycler);
-        adapter = new CardRowAdapter(requireContext(), pool, viewModel.config(), overlap);
-        adapter.setPaginate(paginate);
-        recycler.setAdapter(adapter);
-
-        addAdapterListeners();
-    }
-
     private void addAdapterListeners() {
         adapter.setItemClickListener((movie, position) -> {
             Bundle bundle = new Bundle();
@@ -88,14 +61,8 @@ public class MovieRowFragment extends BaseFragment implements IAnimatorBottombar
             adapter.notifyItemChanged(position);
         });
         adapter.setMoreClickListener(v -> {
-            if (!paginate) return;
-            setItems();
+            if (paginate) setItems();
         });
-    }
-
-    @Override
-    protected void afterViews(View view) {
-        if (page == 1) setItems();
     }
 
     private void setItems() {
@@ -139,5 +106,37 @@ public class MovieRowFragment extends BaseFragment implements IAnimatorBottombar
                 this.viewModel.rated(page, callback);
                 break;
         }
+    }
+
+    /*          OVERRIDES          */
+
+    @Override
+    protected void setResource() {
+        this.resource = R.layout.fragment_movie_row;
+    }
+
+    @Override
+    protected void beforeViews() {
+        if (page != 1) return;
+
+        this.getBundle();
+        this.attachAnimator(requireActivity());
+        this.overlap = new HashSet<>();
+        this.pool = new ArrayList<>();
+    }
+
+    @Override
+    protected void initViews(View view) {
+        RecyclerView recycler = view.findViewById(R.id.movie_row_recycler);
+        adapter = new CardRowAdapter(requireContext(), pool, viewModel.config(), overlap);
+        adapter.setPaginate(paginate);
+        recycler.setAdapter(adapter);
+
+        addAdapterListeners();
+    }
+
+    @Override
+    protected void afterViews(View view) {
+        if (page == 1) setItems();
     }
 }
