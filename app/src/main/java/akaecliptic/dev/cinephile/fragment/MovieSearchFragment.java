@@ -33,6 +33,7 @@ import dev.akaecliptic.models.Page;
  */
 public class MovieSearchFragment extends BaseFragment {
 
+    private int out = -1;
     private int page = 1;
     private String query;
     private boolean paginate;
@@ -101,6 +102,7 @@ public class MovieSearchFragment extends BaseFragment {
 
     private void addAdapterListeners() {
         adapter.setItemClickListener((movie, position) -> {
+            out = movie.getId();
             Bundle bundle = new Bundle();
             bundle.putSerializable(SELECTED_MOVIE, movie);
 
@@ -155,4 +157,22 @@ public class MovieSearchFragment extends BaseFragment {
         }));
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (out == -1) return;
+
+        this.viewModel.selectMoviesWhereIn(movies -> {
+            if(movies.size() == 0) return;
+
+            Movie add = movies.get(0);
+            int index = pool.indexOf(add);
+
+            pool.remove(index);
+            pool.add(index, add);
+            overlap.add(add.getId());
+            out = -1;
+
+        }, out);
+    }
 }

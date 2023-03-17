@@ -33,6 +33,7 @@ public class MovieRowFragment extends BaseFragment implements IAnimatorBottombar
 
     static final String PAGE_TYPE = "PAGE_TYPE";
 
+    private int out = -1;
     private int page = 1;
     private Section section;
     private boolean paginate;
@@ -49,6 +50,7 @@ public class MovieRowFragment extends BaseFragment implements IAnimatorBottombar
 
     private void addAdapterListeners() {
         adapter.setItemClickListener((movie, position) -> {
+            out = movie.getId();
             Bundle bundle = new Bundle();
             bundle.putSerializable(SELECTED_MOVIE, movie);
 
@@ -138,5 +140,24 @@ public class MovieRowFragment extends BaseFragment implements IAnimatorBottombar
     @Override
     protected void afterViews(View view) {
         if (page == 1) setItems();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (out == -1) return;
+
+        this.viewModel.selectMoviesWhereIn(movies -> {
+            if(movies.size() == 0) return;
+
+            Movie add = movies.get(0);
+            int index = pool.indexOf(add);
+
+            pool.remove(index);
+            pool.add(index, add);
+            overlap.add(add.getId());
+            out = -1;
+
+        }, out);
     }
 }
