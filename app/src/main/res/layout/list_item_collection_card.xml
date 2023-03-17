@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rci_collection_card"
+    android:layout_width="@dimen/_95sdp"
+    android:layout_height="@dimen/_100sdp"
+    android:background="@color/colorSecondaryDark"
+    android:padding="@dimen/_2sdp"
+    android:theme="@style/MyRecyclerItems">
+
+    <ImageView
+        android:id="@+id/rci_collection_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/_2sdp"
+        android:layout_marginBottom="@dimen/_40sdp"
+        android:contentDescription="@string/description_collection_image"
+        android:scaleX="2"
+        android:scaleY="2"
+        android:src="@drawable/icon_bookmark"
+        android:tint="@color/colorTextPrimary" />
+
+    <TextView
+        android:id="@+id/rci_collection_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:ellipsize="marquee"
+        android:gravity="center"
+        android:marqueeRepeatLimit="-1"
+        android:maxLines="2"
+        android:text="@string/placeholder_collection_title"
+        android:textAlignment="center" />
+</RelativeLayout>

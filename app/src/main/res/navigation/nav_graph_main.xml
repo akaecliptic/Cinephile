@@ -3,16 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/mylist_fragment">
+    app:startDestination="@id/watchlist_fragment">
 
     <activity
         android:id="@+id/mainActivity"
-        android:name="aka_ecliptic.com.cinephile.MainActivity"
+        android:name="akaecliptic.dev.cinephile.activity.MainActivity"
         android:label="MainActivity" />
 
     <fragment
         android:id="@+id/explore_fragment"
-        android:name="aka_ecliptic.com.cinephile.Fragment.ExploreFragment"
+        android:name="akaecliptic.dev.cinephile.fragment.ExploreFragment"
         android:label="fragment_explore"
         tools:layout="@layout/fragment_explore">
         <action
@@ -20,43 +20,31 @@
             app:destination="@id/movie_profile_fragment" />
         <action
             android:id="@+id/action_explore_fragment_to_movie_list_fragment"
-            app:destination="@id/movie_list_fragment" />
+            app:destination="@id/movie_row_fragment" />
     </fragment>
 
     <fragment
         android:id="@+id/movie_profile_fragment"
-        android:name="aka_ecliptic.com.cinephile.Fragment.MovieProfileFragment"
+        android:name="akaecliptic.dev.cinephile.fragment.MovieProfileFragment"
         android:label="fragment_movie_profile"
         tools:layout="@layout/fragment_movie_profile" />
 
     <fragment
-        android:id="@+id/mylist_fragment"
-        android:name="aka_ecliptic.com.cinephile.Fragment.MyListFragment"
-        android:label="fragment_mylist"
-        tools:layout="@layout/fragment_mylist">
+        android:id="@+id/watchlist_fragment"
+        android:name="akaecliptic.dev.cinephile.fragment.WatchlistFragment"
+        android:label="fragment_watchlist"
+        tools:layout="@layout/fragment_watchlist">
         <action
             android:id="@+id/action_mylist_fragment_to_movie_profile_fragment"
             app:destination="@id/movie_profile_fragment" />
-        <action
-            android:id="@+id/action_mylist_fragment_to_collections_fragment"
-            app:destination="@id/collections_fragment" />
     </fragment>
     <fragment
-        android:id="@+id/movie_list_fragment"
-        android:name="aka_ecliptic.com.cinephile.Fragment.MovieListFragment"
-        android:label="fragment_movie_list"
-        tools:layout="@layout/fragment_movie_list">
+        android:id="@+id/movie_row_fragment"
+        android:name="akaecliptic.dev.cinephile.fragment.MovieRowFragment"
+        android:label="fragment_movie_row"
+        tools:layout="@layout/fragment_movie_row">
         <action
             android:id="@+id/action_movie_list_fragment_to_movie_profile_fragment"
-            app:destination="@id/movie_profile_fragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/collections_fragment"
-        android:name="aka_ecliptic.com.cinephile.Fragment.CollectionsFragment"
-        android:label="fragment_collections"
-        tools:layout="@layout/fragment_collections">
-        <action
-            android:id="@+id/action_collections_fragment_to_movie_profile_fragment"
             app:destination="@id/movie_profile_fragment" />
     </fragment>
 </navigation>

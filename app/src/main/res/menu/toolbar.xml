@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:visible="true"
+        android:id="@+id/toolbar_search"
+        android:icon="@drawable/icon_search"
+        android:title="@string/button_search"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="ifRoom|collapseActionView"/>
+
+    <item
+        android:id="@+id/toolbar_sort"
+        android:icon="@drawable/icon_sort"
+        android:title="@string/button_sort"
+        app:showAsAction="ifRoom"/>
+</menu>

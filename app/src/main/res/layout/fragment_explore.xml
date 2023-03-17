@@ -1,93 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_centerInParent="true"
-    tools:context=".Fragment.ExploreFragment">
+    android:orientation="vertical"
+    tools:context=".fragment.ExploreFragment">
 
-    <TextView
-        android:id="@+id/explore_trending_divider"
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/explore_tab_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_2sdp"
-        android:drawableBottom="@drawable/line_divider"
-        android:textSize="@dimen/_12ssp"
-        android:text="@string/trending" />
+        android:layout_height="25dp"
 
-    <TextView
-        android:id="@+id/explore_recent_divider"
+        android:background="@color/accent"
+        app:tabIndicatorColor="@color/accent_text_light"
+        app:tabMode="scrollable"
+        app:tabSelectedTextColor="@color/accent_text_light"
+        app:tabTextColor="@color/card_text_flavour" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/explore_pager"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/explore_trending_recycler"
-        android:layout_marginTop="@dimen/_2sdp"
-        android:drawableBottom="@drawable/line_divider"
-        android:textSize="@dimen/_12ssp"
-        android:text="@string/recent" />
+        android:layout_height="0dp"
+        android:layout_marginVertical="1dp"
+        android:layout_weight="1" />
 
-    <TextView
-        android:id="@+id/explore_upcoming_divider"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/explore_recent_recycler"
-        android:layout_marginTop="@dimen/_2sdp"
-        android:drawableBottom="@drawable/line_divider"
-        android:textSize="@dimen/_12ssp"
-        android:text="@string/upcoming" />
-
-    <TextView
-        android:id="@+id/explore_favourites_divider"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/explore_upcoming_recycler"
-        android:layout_marginTop="@dimen/_2sdp"
-        android:drawableBottom="@drawable/line_divider"
-        android:textSize="@dimen/_12ssp"
-        android:text="@string/favourites" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/explore_recent_recycler"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/explore_recent_divider"
-        android:layout_marginTop="1dp"
-        android:minHeight="115dp"
-        android:orientation="horizontal"
-        app:layoutManager="LinearLayoutManager"
-        tools:listitem="@layout/recycler_item_movie_card" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/explore_trending_recycler"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/explore_trending_divider"
-        android:layout_marginTop="1dp"
-        android:minHeight="115dp"
-        android:orientation="horizontal"
-        app:layoutManager="LinearLayoutManager"
-        tools:listitem="@layout/recycler_item_movie_card" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/explore_upcoming_recycler"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/explore_upcoming_divider"
-        android:layout_marginTop="1dp"
-        android:minHeight="115dp"
-        android:orientation="horizontal"
-        app:layoutManager="LinearLayoutManager"
-        tools:listitem="@layout/recycler_item_movie_card" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/explore_favourites_recycler"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/explore_favourites_divider"
-        android:layout_marginTop="1dp"
-        android:minHeight="115dp"
-        android:orientation="horizontal"
-        app:layoutManager="LinearLayoutManager"
-        tools:listitem="@layout/recycler_item_movie_card" />
-
-</RelativeLayout>
+</LinearLayout>

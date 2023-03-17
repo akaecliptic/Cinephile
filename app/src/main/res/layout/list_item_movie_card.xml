@@ -1,0 +1,62 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="170dp"
+    android:layout_height="250dp"
+    android:layout_margin="5dp">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/movie_card_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:contentDescription="@string/description_movie_card_poster"
+
+        android:foreground="@drawable/foreground_image_gradient_rounded"
+        android:src="@drawable/sample_poster"
+        app:shapeAppearanceOverlay="@style/card_image_overlay_rounded_large"
+        app:strokeColor="@null" />
+
+    <include
+        layout="@layout/component_icons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="2dp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="5dp"
+        android:layout_marginBottom="5dp"
+
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/movie_card_text_year"
+            style="@style/card_text_year"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="@string/placeholder_year"
+            android:textAlignment="textStart"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/movie_card_text_title"
+            style="@style/card_text_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:text="@string/placeholder_movie_title"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>
+

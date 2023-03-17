@@ -127,9 +127,18 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="292" />
+                            <option name="x" value="341" />
                             <option name="y" value="-252" />
                           </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_collections_fragment_to_movie_profile_fragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
                         </option>
                       </LayoutPositions>
                     </value>
@@ -165,30 +174,9 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="14" />
-                            <option name="y" value="-537" />
+                            <option name="x" value="7" />
+                            <option name="y" value="-358" />
                           </Point>
-                        </option>
-                      </LayoutPositions>
-                    </value>
-                  </entry>
-                  <entry key="movie_list_fragment">
-                    <value>
-                      <LayoutPositions>
-                        <option name="myPosition">
-                          <Point>
-                            <option name="x" value="276" />
-                            <option name="y" value="590" />
-                          </Point>
-                        </option>
-                        <option name="myPositions">
-                          <map>
-                            <entry key="action_movie_list_fragment_to_movie_profile_fragment">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
-                          </map>
                         </option>
                       </LayoutPositions>
                     </value>
@@ -205,7 +193,28 @@
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="mylist_fragment">
+                  <entry key="movie_row_fragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="12" />
+                            <option name="y" value="12" />
+                          </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_movie_list_fragment_to_movie_profile_fragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="watchlist_fragment">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
@@ -241,7 +250,19 @@
             <LayoutPositions>
               <option name="myPositions">
                 <map>
-                  <entry key="movie_list_fragment">
+                  <entry key="movie_profile_fragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="256" />
+                            <option name="y" value="12" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="movie_search_fragment">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
@@ -252,24 +273,12 @@
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="action_movieListFragment_to_movie_profile_fragment">
+                            <entry key="action_movie_list_fragment_to_movie_profile_fragment2">
                               <value>
                                 <LayoutPositions />
                               </value>
                             </entry>
                           </map>
-                        </option>
-                      </LayoutPositions>
-                    </value>
-                  </entry>
-                  <entry key="movie_profile_fragment">
-                    <value>
-                      <LayoutPositions>
-                        <option name="myPosition">
-                          <Point>
-                            <option name="x" value="256" />
-                            <option name="y" value="12" />
-                          </Point>
                         </option>
                       </LayoutPositions>
                     </value>

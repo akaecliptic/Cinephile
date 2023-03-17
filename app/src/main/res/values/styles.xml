@@ -1,5 +1,6 @@
 <resources>
 
+    <!-- OLD STYLES - TO DEPRECATE -->
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -10,13 +11,13 @@
     </style>
 
     <style name="MyCheckboxStyle" parent="AppTheme">
-        <item name="android:button">@drawable/button_checkbox</item>
+        <item name="android:button">@drawable/background_checkbox</item>
         <item name="android:background">@color/colorSecondaryDark</item>
     </style>
 
     <style name="MyCheckboxSeen" parent="AppTheme">
-        <item name="android:button">@drawable/ic_seen</item>
-        <item name="android:buttonTint">@drawable/tint_menu</item>
+        <item name="android:button">@drawable/icon_seen</item>
+        <item name="android:buttonTint">@drawable/select_tint</item>
         <item name="android:outlineProvider">none</item>
     </style>
 
@@ -26,7 +27,7 @@
     </style>
 
     <style name="TextFont" parent="android:Widget.TextView">
-        <item name="fontFamily">@font/cousine</item>
+        <!--        <item name="fontFamily">@font/cousine</item>-->
     </style>
 
     <style name="MyRecyclerItems" parent="AppTheme">
@@ -53,5 +54,86 @@
         <item name="android:textSize">@dimen/_10ssp</item>
         <item name="android:textColor">@color/colorTextSecondary</item>
         <item name="textAllCaps">false</item>
+    </style>
+
+    <!-- NEW STYLES - MIGRATING TO -->
+    <style name="application_background">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@color/application_background</item>
+    </style>
+
+    <style name="application_theme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:textColor">@color/application_text</item>
+        <item name="android:statusBarColor">@color/black</item>
+    </style>
+
+    <style name="card_background">
+        <item name="android:background">@drawable/background_card</item>
+        <item name="android:padding">5dp</item>
+    </style>
+
+    <style name="card_image_overlay_rounded">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">5dp</item>
+    </style>
+
+    <style name="card_image_overlay_rounded_large">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">10dp</item>
+    </style>
+
+    <style name="card_text_title">
+        <item name="android:textFontWeight">600</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:fontFamily">@font/archivo</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textColor">@color/card_text</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="card_text_year">
+        <item name="android:textFontWeight">400</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:fontFamily">@font/archivo</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textColor">@color/card_text_flavour</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="list_item_movie">
+        <item name="android:textColor">@color/card_text</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:fontFamily">@font/archivo</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:fontWeight">700</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:letterSpacing">0.05</item>
+    </style>
+
+    <style name="toolbar">
+        <item name="android:background">@color/black</item>
+    </style>
+
+    <style name="checkbox_seen">
+        <item name="android:button">@drawable/icon_seen</item>
+        <item name="android:buttonTint">@drawable/select_tint</item>
+        <item name="android:outlineProvider">none</item>
+    </style>
+
+    <style name="checkbox_heart">
+        <item name="android:button">@null</item>
+        <item name="android:background">@drawable/background_checkbox_heart</item>
+        <item name="android:backgroundTint">@drawable/select_tint_accent</item>
+        <item name="android:outlineProvider">none</item>
+    </style>
+
+    <style name="button_dialog">
+        <item name="android:minHeight">40dp</item>
+        <item name="android:background">@drawable/background_card</item>
+        <item name="android:textColor">@color/card_text</item>
+        <item name="android:textSize">16sp</item>
     </style>
 </resources>

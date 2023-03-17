@@ -5,12 +5,115 @@
       <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
     </configurations>
   </component>
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/drawable/background_card.xml" value="0.2975" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/drawable/background_checkbox.xml" value="0.2975" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/drawable/background_circle.xml" value="0.443" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/drawable/background_line_divider.xml" value="0.443" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/drawable/background_pill.xml" value="0.3775" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/drawable/background_poster.xml" value="0.2975" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/drawable/background_spinner.xml" value="0.2975" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/drawable/button_checkbox.xml" value="0.351" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/drawable/button_checkbox_favourite.xml" value="0.299" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/drawable/foreground_image_gradient.xml" value="0.443" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/drawable/ic_add.xml" value="0.299" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/drawable/ic_seen.xml" value="0.3515" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/drawable/ic_sort.xml" value="0.3515" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/drawable/icon_add.xml" value="0.443" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/drawable/icon_arrow_back.xml" value="0.443" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/drawable/icon_bookmark.xml" value="0.443" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/drawable/icon_check.xml" value="0.443" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/drawable/icon_explore.xml" value="0.233" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/drawable/icon_favorite.xml" value="0.3015" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/drawable/icon_favorite_border.xml" value="0.443" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/drawable/icon_filter.xml" value="0.443" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/drawable/icon_globe.xml" value="0.443" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/drawable/icon_heart.xml" value="0.443" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/drawable/icon_heart_border.xml" value="0.443" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/drawable/icon_more_horizontal.xml" value="0.443" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/drawable/icon_search.xml" value="0.443" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/drawable/icon_seen.xml" value="0.443" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/drawable/icon_sort.xml" value="0.443" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/drawable/icon_watch_list.xml" value="0.443" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/drawable/icon_watch_list_add.xml" value="0.443" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/drawable/line_divider.xml" value="0.3515" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/drawable/progress_bar_circle.xml" value="0.3515" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/drawable/select_heart.xml" value="0.4355" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/drawable/select_progress_bar_circle.xml" value="0.443" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/drawable/select_tini_bottombar_icon.xml" value="0.233" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/drawable/select_tini_bottombar_text.xml" value="0.233" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/drawable/select_tint.xml" value="0.443" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/drawable/select_tint_accent.xml" value="0.25" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/drawable/shape_circle.xml" value="0.3515" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/drawable/spinner_background.xml" value="0.351" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/drawable/tint_menu.xml" value="0.3515" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/font/archivo.xml" value="0.24609375" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/font/archivo_narrow.xml" value="0.2921875" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/font/archivo_narrow_bold.xml" value="0.2921875" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/font/cousine.xml" value="0.2921875" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/activity_main.xml" value="0.22" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/activity_search.xml" value="0.25" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/bottom_nav.xml" value="0.301953125" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/card_row_movie.xml" value="0.33" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/component_card_image.xml" value="1.1" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/component_icons.xml" value="0.5" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/component_pill.xml" value="0.67" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/component_profile_buttonbar.xml" value="0.33" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/component_searchbar.xml" value="0.25" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/dialog_add_collection.xml" value="0.301953125" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/dialog_delete.xml" value="0.25" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/dialog_new_collection.xml" value="0.23515625" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/dialog_rating.xml" value="0.23515625" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/fragment_collections.xml" value="0.23515625" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/fragment_explore.xml" value="0.5" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/fragment_movie_list.xml" value="0.33" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/fragment_movie_profile.xml" value="0.25" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/fragment_movie_row.xml" value="0.31328125" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/fragment_movie_search.xml" value="0.21171875" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/fragment_mylist.xml" value="0.26953125" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/fragment_view_collections.xml" value="0.23515625" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/fragment_watch_list.xml" value="0.33" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/fragment_watchlist.xml" value="0.415625" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/grid_item_collection_card.xml" value="0.23515625" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/item_spinner.xml" value="0.26171875" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/list_item_collection.xml" value="0.23515625" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/list_item_collection_card.xml" value="0.366015625" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/list_item_footer.xml" value="0.366015625" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/list_item_footer_more.xml" value="0.22" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/list_item_movie_card.xml" value="0.33" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/list_item_movie_card_old.xml" value="0.366015625" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/list_item_movie_card_row.xml" value="0.25" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/list_item_movie_card_slim.xml" value="0.33" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/list_item_movie_list.xml" value="0.366015625" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/list_item_movie_list_old.xml" value="0.366015625" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/list_item_my_list.xml" value="0.67" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/nav_bottombar.xml" value="0.415625" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/nav_toolbar.xml" value="0.366015625" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/old_fragment_view_collections.xml" value="0.266015625" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/old_list_item_movie_list.xml" value="0.178125" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/old_list_item_my_list.xml" value="0.178125" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/recycler_item_footer.xml" value="0.301953125" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/recycler_item_movie_card.xml" value="0.301953125" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/recycler_item_movie_list.xml" value="0.301953125" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/recycler_item_my_list.xml" value="0.26953125" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/toolbar.xml" value="0.26953125" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/layout/underline_spinner_item.xml" value="0.301953125" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/menu/bottom_menu.xml" value="0.23515625" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/menu/toolbar.xml" value="0.36177606177606175" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/menu/toolbar_menu.xml" value="0.23515625" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.299" />
+        <entry key="..\:/Dev/ANDROID/Cinephile/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.299" />
+      </map>
+    </option>
+  </component>
   <component name="NullableNotNullManager">
     <option name="myDefaultNullable" value="android.support.annotation.Nullable" />
     <option name="myDefaultNotNull" value="android.support.annotation.NonNull" />
     <option name="myNullables">
       <value>
-        <list size="10">
+        <list size="14">
           <item index="0" class="java.lang.String" itemvalue="org.jetbrains.annotations.Nullable" />
           <item index="1" class="java.lang.String" itemvalue="javax.annotation.Nullable" />
           <item index="2" class="java.lang.String" itemvalue="javax.annotation.CheckForNull" />
@@ -21,12 +124,16 @@
           <item index="7" class="java.lang.String" itemvalue="org.checkerframework.checker.nullness.qual.Nullable" />
           <item index="8" class="java.lang.String" itemvalue="org.checkerframework.checker.nullness.compatqual.NullableDecl" />
           <item index="9" class="java.lang.String" itemvalue="org.checkerframework.checker.nullness.compatqual.NullableType" />
+          <item index="10" class="java.lang.String" itemvalue="com.android.annotations.Nullable" />
+          <item index="11" class="java.lang.String" itemvalue="org.eclipse.jdt.annotation.Nullable" />
+          <item index="12" class="java.lang.String" itemvalue="io.reactivex.annotations.Nullable" />
+          <item index="13" class="java.lang.String" itemvalue="io.reactivex.rxjava3.annotations.Nullable" />
         </list>
       </value>
     </option>
     <option name="myNotNulls">
       <value>
-        <list size="9">
+        <list size="13">
           <item index="0" class="java.lang.String" itemvalue="org.jetbrains.annotations.NotNull" />
           <item index="1" class="java.lang.String" itemvalue="javax.annotation.Nonnull" />
           <item index="2" class="java.lang.String" itemvalue="edu.umd.cs.findbugs.annotations.NonNull" />
@@ -36,14 +143,25 @@
           <item index="6" class="java.lang.String" itemvalue="org.checkerframework.checker.nullness.qual.NonNull" />
           <item index="7" class="java.lang.String" itemvalue="org.checkerframework.checker.nullness.compatqual.NonNullDecl" />
           <item index="8" class="java.lang.String" itemvalue="org.checkerframework.checker.nullness.compatqual.NonNullType" />
+          <item index="9" class="java.lang.String" itemvalue="com.android.annotations.NonNull" />
+          <item index="10" class="java.lang.String" itemvalue="org.eclipse.jdt.annotation.NonNull" />
+          <item index="11" class="java.lang.String" itemvalue="io.reactivex.annotations.NonNull" />
+          <item index="12" class="java.lang.String" itemvalue="io.reactivex.rxjava3.annotations.NonNull" />
         </list>
       </value>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.21171875" />
+      </ProjectState>
+    </option>
   </component>
 </project>

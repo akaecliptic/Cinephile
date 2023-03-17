@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/card_background"
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:layout_marginBottom="1dp"
+    android:theme="@style/list_item_movie">
+
+    <CheckBox
+        android:id="@+id/movie_card_slim_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_alignParentStart="true"
+
+        android:button="@drawable/background_checkbox"
+        tools:ignore="TouchTargetSizeCheck" />
+
+    <TextView
+        android:id="@+id/movie_card_slim_text_year"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="7dp"
+        android:layout_toEndOf="@+id/movie_card_slim_checkbox"
+
+        android:text="@string/placeholder_year" />
+
+    <TextView
+        android:id="@+id/movie_card_slim_text_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="7dp"
+        android:layout_marginEnd="7dp"
+        android:layout_toStartOf="@+id/movie_card_slim_text_rating"
+        android:layout_toEndOf="@+id/movie_card_slim_text_year"
+
+        android:ellipsize="marquee"
+        android:focusable="true"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
+        android:text="@string/placeholder_movie_title" />
+
+    <TextView
+        android:id="@+id/movie_card_slim_text_rating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_alignParentEnd="true"
+
+        android:maxLength="3"
+        android:text="@string/placeholder_rating" />
+
+</RelativeLayout>
