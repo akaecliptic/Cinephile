@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 import akaecliptic.dev.cinephile.R;
 import akaecliptic.dev.cinephile.adapter.watchlist.WatchlistCollectionAdapter;
 import akaecliptic.dev.cinephile.base.BaseFragment;
+import akaecliptic.dev.cinephile.dialog.DeleteDialog;
 import akaecliptic.dev.cinephile.model.Collection;
 
 public class WatchlistFragment extends BaseFragment {
@@ -50,8 +51,25 @@ public class WatchlistFragment extends BaseFragment {
         });
 
         pager.setAdapter(adapter);
-        new TabLayoutMediator(tabLayout, pager, (tab, position) ->
-                tab.setText(this.collections.get(position))
-        ).attach();
+        new TabLayoutMediator(tabLayout, pager, (tab, position) -> {
+            tab.setText(this.collections.get(position));
+            tab.view.setOnLongClickListener(v -> showDeleteDialog(position));
+        }).attach();
+    }
+
+    private boolean showDeleteDialog(int position) {
+        String working = this.collections.get(position);
+
+        // A little much, but just to be extra safe
+        if (position == 0 || position == 1 || working.equals(ALL) || working.equals(FAV))
+            return true;
+
+        DeleteDialog<String> deleteDialog = new DeleteDialog<>(working, working);
+        deleteDialog.show(getParentFragmentManager(), TAG);
+        deleteDialog.setOnDeleteListener(collection -> {
+            this.viewModel.deleteCollection(collection);
+            adapter.notifyItemRemoved(position);
+        });
+        return true;
     }
 }
