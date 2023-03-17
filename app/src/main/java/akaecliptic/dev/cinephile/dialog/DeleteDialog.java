@@ -12,17 +12,18 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
-import akaecliptic.dev.cinephile.interaction.listener.MovieChangeListener;
 import akaecliptic.dev.cinephile.R;
-import dev.akaecliptic.models.Movie;
+import akaecliptic.dev.cinephile.interaction.listener.OnDeleteListener;
 
-public class DeleteDialog extends DialogFragment {
+public class DeleteDialog<T> extends DialogFragment {
 
-    private final Movie working;
-    private MovieChangeListener movieChangeListener;
+    private final T working;
+    private final String identifier;
+    private OnDeleteListener<T> onDeleteListener;
 
-    public DeleteDialog(Movie movie) {
+    public DeleteDialog(T movie, String identifier) {
         this.working = movie;
+        this.identifier = identifier;
     }
 
     @NonNull
@@ -42,10 +43,10 @@ public class DeleteDialog extends DialogFragment {
         Button cancel = view.findViewById(R.id.delete_dialog_button_cancel);
 
         title.setText(requireContext().getText(R.string.dialog_title_delete));
-        target.setText(String.format("'%s'", working.getTitle()));
+        target.setText(String.format("'%s'", this.identifier));
 
         confirm.setOnClickListener(v -> {
-            movieChangeListener.onChange(working);
+            onDeleteListener.delete(working);
             dialog.dismiss();
         });
         cancel.setOnClickListener(v -> dialog.dismiss());
@@ -53,7 +54,7 @@ public class DeleteDialog extends DialogFragment {
         return dialog;
     }
 
-    public void setMovieChangeListener(MovieChangeListener movieChangeListener) {
-        this.movieChangeListener = movieChangeListener;
+    public void setOnDeleteListener(OnDeleteListener<T> onDeleteListener) {
+        this.onDeleteListener = onDeleteListener;
     }
 }

@@ -18,7 +18,8 @@ import akaecliptic.dev.cinephile.adapter.watchlist.CardSlimAdapter;
 import akaecliptic.dev.cinephile.base.BaseFragment;
 import akaecliptic.dev.cinephile.data.ViewModel;
 import akaecliptic.dev.cinephile.dialog.DeleteDialog;
-import akaecliptic.dev.cinephile.interaction.listener.MovieChangeListener;
+import akaecliptic.dev.cinephile.interaction.listener.OnDeleteListener;
+import dev.akaecliptic.models.Movie;
 
 public class CollectionsFragment extends BaseFragment {
 
@@ -27,7 +28,7 @@ public class CollectionsFragment extends BaseFragment {
     private CardSlimAdapter adapter;
     private final String name;
 
-    private final MovieChangeListener movieChangeListener = (movie) -> {
+    private final OnDeleteListener<Movie> movieDeleteListener = (movie) -> {
         if (adapter == null) return;
 
         int index = adapter.getItems().indexOf(movie);
@@ -104,9 +105,9 @@ public class CollectionsFragment extends BaseFragment {
             activity.getNavigationController().navigate(R.id.movie_profile_fragment, bundle);
         });
         adapter.setOnLongClickItem((movie, position) -> {
-            DeleteDialog deleteDialog = new DeleteDialog(movie);
+            DeleteDialog<Movie> deleteDialog = new DeleteDialog<>(movie, movie.getTitle());
             deleteDialog.show(getParentFragmentManager(), TAG);
-            deleteDialog.setMovieChangeListener(movieChangeListener);
+            deleteDialog.setOnDeleteListener(movieDeleteListener);
         });
     }
 
